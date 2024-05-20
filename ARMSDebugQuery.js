@@ -7,6 +7,8 @@
 // @match        https://*/arms/admin/
 // @match        https://*/arms/debug/debug.php
 // @match        https://*/arms/debug/debug_query.php
+// @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/ARMSDebugQuery.js
+// @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/ARMSDebugQuery.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
 // @grant        none
 // ==/UserScript==
