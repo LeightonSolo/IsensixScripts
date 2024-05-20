@@ -8,6 +8,8 @@
 // @match        https://*/arms2/
 // @match        https://*/arms/
 // @match        https://*/arms/index.php*
+// @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrateButtonsOnLiveView.js
+// @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrateButtonsOnLiveView.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
 // @grant        none
 // ==/UserScript==
