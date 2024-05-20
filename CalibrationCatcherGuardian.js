@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (Guardian)
-// @namespace    http://tampermonkey.net/
-// @version      2.91
+// @namespace    https://github.com/LeightonSolo/IsensixScripts
+// @version      2.92
 // @description  Catch calibration mistakes for Isensix Guardian servers
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php*
