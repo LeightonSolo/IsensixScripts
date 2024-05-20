@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Copy Isensix Calibration Summary (Guardian)
-// @namespace http://tampermonkey.net/
-// @version 1.6
+// @namespace https://github.com/LeightonSolo/IsensixScripts
+// @version 1.7
 // @description This script will automatically copy the text from the Isensix Calibration Summary on guardian servers when the button is pressed
 // @author Leighton Solomon
 // @match        https://*/arms2/iserep1.php
