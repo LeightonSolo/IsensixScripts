@@ -8,6 +8,8 @@
 // @match        https://*/arms/iserep1.php
 // @match        https://*/arms2/iserep1.php
 // @match        https://*/arms/debug/debug_query.php
+// @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/LatestCalibrationTimes.js
+// @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/LatestCalibrationTimes.js
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @grant        none
 // ==/UserScript==
