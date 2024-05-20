@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (ARMS)
-// @namespace    http://tampermonkey.net/
-// @version      1.6
+// @namespace    https://github.com/LeightonSolo/IsensixScripts
+// @version      1.7
 // @description  Catch calibration mistakes for Isensix ARMS servers
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/sensorcal.php
