@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Latest Calibration Times
-// @namespace    http://tampermonkey.net/
-// @version      1.5
+// @namespace    https://github.com/LeightonSolo/IsensixScripts
+// @version      1.6
 // @description  Tells latest calibration time on the calibration overview tab, Isensix Calibration Summary Tab, and ARMS Debug Query
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calreport.php
