@@ -16,6 +16,8 @@
 // @match        https://*/arms2/iserep1.php*
 // @match        https://*/arms/iserep1.php*
 // @match        https://*/arms/debug/debug_query.php*
+// @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibratedCheckmarks.js
+// @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibratedCheckmarks.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
 // @grant GM_getValue
 // @grant GM.setValue
