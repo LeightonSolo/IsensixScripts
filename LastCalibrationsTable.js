@@ -10,6 +10,8 @@
 // @match        https://*/arms/calsensor.php*
 // @match        https://*/arms/calreport.php?*
 // @match        https://*/arms/admin/index.php?*
+// @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/LastCalibrationsTable.js
+// @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/LastCalibrationsTable.js
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @grant GM_getValue
 // @grant GM.setValue
