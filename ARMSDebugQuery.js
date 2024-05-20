@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ARMS Debug Query
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.2
+// @version      2.3
 // @description  Creates a button on older ARMS servers that when clicked will open, autofill query, and copy from debug_query.php
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/
