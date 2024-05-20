@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Last 5 Calibrations Table
-// @namespace    http://tampermonkey.net/
-// @version      1.9
+// @namespace    https://github.com/LeightonSolo/IsensixScripts
+// @version      1.95
 // @description  Shows the last 5 calibrations you've done to prevent meter time overlap
 // @author       Leighton Solomon
 // @match        https://*/arms2/calsetup.php
