@@ -7,6 +7,8 @@
 // @match        https://*/arms2/calibration/calsensor.php*
 // @match        https://*/arms/calsensor.php*
 // @match        https://*/arms2/calsensor.php*
+// @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrationCatcherGuardian.js
+// @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrationCatcherGuardian.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
 // @grant        none
 // ==/UserScript==
