@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Calibrated Checkmarks for Live View, ARMS and Guardian
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/LeightonSolo/IsensixScripts
 // @version      2.8
 // @description  Shows which sensors have already been calibrated on the live view. This data only updates whenever the calibration overview, calibration summary, or arms debug query is viewed.
 // @author       Leighton Solomon
