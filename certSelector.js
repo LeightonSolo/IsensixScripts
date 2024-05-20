@@ -1,17 +1,18 @@
 // ==UserScript==
 // @name         WIP Cert Selector
 // @namespace    http://tampermonkey.net/
-// @version      0.4
+// @version      0.5
 // @description  Will select and highlight certs that you upload for easier calibration
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
 // @match        https://*/arms2/calibration/calsensor.php*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
+// @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/certSelector.js
+// @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/certSelector.js
 // @grant GM_getValue
 // @grant GM.setValue
 // ==/UserScript==
 
-//TESTING
 
 //  .--.      .--.      .--.      .--.      .--.      .--.      .--.      .--.
 //:::::.\::::::::.\::::::::.\  Leighton's Tools \::::::::.\::::::::.\::::::::.\
