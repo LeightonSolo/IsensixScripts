@@ -6,6 +6,8 @@
 // @author Leighton Solomon
 // @match        https://*/arms2/iserep1.php
 // @match        https://*/arms/iserep1.php
+// @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CopySummaryGuardian.js
+// @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CopySummaryGuardian.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
 // @grant none
 // ==/UserScript==
