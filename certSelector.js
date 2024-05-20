@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WIP Cert Selector
 // @namespace    http://tampermonkey.net/
-// @version      0.3
+// @version      0.4
 // @description  Will select and highlight certs that you upload for easier calibration
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -10,6 +10,8 @@
 // @grant GM_getValue
 // @grant GM.setValue
 // ==/UserScript==
+
+//TESTING
 
 //  .--.      .--.      .--.      .--.      .--.      .--.      .--.      .--.
 //:::::.\::::::::.\::::::::.\  Leighton's Tools \::::::::.\::::::::.\::::::::.\
