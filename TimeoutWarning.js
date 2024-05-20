@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WIP Warning on Unconfirmed Calibration
-// @namespace    http://tampermonkey.net/
-// @version      0.5
+// @namespace    https://github.com/LeightonSolo/IsensixScripts
+// @version      0.6
 // @description  Will warn if you have sat on the calibration confirmation page for too long without confirming before the page times out
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php
