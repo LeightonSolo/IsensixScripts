@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Calibrate Buttons for Live View, ARMS and Guardian
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/LeightonSolo/IsensixScripts
 // @version      3.95
 // @description  Adds a Calibration button to every sensor on the Isensix Live view page, will work on all ARMS and Guardian servers
 // @author       Leighton Solomon
