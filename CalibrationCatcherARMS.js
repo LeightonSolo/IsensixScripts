@@ -5,6 +5,8 @@
 // @description  Catch calibration mistakes for Isensix ARMS servers
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/sensorcal.php
+// @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrationCatcherARMS.js
+// @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrationCatcherARMS.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
 // @grant        none
 // ==/UserScript==
