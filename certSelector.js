@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WIP Cert Selector
-// @namespace    http://tampermonkey.net/
-// @version      0.5
+// @namespace    https://github.com/LeightonSolo/IsensixScripts
+// @version      0.6
 // @description  Will select and highlight certs that you upload for easier calibration
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
