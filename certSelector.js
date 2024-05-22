@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WIP Cert Selector
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.0
+// @version      1.01
 // @description  Will select and highlight certs that you upload for easier calibration
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -38,6 +38,7 @@
                 options[i].style.color = "darkblue";
             };
         }
+
     }
 
 
@@ -74,33 +75,13 @@
 
     if((document.URL).includes("photo_manager.php?id")){ //cert pages
 
-        //Create checkbox to save cert
-        let checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.id = "saveCheckbox";
-        checkbox.checked = true; //Set the initial checked state
-
-        /*// Create label for checkbox
-        let label = document.createElement("label");
-        label.for = "saveCheckbox"; // Link the label to the checkbox by ID
-        label.textContent = "Highlight Cert when Calibrating";
-        label.style.fontSize = "20px";
-
-        let checkboxContainer = document.getElementById("filename");
-        // Add the checkbox to the container
-        checkboxContainer.parentElement.prepend(checkbox);
-
-        checkbox.insertAdjacentElement('afterend', label);
-        */
-
+        
         const BTN_CHECK = document.getElementById("save");
 
         let stored1 = await GM.getValue("highlightCert1");
         let stored2 = await GM.getValue("highlightCert2");
         let stored3 = await GM.getValue("highlightCert3");
         let stored4 = await GM.getValue("highlightCert4");
-
-
 
         BTN_CHECK.addEventListener("click", (event) => { //wait for user to click the save button
             let certBox = document.getElementById("cat2");
@@ -171,28 +152,6 @@ function createTable(append, number, names, buttons) {
     // Append the button element to the cell
     cellButton.appendChild(buttonElement);
 
-
-    /*for (var i = 0; i < 4; i++) {
-        var row = table.insertRow(i);
-
-        for (var j = 0; j < 3; j++) {
-            var cell = row.insertCell(j);
-            cell.innerHTML = (j === 0) ? number[i] :
-                              (j === 1) ? names[i] :
-            buttons[i];
-
-
-            cell.style.borderBottom = "1px solid black";
-            cell.style.padding = "2px";
-            cell.style.textAlign = "left";
-            cell.style.fontSize = "15px";
-            if(j > 0){
-                cell.style.borderLeft = "1px solid black";
-            }
-            if(i < 1){
-                cell.style.fontWeight = "bold";
-            }
-            */
         }
     append.prepend(table);
 }
