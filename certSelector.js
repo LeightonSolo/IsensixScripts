@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         WIP Cert Selector
+// @name         Cert Selector (Guardian 2.1)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
 // @version      1.11
-// @description  Will select and highlight certs that you upload for easier calibration
+// @description  Will select and highlight certs that you upload for easier calibration, currently just works for Guardian 2.1
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -303,29 +303,29 @@ function createTable(append, number, names, buttons) {
         document.getElementById("outer").appendChild(append);
 
     for (var i = 0; i < 4; i++) {
-    var row = table.insertRow(i);
+        var row = table.insertRow(i);
 
-    // Create cells for number and name
-    var cellNumber = row.insertCell(0);
-    cellNumber.innerHTML = number[i];
+        // Create cells for number and name
+        var cellNumber = row.insertCell(0);
+        cellNumber.innerHTML = number[i];
 
-    var cellName = row.insertCell(1);
-    cellName.innerHTML = names[i];
+        var cellName = row.insertCell(1);
+        cellName.innerHTML = names[i];
 
-    // Create cell for button
-    var cellButton = row.insertCell(2);
+        // Create cell for button
+        var cellButton = row.insertCell(2);
 
-    // Create a button element
-    var buttonElement = document.createElement("button");
-    buttonElement.innerText = buttons[i].text;
+        // Create a button element
+        var buttonElement = document.createElement("button");
+        buttonElement.innerText = buttons[i].text;
 
-    // Add click event listener to the button
-    buttonElement.addEventListener("click", buttons[i].clickFunction);
+        // Add click event listener to the button
+        buttonElement.addEventListener("click", buttons[i].clickFunction);
 
-    // Append the button element to the cell
-    cellButton.appendChild(buttonElement);
+        // Append the button element to the cell
+        cellButton.appendChild(buttonElement);
 
-        }
+    }
     append.prepend(table);
 }
 
