@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WIP Cert Selector
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.01
+// @version      1.09
 // @description  Will select and highlight certs that you upload for easier calibration
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -19,7 +19,7 @@
 //'      `--'      `--'      `--'      `--'      `--'      `--'      `--'      `
 
 
-    if((document.URL).includes("calsensor.php")){
+    if((document.URL).includes("calsensor.php")){ //Calibration Page
 
         let certName1 = await GM.getValue("highlightCert1");
         let certName2 = await GM.getValue("highlightCert2");
@@ -30,22 +30,89 @@
         let selectedOption = dropdown.options[dropdown.selectedIndex];
         let options = dropdown.options;
 
+        const form = document.getElementById("calsen");
+        const table = form.getElementsByTagName("table")[0];
+        const d = table.getElementsByTagName("tr")[6];
+        const serialObj = d.getElementsByTagName("td")[0];
+        const serial = serialObj.innerHTML; //full serial number here
+        const firstFour = serial.slice(0, 4).toLowerCase(); //get first four letters of sensor serial number, used to check sensor type
+        let meterType = "";
+
+        if(firstFour.includes("re") || firstFour.includes("rm") || firstFour.includes("sc") || firstFour.includes("tmc") || firstFour.includes("tc")){
+            meterType = "RE";
+        }
+        else if(firstFour.includes("hu")){
+            meterType = "HU";
+        }
+        else if(firstFour.includes("co2")){
+            meterType = "CO2";
+        }
+        else if(firstFour.includes("dp")){
+            meterType = "DP";
+        }
+        else if((firstFour.includes("4to2")) || (firstFour.includes("bi"))){
+            meterType = "VerifyOnly";
+        }
+
         for(let i = 0; i < options.length; i++){
              let check = options[i].text;
              let match = check.split(" - ")[0]; //remove expiration date from cert name
             if((match == certName1) || (match == certName2) || (match == certName3) || (match == certName4)){ //check if matches a stored cert name
+                dropdown.selectedIndex = i;
                 options[i].style.fontWeight = "bold";
                 options[i].style.color = "darkblue";
             };
         }
+        let cert1index = 0;
+        let cert2index = 0;
+        let cert3index = 0;
+        let cert4index = 0;
+
+
+        if(meterType == "RE"){ //will auto select Oakton and Flukes for RE type sensors
+            if(certName1.includes("Oakton") || certName1.includes("Fluke")){
+                for (let i = 0; i < dropdown.options.length; i++) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName1) {
+                        cert1index = i;
+                        break; // Exit the loop if found
+                    }
+                }
+                dropdown.selectedIndex = cert1index;
+            }
+            if(certName2.includes("Oakton") || certName2.includes("Fluke")){
+                for (let i = 0; i < dropdown.options.length; i++) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName2) {
+                        cert2index = i;
+                        break; // Exit the loop if found
+                    }
+                }
+                dropdown.selectedIndex = cert2index;
+            }
+            if(certName3.includes("Oakton") || certName3.includes("Fluke")){
+                for (let i = 0; i < dropdown.options.length; i++) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName3) {
+                        cert3index = i;
+                        break; // Exit the loop if found
+                    }
+                }
+                dropdown.selectedIndex = cert3index;
+            }
+            if(certName4.includes("Oakton") || certName4.includes("Fluke")){
+                for (let i = 0; i < dropdown.options.length; i++) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName4) {
+                        cert4index = i;
+                        break; // Exit the loop if found
+                    }
+                }
+                dropdown.selectedIndex = cert4index;
+            }
+        }// END RE
 
     }
 
 
 (async () => {
     'use strict';
-
-
 
     if(!(document.URL).includes("calsensor.php")){ //dont create table on calibration page
         let container = document.getElementById("body");
@@ -75,7 +142,6 @@
 
     if((document.URL).includes("photo_manager.php?id")){ //cert pages
 
-        
         const BTN_CHECK = document.getElementById("save");
 
         let stored1 = await GM.getValue("highlightCert1");
@@ -144,7 +210,7 @@ function createTable(append, number, names, buttons) {
 
     // Create a button element
     var buttonElement = document.createElement("button");
-    buttonElement.innerText = buttons[i].text; // Assuming buttons is an array of objects with "text" property
+    buttonElement.innerText = buttons[i].text;
 
     // Add click event listener to the button
     buttonElement.addEventListener("click", buttons[i].clickFunction);
