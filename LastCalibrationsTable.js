@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Last 5 Calibrations Table
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.95
+// @version      1.96
 // @description  Shows the last 5 calibrations you've done to prevent meter time overlap
 // @author       Leighton Solomon
 // @match        https://*/arms2/calsetup.php
@@ -216,7 +216,7 @@ let arms = 0;
     else if(arms == 1){ //ARMS
 
 
-        if((document.URL).includes("arms/admin/index.php?") && (document.URL).includes("mode=11")){
+        if((document.URL).includes("arms/admin/index.php?") && (document.URL).includes("mode=11") && !(document.URL).includes("certs=1")){
 
             const calForm = document.getElementsByName("calform")[0];
 
