@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Cert Selector (Guardian 2.1)
+// @name         Cert Selector (Guadian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
 // @version      1.41
 // @description  Will select and highlight certs that you upload for easier calibration, currently just works for Guardian 2.1
