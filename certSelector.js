@@ -2,7 +2,7 @@
 // @name         Cert Selector (Guardian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
 // @version      1.41
-// @description  Will select and highlight certs that you upload for easier calibration, currently just works for Guardian 2.1
+// @description  Will select and highlight certs that you upload for easier calibration
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
 // @match        https://*/arms2/calibration/calsensor.php*
