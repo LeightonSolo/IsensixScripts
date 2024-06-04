@@ -1,11 +1,14 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian 2.1)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.11
+// @version      1.41
 // @description  Will select and highlight certs that you upload for easier calibration, currently just works for Guardian 2.1
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
 // @match        https://*/arms2/calibration/calsensor.php*
+// @match        https://*/arms/admin/index.php?mode=11&certs=1*
+// @match        https://*/arms/admin/editcalcert.php
+// @match        https://*/arms/admin/sensorcal.php
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/certSelector.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/certSelector.js
@@ -17,23 +20,65 @@
 //:::::.\::::::::.\::::::::.\  Leighton's Tools \::::::::.\::::::::.\::::::::.\
 //'      `--'      `--'      `--'      `--'      `--'      `--'      `--'      `
 
-    if((document.URL).includes("calsensor.php")){ //Calibration Page
+let arms = 0;
+    try { //determine if the system is ARMS or Guardian
+        if(document.getElementsByClassName("headline2")[0].innerHTML == "(Advanced Remote Monitoring System)"){
+        //console.log("ARMS server detected");
+        arms = 1;
+        }
+    }
+    catch(err){}
+
+    if((document.URL).includes("calsensor.php") || (document.URL).includes("sensorcal.php")){ //Calibration Pages
 
         let certName1 = await GM.getValue("highlightCert1");
         let certName2 = await GM.getValue("highlightCert2");
         let certName3 = await GM.getValue("highlightCert3");
         let certName4 = await GM.getValue("highlightCert4");
 
+        if(certName1 == undefined){
+            certName1 = "empty";
+        }
+        if(certName2 == undefined){
+            certName2 = "empty";
+        }
+        if(certName3 == undefined){
+            certName3 = "empty";
+        }
+        if(certName4 == undefined){
+            certName4 = "empty";
+        }
+
         let dropdown = document.getElementById("slCalibrationCertificate");
+        if(arms == 1){
+            dropdown = document.querySelector("body > form > table > tbody > tr:nth-child(5) > td > table > tbody > tr:nth-child(1) > td > select");
+        }
         let selectedOption = dropdown.options[dropdown.selectedIndex];
         let options = dropdown.options;
 
-        const form = document.getElementById("calsen");
-        const table = form.getElementsByTagName("table")[0];
-        const d = table.getElementsByTagName("tr")[6];
-        const serialObj = d.getElementsByTagName("td")[0];
-        const serial = serialObj.innerHTML; //full serial number here
-        const firstFour = serial.slice(0, 4).toLowerCase(); //get first four letters of sensor serial number, used to check sensor type
+        let serial = "";
+
+        if(arms == 1){//ARMS
+            let table = document.getElementsByTagName("table")[4];
+            let d = table.getElementsByTagName("tr")[6];
+
+            let serialObj = d.getElementsByClassName("sinfodesc")[0];
+
+            serial = serialObj.innerHTML.trim(); //full serial number here
+
+            //let serial = document.querySelector("body > form > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(5) > th.sinfodesc").innerHTML.text;
+            //let serial = document.querySelector("body > form > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(4) > th.sinfodesc");
+        }
+        if(arms == 0){ //Guardian
+            let form = document.getElementById("calsen");
+            let table = form.getElementsByTagName("table")[0];
+            let d = table.getElementsByTagName("tr")[6];
+            let serialObj = d.getElementsByTagName("td")[0];
+            serial = serialObj.innerHTML; //full serial number here
+        }
+
+        let firstFour = serial.slice(0, 4).toLowerCase(); //get first two letters of sensor serial number, used to check sensor type
+
         let meterType = "";
 
         if(firstFour.includes("re") || firstFour.includes("rm") || firstFour.includes("sc") || firstFour.includes("tmc") || firstFour.includes("tc")){
@@ -55,6 +100,9 @@
         for(let i = 0; i < options.length; i++){
              let check = options[i].text;
              let match = check.split(" - ")[0]; //remove expiration date from cert name
+            if(arms == 1){
+                match = check.split(" Exp:")[0];
+            }
             if((match == certName1) || (match == certName2) || (match == certName3) || (match == certName4)){ //check if matches a stored cert name
                 dropdown.selectedIndex = i;
                 options[i].style.fontWeight = "bold";
@@ -67,9 +115,10 @@
         let cert4index = 0;
 
         if(meterType == "RE"){ //will auto select Oakton and Flukes for RE type sensors
+
             if(certName1.includes("Oakton") || certName1.includes("Fluke")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName1) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
                         cert1index = i;
                         break; // Exit the loop if found
                     }
@@ -78,7 +127,7 @@
             }
             if(certName2.includes("Oakton") || certName2.includes("Fluke")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName2) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
                         cert2index = i;
                         break; // Exit the loop if found
                     }
@@ -87,7 +136,7 @@
             }
             if(certName3.includes("Oakton") || certName3.includes("Fluke")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName3) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
                         cert3index = i;
                         break; // Exit the loop if found
                     }
@@ -96,7 +145,7 @@
             }
             if(certName4.includes("Oakton") || certName4.includes("Fluke")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName4) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
                         cert4index = i;
                         break; // Exit the loop if found
                     }
@@ -107,7 +156,7 @@
         else if(meterType == "HU"){ //will auto select Vaisala for HU type sensors
             if(certName1.includes("Vaisala") && !certName1.includes("CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName1) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
                         cert1index = i;
                         break; // Exit the loop if found
                     }
@@ -116,7 +165,7 @@
             }
             if(certName2.includes("Vaisala") && !certName2.includes("CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName2) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
                         cert2index = i;
                         break; // Exit the loop if found
                     }
@@ -125,7 +174,7 @@
             }
             if(certName3.includes("Vaisala") && !certName3.includes("CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName3) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
                         cert3index = i;
                         break; // Exit the loop if found
                     }
@@ -134,7 +183,7 @@
             }
             if(certName4.includes("Vaisala") && !certName4.includes("CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName4) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
                         cert4index = i;
                         break; // Exit the loop if found
                     }
@@ -145,7 +194,7 @@
         else if(meterType == "CO2"){ //will auto select Vaisala CO2 for CO2 type sensors
             if(certName1.includes("Vaisala CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName1) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
                         cert1index = i;
                         break; // Exit the loop if found
                     }
@@ -154,7 +203,7 @@
             }
             if(certName2.includes("Vaisala CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName2) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
                         cert2index = i;
                         break; // Exit the loop if found
                     }
@@ -163,7 +212,7 @@
             }
             if(certName3.includes("Vaisala CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName3) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
                         cert3index = i;
                         break; // Exit the loop if found
                     }
@@ -172,7 +221,7 @@
             }
             if(certName4.includes("Vaisala CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName4) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
                         cert4index = i;
                         break; // Exit the loop if found
                     }
@@ -183,7 +232,7 @@
         else if(meterType == "DP"){ //will auto select Dwyer for DP type sensors
             if(certName1.includes("Dwyer")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName1) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
                         cert1index = i;
                         break; // Exit the loop if found
                     }
@@ -192,7 +241,7 @@
             }
             if(certName2.includes("Dwyer")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName2) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
                         cert2index = i;
                         break; // Exit the loop if found
                     }
@@ -201,7 +250,7 @@
             }
             if(certName3.includes("Dwyer")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName3) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
                         cert3index = i;
                         break; // Exit the loop if found
                     }
@@ -210,7 +259,7 @@
             }
             if(certName4.includes("Dwyer")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName4) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
                         cert4index = i;
                         break; // Exit the loop if found
                     }
@@ -220,36 +269,43 @@
         }// END DP
     }
 
-
 (async () => {
     'use strict';
 
-    if(!(document.URL).includes("calsensor.php")){ //dont create table on calibration page
-        let container = document.getElementById("body");
+    let container = "";
 
-    let certNames = [];
-    certNames[0] = await GM.getValue("highlightCert1");
+    if(!(document.URL).includes("calsensor.php") && !(document.URL).includes("editcalcert.php") && !(document.URL).includes("sensorcal.php")){ //dont create table on calibration pages (and arms upload page?)
+        container = document.getElementById("body");
+
+
+        if((document.URL).includes("mode=11&certs=1")){
+            container = document.getElementById("arms_menu_2");
+        }
+
+        let certNames = [];
+        certNames[0] = await GM.getValue("highlightCert1");
         if(certNames[0] == undefined){certNames[0] = "empty"};
-    certNames[1] = await GM.getValue("highlightCert2");
+        certNames[1] = await GM.getValue("highlightCert2");
         if(certNames[1] == undefined){certNames[1] = "empty"};
-    certNames[2] = await GM.getValue("highlightCert3");
+        certNames[2] = await GM.getValue("highlightCert3");
         if(certNames[2] == undefined){certNames[2] = "empty"};
-    certNames[3] = await GM.getValue("highlightCert4");
+        certNames[3] = await GM.getValue("highlightCert4");
         if(certNames[3] == undefined){certNames[3] = "empty"};
 
-    const deleteButtons = [
-        { text: "Delete", clickFunction: () => deleteCert(1) },
-        { text: "Delete", clickFunction: () => deleteCert(2) },
-        { text: "Delete", clickFunction: () => deleteCert(3) },
-        { text: "Delete", clickFunction: () => deleteCert(4) },
-    ];
+        const deleteButtons = [
+            { text: "Delete", clickFunction: () => deleteCert(1) },
+            { text: "Delete", clickFunction: () => deleteCert(2) },
+            { text: "Delete", clickFunction: () => deleteCert(3) },
+            { text: "Delete", clickFunction: () => deleteCert(4) },
+        ];
 
-    const line1 = document.createTextNode("\u00A0 \u00A0Stored Certificates");
-    createTable(container, [1,2,3,4], certNames, deleteButtons); //create table of stored certs
-    container.prepend(line1);
+        const line1 = document.createTextNode("\u00A0 \u00A0Stored Certificates");
+        createTable(container, [1,2,3,4], certNames, deleteButtons); //create table of stored certs
+        container.prepend(line1);
+
     }
 
-    if((document.URL).includes("photo_manager.php?id")){ //cert pages
+    if((document.URL).includes("photo_manager.php?id")){ //guardian 2.1 cert pages
 
         const BTN_CHECK = document.getElementById("save");
 
@@ -289,8 +345,48 @@
             }
         });
     }
+    else if((document.URL).includes("editcalcert.php")){ //ARMS cert pages
+
+        const BTN_CHECK = document.querySelector('input[type="submit"][value="Accept"]'); //ARMS accept cert button
+
+        let stored1 = await GM.getValue("highlightCert1");
+        let stored2 = await GM.getValue("highlightCert2");
+        let stored3 = await GM.getValue("highlightCert3");
+        let stored4 = await GM.getValue("highlightCert4");
+
+        BTN_CHECK.addEventListener("click", (event) => { //wait for user to click the save button
+                let certName = document.querySelector("body > form > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(3) > td:nth-child(2)").innerHTML; //get cert description
+
+                if((stored1 == certName) || (stored2 == certName) || (stored3 == certName) || (stored4 == certName)){
+                    alert("Cert saved: " + certName);
+                }
+                else if(stored1 == undefined){
+                    GM.setValue("highlightCert1", certName);
+                    alert("Cert saved: " + certName);
+                }
+                else if(stored2 == undefined){
+                    GM.setValue("highlightCert2", certName);
+                    alert("Cert saved: " + certName);
+                }
+                else if(stored3 == undefined){
+                    GM.setValue("highlightCert3", certName);
+                    alert("Cert saved: " + certName);
+                }
+                else if(stored4 == undefined){
+                    GM.setValue("highlightCert4", certName);
+                    alert("Cert saved: " + certName);
+                }
+                else{
+                    GM.setValue("highlightCert1", certName);
+                    alert("Cert saved: " + certName);
+                }
+
+        });
+    }
 
 })();
+
+
 
 function createTable(append, number, names, buttons) {
 
@@ -300,7 +396,14 @@ function createTable(append, number, names, buttons) {
         table.style.width = '350px';
         table.style.border = '1px solid #000';
         //table.style.marginLeft = '50px';
+
+    if(arms == 0){
         document.getElementById("outer").appendChild(append);
+    }
+    else if(arms == 1){
+        document.getElementById("arms_menu_1").appendChild(append);
+    }
+
 
     for (var i = 0; i < 4; i++) {
         var row = table.insertRow(i);
