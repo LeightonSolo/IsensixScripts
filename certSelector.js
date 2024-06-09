@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.41
-// @description  Will select and highlight certs that you upload for easier calibration
+// @version      1.42
+// @description  Will select certs automatically based on sensor type and highlight certs that you upload for easier calibration
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -299,7 +299,7 @@ let arms = 0;
             { text: "Delete", clickFunction: () => deleteCert(4) },
         ];
 
-        const line1 = document.createTextNode("\u00A0 \u00A0Stored Certificates");
+        const line1 = document.createTextNode("\u00A0 \u00A0Assigned Certificates");
         createTable(container, [1,2,3,4], certNames, deleteButtons); //create table of stored certs
         container.prepend(line1);
 
