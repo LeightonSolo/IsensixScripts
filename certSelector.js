@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.43
+// @version      1.44
 // @description  Will select certs automatically based on sensor type and highlight certs that you upload for easier calibration. Currently not functional on Guardian 2.0
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
