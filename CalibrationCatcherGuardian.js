@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (Guardian)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.95
+// @version      2.96
 // @description  Catch calibration mistakes for Isensix Guardian servers
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -99,7 +99,7 @@
         type = "TC";
         allowOffset = "±2°C";
     }
-    else if((firstFour.includes("4to2")) || (firstFour.includes("bi")) || (cert == "N/A") || (firstFour.includes("da"))){
+    else if((firstFour.includes("4to2")) || (firstFour.includes("bi")) || (cert == "N/A") || (firstFour.includes("da")) || (firstFour.includes("mpm"))){
         type = "VerifyOnly";
         allowOffset = "N/A";
     }
