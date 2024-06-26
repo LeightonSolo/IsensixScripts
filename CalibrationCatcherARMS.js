@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.75
+// @version      1.76
 // @description  Catch calibration mistakes for Isensix ARMS servers
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/sensorcal.php
@@ -68,7 +68,7 @@
         type = "TC";
         allowOffset = "±2°C";
     }
-    else if(firstFour.includes("4to2") || firstFour.includes("bin") || firstFour.includes("da")){
+    else if(firstFour.includes("4to2") || firstFour.includes("bin") || firstFour.includes("da") || firstFour.includes("mpm")){
         type = "VerifyOnly";
         allowOffset = "N/A";
     }
