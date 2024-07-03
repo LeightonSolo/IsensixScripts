@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.76
+// @version      2.02
 // @description  Catch calibration mistakes for Isensix ARMS servers
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/sensorcal.php
@@ -85,48 +85,79 @@
 
     const checkBoxes = document.querySelectorAll('input[type=checkbox]');
     let canSelected = false;
-
+    let firstClick = true;
+    let failed = false;
 
     const BTN_CHECK = document.getElementsByName("submit")[2];
 
     BTN_CHECK.addEventListener("click", (event) => { //wait for user to Set Sensor Offset button
 
-        const offset = document.getElementsByName("newoffset")[0].value; //get value of offset entered
-
-        if((type == "RE" || type == "RM") && (offset >= 1.5 || offset <= -1.5)){
-            alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for RE/RM (±1.5°C)");
-        }
-        else if(type == "SC" && (offset >= 3 || offset <= -3)){
-            alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for SC (±3°C)");
-        }
-        else if(type == "HU" && (offset >= 5 || offset <= -5)){
-            alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for HU (±5%)");
-        }
-        else if(type == "TMC" && (offset >= 4 || offset <= -4)){
-            alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for TMC (±4°C)");
-        }
-        else if(type == "DP" && (offset >= 0.05 || offset <= -0.05)){
-            alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for DP (±0.05%)");
-        }
-        else if(type == "CO2" && (offset >= 2 || offset <= -2)){
-            alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for CO2 (±2%)");
-        }
-        else if(type == "TC" && (offset >= 2 || offset <= -2)){
-            alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for TC (±2°)");
-        }
-        else if((offset == 0 || offset === "") && (type != "VerifyOnly")){
-            alert("Warning: Please make sure you have entered an offset and try to refrain from offsets of exactly 0. Disregard this message if the sensor is only being Verified.");
-        }
-
         for(var i = 0; i < checkBoxes.length; i++){ //go through all canned messages and make sure you have selected at least one
-
             if(checkBoxes[i].checked){
                 canSelected = true;
+                if(checkBoxes[i].parentElement.textContent.trim().toLowerCase().includes("failed")){
+                    failed = true;
+                    console.log("Sensor failed.");
+                }
             }
         }
 
-        if(!canSelected){
+        const offset = document.getElementsByName("newoffset")[0].value; //get value of offset entered
+
+        if(!failed){
+
+            if(firstClick && (type == "RE" || type == "RM") && (offset >= 1.5 || offset <= -1.5)){
+                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for RE/RM (±1.5°C)");
+                event.preventDefault();
+                firstClick = false;
+            }
+            else if(firstClick && (type == "SC") && (offset >= 3 || offset <= -3)){
+                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for SC (±3°C)");
+                event.preventDefault();
+                firstClick = false;
+            }
+            else if(firstClick && (type == "HU") && (offset >= 5 || offset <= -5)){
+                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for HU (±5%)");
+                event.preventDefault();
+                firstClick = false;
+            }
+            else if(firstClick && (type == "TMC") && (offset >= 4 || offset <= -4)){
+                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for TMC (±4°C)");
+                event.preventDefault();
+                firstClick = false;
+            }
+            else if(firstClick && (type == "DP") && (offset >= 0.05 || offset <= -0.05)){
+                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for DP (±0.05%)");
+                event.preventDefault();
+                firstClick = false;
+            }
+            else if(firstClick && (type == "CO2") && (offset >= 2 || offset <= -2)){
+                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for CO2 (±2%)");
+                event.preventDefault();
+                firstClick = false;
+            }
+            else if(firstClick && (type == "TC") && (offset >= 2 || offset <= -2)){
+                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for TC (±2°)");
+                event.preventDefault();
+                firstClick = false;
+            }
+            else if(firstClick && (offset == 0 || offset === "") && (type != "VerifyOnly")){
+                alert("Warning: Please make sure you have entered an offset and try to refrain from offsets of exactly 0. Disregard this message if the sensor is only being Verified.");
+                event.preventDefault();
+                firstClick = false;
+            }
+            else if(firstClick && (type == "UNKNOWN FROM SERIAL") && (offset >= 5 || offset <= -5)){
+                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for any sensor type.");
+                event.preventDefault();
+                firstClick = false;
+            }
+
+        }
+
+        if(firstClick && (!canSelected)){
             alert("Please make sure you select a Canned Message.");
+            event.preventDefault();
+            firstClick = false;
         }
 
     });
