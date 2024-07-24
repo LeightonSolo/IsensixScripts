@@ -1,14 +1,16 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.44
-// @description  Will select certs automatically based on sensor type and highlight certs that you upload for easier calibration. Currently not functional on Guardian 2.0
+// @version      1.51
+// @description  Will select certs automatically based on sensor type and highlight certs that you upload for easier calibration.
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
 // @match        https://*/arms2/calibration/calsensor.php*
 // @match        https://*/arms/admin/index.php?mode=11&certs=1*
 // @match        https://*/arms/admin/editcalcert.php
 // @match        https://*/arms/admin/sensorcal.php
+// @match        https://*/arms2/admin/index.php?mode=SETUP_CERT*
+// @match        https://*/arms2/calsensor.php?id=*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/certSelector.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/certSelector.js
@@ -50,6 +52,9 @@ let arms = 0;
         }
 
         let dropdown = document.getElementById("slCalibrationCertificate");
+        if(dropdown == null){ //handle guardian 2.0 dropdown
+            dropdown = document.getElementById("cacert");
+        }
         if(arms == 1){
             dropdown = document.querySelector("body > form > table > tbody > tr:nth-child(5) > td > table > tbody > tr:nth-child(1) > td > select");
         }
@@ -113,6 +118,8 @@ let arms = 0;
         let cert2index = 0;
         let cert3index = 0;
         let cert4index = 0;
+
+        console.log("Meter Type Detected: " + meterType);
 
         if(meterType == "RE"){ //will auto select Oakton and Flukes for RE type sensors
 
@@ -277,7 +284,6 @@ let arms = 0;
     if(!(document.URL).includes("calsensor.php") && !(document.URL).includes("editcalcert.php") && !(document.URL).includes("sensorcal.php")){ //dont create table on calibration pages (and arms upload page?)
         container = document.getElementById("body");
 
-
         if((document.URL).includes("mode=11&certs=1")){
             container = document.getElementById("arms_menu_2");
         }
@@ -345,6 +351,47 @@ let arms = 0;
             }
         });
     }
+    else if((document.URL).includes("?mode=SETUP_CERT")){ //guardian 2.0 cert pages
+
+        const BTN_CHECK = document.querySelector("#body > form > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(7) > td > input:nth-child(1)");
+
+        let stored1 = await GM.getValue("highlightCert1");
+        let stored2 = await GM.getValue("highlightCert2");
+        let stored3 = await GM.getValue("highlightCert3");
+        let stored4 = await GM.getValue("highlightCert4");
+
+        BTN_CHECK.addEventListener("click", (event) => { //wait for user to click the save button
+
+                let certName = document.querySelector("#body > form > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(2) > td").textContent;
+
+
+                if((stored1 == certName) || (stored2 == certName) || (stored3 == certName) || (stored4 == certName)){
+                    alert("Cert saved: " + certName);
+                }
+                else if(stored1 == undefined){
+                    GM.setValue("highlightCert1", certName);
+                    alert("Cert saved: " + certName);
+                }
+                else if(stored2 == undefined){
+                    GM.setValue("highlightCert2", certName);
+                    alert("Cert saved: " + certName);
+                }
+                else if(stored3 == undefined){
+                    GM.setValue("highlightCert3", certName);
+                    alert("Cert saved: " + certName);
+                }
+                else if(stored4 == undefined){
+                    GM.setValue("highlightCert4", certName);
+                    alert("Cert saved: " + certName);
+                }
+                else{
+                    GM.setValue("highlightCert1", certName);
+                    alert("Cert saved: " + certName);
+                }
+
+        });
+    }
+
     else if((document.URL).includes("editcalcert.php")){ //ARMS cert pages
 
         const BTN_CHECK = document.querySelector('input[type="submit"][value="Accept"]'); //ARMS accept cert button
@@ -387,7 +434,6 @@ let arms = 0;
 })();
 
 
-
 function createTable(append, number, names, buttons) {
 
     var table = document.createElement("TABLE"); //makes a table element for the page
@@ -403,7 +449,6 @@ function createTable(append, number, names, buttons) {
     else if(arms == 1){
         document.getElementById("arms_menu_1").appendChild(append);
     }
-
 
     for (var i = 0; i < 4; i++) {
         var row = table.insertRow(i);
