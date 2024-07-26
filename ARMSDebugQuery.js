@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ARMS Debug Query
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.3
+// @version      2.4
 // @description  Creates a button on older ARMS servers that when clicked will open, autofill query, and copy from debug_query.php
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/
@@ -74,10 +74,34 @@ function selectElementContents(el) {
             range.select();
         }
     }
+
+function removeEmptyLastColumn(table) {
+    let lastColumnEmpty = true;
+    const rows = table.rows;
+    const lastCellIndex = rows[0].cells.length - 1;
+
+    for (let i = 0; i < rows.length; i++) {
+        const cell = rows[i].cells[lastCellIndex];
+        if (cell && cell.textContent.trim() !== "") {
+            lastColumnEmpty = false;
+            break;
+        }
+    }
+
+    if (lastColumnEmpty) {
+        for (let i = 0; i < rows.length; i++) {
+            rows[i].deleteCell(lastCellIndex);
+        }
+    }
+}
+
 function copyTable(copyBtn){
 
 
     var table = document.getElementsByTagName("table")[0];
+
+    // Remove the last column if it is empty
+    removeEmptyLastColumn(table);
 
                 selectElementContents(table);
 
