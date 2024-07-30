@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.51
+// @version      1.8
 // @description  Will select certs automatically based on sensor type and highlight certs that you upload for easier calibration.
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -101,6 +101,9 @@ let arms = 0;
         else if((firstFour.includes("4to2")) || (firstFour.includes("bi"))){
             meterType = "VerifyOnly";
         }
+        else{
+            meterType = "UNKNOWN";
+        }
 
         for(let i = 0; i < options.length; i++){
              let check = options[i].text;
@@ -121,43 +124,43 @@ let arms = 0;
 
         console.log("Meter Type Detected: " + meterType);
 
-        if(meterType == "RE"){ //will auto select Oakton and Flukes for RE type sensors
-
+        if((meterType == "RE") || (meterType == "UNKNOWN")){ //will auto select Oakton and Flukes for RE type sensors
             if(certName1.includes("Oakton") || certName1.includes("Fluke")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
                         cert1index = i;
+                        dropdown.selectedIndex = cert1index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert1index;
             }
             if(certName2.includes("Oakton") || certName2.includes("Fluke")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
                         cert2index = i;
+                        dropdown.selectedIndex = cert2index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert2index;
+
             }
             if(certName3.includes("Oakton") || certName3.includes("Fluke")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
                         cert3index = i;
+                        dropdown.selectedIndex = cert3index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert3index;
             }
             if(certName4.includes("Oakton") || certName4.includes("Fluke")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
                         cert4index = i;
+                        dropdown.selectedIndex = cert4index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert4index;
             }
         }// END RE
         else if(meterType == "HU"){ //will auto select Vaisala for HU type sensors
@@ -165,75 +168,75 @@ let arms = 0;
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
                         cert1index = i;
+                        dropdown.selectedIndex = cert1index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert1index;
             }
             if(certName2.includes("Vaisala") && !certName2.includes("CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
                         cert2index = i;
+                        dropdown.selectedIndex = cert2index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert2index;
             }
             if(certName3.includes("Vaisala") && !certName3.includes("CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
                         cert3index = i;
+                        dropdown.selectedIndex = cert3index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert3index;
             }
             if(certName4.includes("Vaisala") && !certName4.includes("CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
                         cert4index = i;
+                        dropdown.selectedIndex = cert4index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert4index;
             }
         }// END HU
-        else if(meterType == "CO2"){ //will auto select Vaisala CO2 for CO2 type sensors
+        else if(meterType == "CO2"){ //will auto select Vaisala CO2 for CO2 type
             if(certName1.includes("Vaisala CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
                         cert1index = i;
+                        dropdown.selectedIndex = cert1index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert1index;
             }
             if(certName2.includes("Vaisala CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
                         cert2index = i;
+                        dropdown.selectedIndex = cert2index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert2index;
             }
             if(certName3.includes("Vaisala CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
                         cert3index = i;
+                        dropdown.selectedIndex = cert3index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert3index;
             }
             if(certName4.includes("Vaisala CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
                         cert4index = i;
+                        dropdown.selectedIndex = cert4index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert4index;
             }
         }// END CO2
         else if(meterType == "DP"){ //will auto select Dwyer for DP type sensors
@@ -241,37 +244,37 @@ let arms = 0;
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
                         cert1index = i;
+                        dropdown.selectedIndex = cert1index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert1index;
             }
             if(certName2.includes("Dwyer")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
                         cert2index = i;
+                        dropdown.selectedIndex = cert2index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert2index;
             }
             if(certName3.includes("Dwyer")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
                         cert3index = i;
+                        dropdown.selectedIndex = cert3index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert3index;
             }
             if(certName4.includes("Dwyer")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
                         cert4index = i;
+                        dropdown.selectedIndex = cert4index;
                         break; // Exit the loop if found
                     }
                 }
-                dropdown.selectedIndex = cert4index;
             }
         }// END DP
     }
