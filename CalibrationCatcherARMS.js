@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.02
+// @version      2.1
 // @description  Catch calibration mistakes for Isensix ARMS servers
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/sensorcal.php
@@ -90,22 +90,35 @@
 
     const BTN_CHECK = document.getElementsByName("submit")[2];
 
+    //TEST BUTTON, uncomment to test failure catching without submitting the calibration
+    /*let btn = document.createElement("BUTTON");
+        btn.textContent = 'Test';
+    let div = document.getElementsByClassName("headline3")[0];
+
+        let cell = document.createElement("td");
+        cell.appendChild(btn);
+        div.prepend(cell);
+        */
+
     BTN_CHECK.addEventListener("click", (event) => { //wait for user to Set Sensor Offset button
+    //btn.onclick = () => {
 
         for(var i = 0; i < checkBoxes.length; i++){ //go through all canned messages and make sure you have selected at least one
             if(checkBoxes[i].checked){
                 canSelected = true;
-                if(checkBoxes[i].parentElement.textContent.trim().toLowerCase().includes("failed")){
+                const text = checkBoxes[i].nextSibling.textContent.trim().toLowerCase();
+                //Check if canned message includes the word "failed"
+                if (text.includes("failed")) {
                     failed = true;
                     console.log("Sensor failed.");
                 }
+
             }
         }
 
         const offset = document.getElementsByName("newoffset")[0].value; //get value of offset entered
 
         if(!failed){
-
             if(firstClick && (type == "RE" || type == "RM") && (offset >= 1.5 || offset <= -1.5)){
                 alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for RE/RM (±1.5°C)");
                 event.preventDefault();
@@ -161,5 +174,6 @@
         }
 
     });
+    //}
 
 })();
