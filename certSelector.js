@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.81
+// @version      1.85
 // @description  Will select certs automatically based on sensor type and highlight certs that you upload for easier calibration.
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -61,6 +61,7 @@ let arms = 0;
         }
         let selectedOption = dropdown.options[dropdown.selectedIndex];
         let options = dropdown.options;
+
 
         let serial = "";
 
@@ -131,6 +132,10 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
                         cert1index = i;
                         dropdown.selectedIndex = cert1index;
+                        if(meterType != "UNKNOWN"){
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
+                        }
                         break; // Exit the loop if found
                     }
                 }
@@ -140,6 +145,10 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
                         cert2index = i;
                         dropdown.selectedIndex = cert2index;
+                        if(meterType != "UNKNOWN"){
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
+                        }
                         break; // Exit the loop if found
                     }
                 }
@@ -150,6 +159,10 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
                         cert3index = i;
                         dropdown.selectedIndex = cert3index;
+                        if(meterType != "UNKNOWN"){
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
+                        }
                         break; // Exit the loop if found
                     }
                 }
@@ -159,6 +172,10 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
                         cert4index = i;
                         dropdown.selectedIndex = cert4index;
+                        if(meterType != "UNKNOWN"){
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
+                        }
                         break; // Exit the loop if found
                     }
                 }
@@ -170,6 +187,8 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
                         cert1index = i;
                         dropdown.selectedIndex = cert1index;
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
                         break; // Exit the loop if found
                     }
                 }
@@ -179,6 +198,8 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
                         cert2index = i;
                         dropdown.selectedIndex = cert2index;
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
                         break; // Exit the loop if found
                     }
                 }
@@ -188,6 +209,8 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
                         cert3index = i;
                         dropdown.selectedIndex = cert3index;
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
                         break; // Exit the loop if found
                     }
                 }
@@ -197,6 +220,8 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
                         cert4index = i;
                         dropdown.selectedIndex = cert4index;
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
                         break; // Exit the loop if found
                     }
                 }
@@ -208,6 +233,8 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
                         cert1index = i;
                         dropdown.selectedIndex = cert1index;
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
                         break; // Exit the loop if found
                     }
                 }
@@ -217,6 +244,8 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
                         cert2index = i;
                         dropdown.selectedIndex = cert2index;
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
                         break; // Exit the loop if found
                     }
                 }
@@ -226,6 +255,8 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
                         cert3index = i;
                         dropdown.selectedIndex = cert3index;
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
                         break; // Exit the loop if found
                     }
                 }
@@ -235,6 +266,8 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
                         cert4index = i;
                         dropdown.selectedIndex = cert4index;
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
                         break; // Exit the loop if found
                     }
                 }
@@ -246,6 +279,8 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
                         cert1index = i;
                         dropdown.selectedIndex = cert1index;
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
                         break; // Exit the loop if found
                     }
                 }
@@ -255,6 +290,8 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
                         cert2index = i;
                         dropdown.selectedIndex = cert2index;
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
                         break; // Exit the loop if found
                     }
                 }
@@ -264,6 +301,8 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
                         cert3index = i;
                         dropdown.selectedIndex = cert3index;
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
                         break; // Exit the loop if found
                     }
                 }
@@ -273,6 +312,8 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
                         cert4index = i;
                         dropdown.selectedIndex = cert4index;
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
                         break; // Exit the loop if found
                     }
                 }
