@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrated Checkmarks and Autocollapse Zones
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.0
+// @version      3.1
 // @description  Shows which sensors have already been calibrated on the live view. This data only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Guardian 2.0 now has support for automatically collapsing calibrated zones.
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -409,9 +409,10 @@ async function toggleZones(){
                 calibratedCount += occurrences;
                 //console.log("Zone: " + i);
                 //console.log("Calibrated: " + calibratedCount);
-                const zoneName = document.querySelector("tbody > tr:nth-child(1) > td > table > tbody > tr > td.zonename > a.zonelink");
+                //const zoneName = document.querySelector("tbody > tr:nth-child(1) > td > table > tbody > tr > td.zonename > a.zonelink");
+                const zoneName = zoneTables[i].querySelector("tbody > tr:nth-child(1) > td > table > tbody > tr > td.zonename > a.zonelink").textContent;
 
-                let zoneTitle = document.createTextNode(zoneName.innerHTML + ' - ' + zoneCount + ' Sensors, ' + calibratedCount + ' Calibrated.');
+                let zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Sensors, ' + calibratedCount + ' Calibrated.');
                 zoneTables[i].prepend(zoneTitle); //adds zone count and calibrated to zone title
 
                 if((calibratedCount == zoneCount) && (toggleZoneState == "ON")){
