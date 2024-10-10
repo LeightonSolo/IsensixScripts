@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrated Checkmarks and Autocollapse Zones
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.1
+// @version      3.2
 // @description  Shows which sensors have already been calibrated on the live view. This data only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Guardian 2.0 now has support for automatically collapsing calibrated zones.
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -60,12 +60,41 @@ async function toggleZones(){
     //let toggleZones = await GM.getValue("toggleZones");
     //if(toggleZones){
     if(savedState === 'ON'){
+        if(arms == 1){
+            window.location="/arms/index.php?x=&zva=1";
+            console.log("Showing all zones");
+        }
+        else if(twoPointZero == 1){
+
+            var links = document.querySelectorAll('a');
+
+            //Iterate over  links to find the one with the text "Show All Sensors"
+            links.forEach(function(link) {
+                if (link.textContent.trim() === "Show All Sensors") {
+                    link.click();
+
+                    // Wait a bit and then force the browser to go to the URL to override redirection
+                    setTimeout(function() {
+                        window.location.href = link.href;
+                    }, 100); // 100 ms delay before overriding
+                }
+            });
+
+            //window.location="/arms/index.php?vmode=2;zva=1";
+            console.log("Showing all zones");
+
+        }
+            else{
+                location.reload();
+        }
         localStorage.setItem(toggleKey, 'OFF');
+
     }
     else{
         localStorage.setItem(toggleKey, 'ON');
+            location.reload();
+
     }
-    location.reload();
 }
 
 
@@ -234,7 +263,10 @@ async function toggleZones(){
 
 
                 try{const zoneName = zoneTables[i].querySelector("tbody > tr:nth-child(1) > td > table > tbody > tr > td.zonename > a.zonelink").textContent;
-                     let zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Active Sensors, ' + calibratedCount + ' Calibrated.');
+                     let zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Active Sensors, ' + calibratedCount + ' Calibrated. ' + (zoneCount - calibratedCount) + ' left.');
+                    if(zoneCount == 0){
+                     zoneTitle = document.createTextNode(zoneName + ' - 0 Active or Hidden');
+                }
                     zoneTables[i].prepend(zoneTitle); //adds zone count and calibrated to zone title
                     zoneTables[i].style = "white-space:nowrap";
                     zoneTables[i].style.fontSize = '14px';
@@ -412,7 +444,11 @@ async function toggleZones(){
                 //const zoneName = document.querySelector("tbody > tr:nth-child(1) > td > table > tbody > tr > td.zonename > a.zonelink");
                 const zoneName = zoneTables[i].querySelector("tbody > tr:nth-child(1) > td > table > tbody > tr > td.zonename > a.zonelink").textContent;
 
-                let zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Sensors, ' + calibratedCount + ' Calibrated.');
+                let zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Sensors, ' + calibratedCount + ' Calibrated. ' + (zoneCount - calibratedCount) + ' left.');
+                if(zoneCount == 0){
+                     zoneTitle = document.createTextNode(zoneName + ' - 0 Active or Hidden');
+                }
+
                 zoneTables[i].prepend(zoneTitle); //adds zone count and calibrated to zone title
 
                 if((calibratedCount == zoneCount) && (toggleZoneState == "ON")){
