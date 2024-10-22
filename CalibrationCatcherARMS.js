@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.1
+// @version      2.4
 // @description  Catch calibration mistakes for Isensix ARMS servers
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/sensorcal.php
@@ -82,7 +82,6 @@
 
     serialObj.appendChild(sensorText);
 
-
     const checkBoxes = document.querySelectorAll('input[type=checkbox]');
     let canSelected = false;
     let firstClick = true;
@@ -92,16 +91,17 @@
 
     //TEST BUTTON, uncomment to test failure catching without submitting the calibration
     /*let btn = document.createElement("BUTTON");
-        btn.textContent = 'Test';
+    btn.textContent = 'Test';
     let div = document.getElementsByClassName("headline3")[0];
+    let cell = document.createElement("td");
+    cell.appendChild(btn);
+    div.prepend(cell);*/
+    //=====================================
 
-        let cell = document.createElement("td");
-        cell.appendChild(btn);
-        div.prepend(cell);
-        */
+    const offset = document.getElementsByName("newoffset")[0].value; //get value of offset entered
 
     BTN_CHECK.addEventListener("click", (event) => { //wait for user to Set Sensor Offset button
-    //btn.onclick = () => {
+    //btn.addEventListener("click", (event) => {
 
         for(var i = 0; i < checkBoxes.length; i++){ //go through all canned messages and make sure you have selected at least one
             if(checkBoxes[i].checked){
@@ -116,57 +116,6 @@
             }
         }
 
-        const offset = document.getElementsByName("newoffset")[0].value; //get value of offset entered
-
-        if(!failed){
-            if(firstClick && (type == "RE" || type == "RM") && (offset >= 1.5 || offset <= -1.5)){
-                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for RE/RM (±1.5°C)");
-                event.preventDefault();
-                firstClick = false;
-            }
-            else if(firstClick && (type == "SC") && (offset >= 3 || offset <= -3)){
-                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for SC (±3°C)");
-                event.preventDefault();
-                firstClick = false;
-            }
-            else if(firstClick && (type == "HU") && (offset >= 5 || offset <= -5)){
-                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for HU (±5%)");
-                event.preventDefault();
-                firstClick = false;
-            }
-            else if(firstClick && (type == "TMC") && (offset >= 4 || offset <= -4)){
-                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for TMC (±4°C)");
-                event.preventDefault();
-                firstClick = false;
-            }
-            else if(firstClick && (type == "DP") && (offset >= 0.05 || offset <= -0.05)){
-                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for DP (±0.05%)");
-                event.preventDefault();
-                firstClick = false;
-            }
-            else if(firstClick && (type == "CO2") && (offset >= 2 || offset <= -2)){
-                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for CO2 (±2%)");
-                event.preventDefault();
-                firstClick = false;
-            }
-            else if(firstClick && (type == "TC") && (offset >= 2 || offset <= -2)){
-                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for TC (±2°)");
-                event.preventDefault();
-                firstClick = false;
-            }
-            else if(firstClick && (offset == 0 || offset === "") && (type != "VerifyOnly")){
-                alert("Warning: Please make sure you have entered an offset and try to refrain from offsets of exactly 0. Disregard this message if the sensor is only being Verified.");
-                event.preventDefault();
-                firstClick = false;
-            }
-            else if(firstClick && (type == "UNKNOWN FROM SERIAL") && (offset >= 5 || offset <= -5)){
-                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for any sensor type.");
-                event.preventDefault();
-                firstClick = false;
-            }
-
-        }
-
         if(firstClick && (!canSelected)){
             alert("Please make sure you select a Canned Message.");
             event.preventDefault();
@@ -174,6 +123,84 @@
         }
 
     });
-    //}
+
+    const td = document.querySelector("body > form > table > tbody > tr:nth-child(3) > td > table");
+    const newRow = document.createElement("tr");
+    const newCell = document.createElement("td");
+    const warning = document.createTextNode(" ");
+
+    newCell.appendChild(warning);
+    newCell.style.color = "red";
+    newCell.style.fontWeight = "bold";
+    newCell.setAttribute("colspan", "5")
+
+
+     if(!failed){
+            if((type == "RE" || type == "RM") && (offset >= 1.5 || offset <= -1.5)){
+                warning.textContent = "Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for RE/RM (±1.5°C)";
+                document.getElementsByName("newoffset")[0].style.color="#ff0000";
+                document.getElementsByName("newoffset")[0].style.fontWeight = 'bold';
+                newRow.appendChild(newCell);
+                event.preventDefault();
+            }
+            else if((type == "SC") && (offset >= 3 || offset <= -3)){
+                warning.textContent = "Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for SC (±3°C)";
+                document.getElementsByName("newoffset")[0].style.color="#ff0000";
+                document.getElementsByName("newoffset")[0].style.fontWeight = 'bold';
+                newRow.appendChild(newCell);
+                event.preventDefault();
+            }
+            else if((type == "HU") && (offset >= 5 || offset <= -5)){
+                warning.textContent = "Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for HU (±5%)";
+                document.getElementsByName("newoffset")[0].style.color="#ff0000";
+                document.getElementsByName("newoffset")[0].style.fontWeight = 'bold';
+                newRow.appendChild(newCell);
+                event.preventDefault();
+            }
+            else if((type == "TMC") && (offset >= 4 || offset <= -4)){
+                alert("Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for TMC (±4°C)");
+                document.getElementsByName("newoffset")[0].style.color="#ff0000";
+                document.getElementsByName("newoffset")[0].style.fontWeight = 'bold';
+                newRow.appendChild(newCell);
+                event.preventDefault();
+            }
+            else if((type == "DP") && (offset >= 0.05 || offset <= -0.05)){
+                warning.textContent = "Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for DP (±0.05%)";
+                document.getElementsByName("newoffset")[0].style.color="#ff0000";
+                document.getElementsByName("newoffset")[0].style.fontWeight = 'bold';
+                newRow.appendChild(newCell);
+                event.preventDefault();
+            }
+            else if((type == "CO2") && (offset >= 2 || offset <= -2)){
+                warning.textContent = "Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for CO2 (±2%)";
+                document.getElementsByName("newoffset")[0].style.color="#ff0000";
+                document.getElementsByName("newoffset")[0].style.fontWeight = 'bold';
+                newRow.appendChild(newCell);
+                event.preventDefault();
+            }
+            else if((type == "TC") && (offset >= 2 || offset <= -2)){
+                warning.textContent = "Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for TC (±2°)";
+                document.getElementsByName("newoffset")[0].style.color="#ff0000";
+                document.getElementsByName("newoffset")[0].style.fontWeight = 'bold';
+                newRow.appendChild(newCell);
+                event.preventDefault();
+            }
+            else if((offset == 0 || offset === "") && (type != "VerifyOnly")){
+                warning.textContent = "Warning: Please make sure you have entered an offset and try to refrain from offsets of exactly 0. Disregard this message if the sensor is only being Verified.";
+                document.getElementsByName("newoffset")[0].style.color="#ff0000";
+                document.getElementsByName("newoffset")[0].style.fontWeight = 'bold';
+                newRow.appendChild(newCell);
+                event.preventDefault();
+            }
+            else if((type == "UNKNOWN FROM SERIAL") && (offset >= 5 || offset <= -5)){
+                warning.textContent = "Warning: The offset entered (" + offset + ") is greater than or equal to the allowable offset for any sensor type.";
+                document.getElementsByName("newoffset")[0].style.color="#ff0000";
+                document.getElementsByName("newoffset")[0].style.fontWeight = 'bold';
+                newRow.appendChild(newCell);
+                event.preventDefault();
+            }
+            td.appendChild(newRow);
+
+        }
 
 })();
