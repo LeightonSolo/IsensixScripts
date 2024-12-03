@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrated Checkmarks and Autocollapse Zones
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.31
+// @version      3.5
 // @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated.
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -100,6 +100,28 @@ async function toggleZones(){
 (async function() {
     'use strict';
 
+
+    //CLEANUP CALIBRATION DATA EVERY 10 MONTHS
+    const currentDate = new Date();
+    const lastCleanup = await GM.getValue("lastCleanup", 0);
+
+    // Check if 10 months have passed since the last cleanup
+    const TEN_MONTHS_MS = 10 * 30 * 24 * 60 * 60 * 1000; // Approximation: 10 months in milliseconds
+    if (currentDate.getTime() - lastCleanup >= TEN_MONTHS_MS) {
+        console.log("10 months have passed. Clearing stored calibration values...");
+
+        // Get all stored keys and clear them
+        const keys = await GM.listValues();
+        for (const key of keys) {
+            await GM.deleteValue(key);
+        }
+
+        // Update the last cleanup timestamp
+        await GM.setValue("lastCleanup", currentDate.getTime());
+        console.log("All stored values cleared and cleanup timestamp updated.");
+    }
+    // ========================================================================
+
     var inputString = document.URL;
             var regex = /:(\d{4})/;
             var match = inputString.match(regex);
@@ -108,6 +130,8 @@ async function toggleZones(){
                 var server = match[1];
                 server = server.slice(1); //will get the three digit server ID
             }
+
+
 
     //================================================ ARMS ===================================================================================================
     if(arms == 1){ //ARMS
