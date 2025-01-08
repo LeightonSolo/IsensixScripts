@@ -6,8 +6,8 @@
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/index.php*mode=11*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
-// @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/
-// @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/
+// @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/refs/heads/main/AutofillTimes%26Readings.js
+// @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/refs/heads/main/AutofillTimes%26Readings.js
 // @grant GM_getValue
 // ==/UserScript==
 
