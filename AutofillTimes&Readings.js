@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WIP Autofill Calibration Times and Readings (ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      0.9
+// @version      0.91
 // @description  Will automatically input the current time into the times for your readings, currently just works for ARMS, will autofill second two readings based on first
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/index.php*mode=11*
@@ -63,7 +63,7 @@ if (reading1box && reading2box && reading3box) {
                 reading2box.value = reading1box.value;
                 reading3box.value = reading1box.value;
             });
-            // Add an event listener to first reading
+            // Add an event listener to first time
             time1box.addEventListener('input', function () {
                 time2box.value = convertTo4Digits(new Date(convertFrom4Digits(time1box.value).getTime() + 60000));
                 time3box.value = convertTo4Digits(new Date(convertFrom4Digits(time1box.value).getTime() + 120000));
