@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.85
+// @version      1.87
 // @description  Will select certs automatically based on sensor type and highlight certs that you upload for easier calibration.
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
 // @match        https://*/arms2/calibration/calsensor.php*
 // @match        https://*/arms/admin/index.php?mode=11&certs=1*
-// @match        https://*/arms/admin/editcalcert.php
+// @match        https://*/arms/admin/editcalcert.php*
 // @match        https://*/arms/admin/sensorcal.php
 // @match        https://*/arms2/admin/index.php?mode=SETUP_CERT*
 // @match        https://*/arms2/calsensor.php?id=*
@@ -439,15 +439,22 @@ let arms = 0;
 
     else if((document.URL).includes("editcalcert.php")){ //ARMS cert pages
 
-        const BTN_CHECK = document.querySelector('input[type="submit"][value="Accept"]'); //ARMS accept cert button
+        let BTN_CHECK = document.querySelector('input[type="submit"][value="Accept"]'); //ARMS accept cert button
+        if(!BTN_CHECK){BTN_CHECK = document.querySelector('input[type="submit"][value="Save"]');}
 
         let stored1 = await GM.getValue("highlightCert1");
         let stored2 = await GM.getValue("highlightCert2");
         let stored3 = await GM.getValue("highlightCert3");
         let stored4 = await GM.getValue("highlightCert4");
 
+
         BTN_CHECK.addEventListener("click", (event) => { //wait for user to click the save button
                 let certName = document.querySelector("body > form > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(3) > td:nth-child(2)").innerHTML; //get cert description
+
+            if((document.URL).includes("&edit=1")){
+                certName = document.querySelector("body > form > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(3) > td:nth-child(2) > input[type=text]").value.trim();
+            }
+
 
                 if((stored1 == certName) || (stored2 == certName) || (stored3 == certName) || (stored4 == certName)){
                     alert("Cert saved: " + certName);
