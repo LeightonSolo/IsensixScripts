@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name         Paylocity QOL Scripts
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/LeightonSolo/IsensixScripts
 // @version      0.7
 // @description  WIP: Adds a button to autofill Per Diem, autofill Monday through Friday hours on time sheet
 // @author       Leighton Solomon
 // @match        https://app.paylocity.com/Expense/dashboardV2/reports/edit/*
 // @match        https://webtime2.paylocity.com/webtime/Employee/Timesheet
+// @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/refs/heads/main/PaylocityTools.js
+// @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/refs/heads/main/PaylocityTools.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=paylocity.com
 // @grant        none
 // ==/UserScript==
