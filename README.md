@@ -21,6 +21,7 @@ Leighton’s Tools is a collection of scripts that run via the Tampermonkey brow
 - [CopySummaryGuardian.js](/CopySummaryGuardian.js) - Creates a button on Guardian servers that when clicked will automatically copy the text from the Isensix Calibration Summary to your clipboard.
 - [AutocloseCalibrationTabs.js](/AutocloseCalibrationTabs.js) - Closes calibration tabs after a sensor is calibrated based on a user defined time. Can be disabled or changed with a slider on the calibration page. 
 - [TimeoutWarning.js](/TimeoutWarning.js) - Will warn if you have sat on the calibration confirmation page for too long without confirming before the page times out.
+- [AutofillTimes&Readings.js](/AutofillTimes&Readings.js) - (Work in Progress) Fills the time and reading automatically when calibrating a sensor, updates dynamically.
 
 Other scripts not on this repository due to being very simple or unlikely to be updated:
 - Automatically go back after Guardian 2.0 servers redirect you to the "Portal" page
