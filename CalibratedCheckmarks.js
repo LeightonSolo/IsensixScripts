@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrated Checkmarks and Autocollapse Zones
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.5
+// @version      3.51
 // @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated.
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -97,12 +97,16 @@ async function toggleZones(){
     }
 }
 
+    const currentDate = new Date();
+
 (async function() {
     'use strict';
 
 
     //CLEANUP CALIBRATION DATA EVERY 10 MONTHS
-    const currentDate = new Date();
+    // Initialize the current date
+
+    // Load the last cleanup timestamp
     const lastCleanup = await GM.getValue("lastCleanup", 0);
 
     // Check if 10 months have passed since the last cleanup
@@ -421,12 +425,6 @@ async function toggleZones(){
                 if((calibratedCount == zoneCount) && (toggleZoneState == "ON")){
                     zoneTables[i].style.backgroundColor = '#9eff7f';
                     zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Sensors, ' + calibratedCount + ' Calibrated.');
-                    //close zone
-                    /* const firstLink = table.querySelector('a');
-                    if (firstLink) {
-                        firstLink.click();
-                    }*/
-                    //console.log("removing");
                     zoneTables[i].children[0].remove();
                 }
                 if(zoneCount == 0){
@@ -529,6 +527,15 @@ async function toggleZones(){
                 }
             }
 
+            //create button to allow manually deleting all stored sensor data if needed  ======
+            let deleteButt=document.createElement("button");
+            deleteButt.innerHTML="Delete Stored Calibration Data from Leighton's Tools";
+            deleteButt.addEventListener("click", () => deleteStoredData());
+            document.querySelector("#body").appendChild(deleteButt);
+            //=============================================================================
+
+
+
             const zoneTables = document.getElementsByClassName("zone p100");
 
             const ajaxBodyElement = document.querySelector('.ajaxbody');
@@ -592,3 +599,17 @@ async function toggleZones(){
         }
     }
 })();
+
+
+async function deleteStoredData(){
+    const keys = await GM.listValues();
+        for (const key of keys) {
+            await GM.deleteValue(key);
+        }
+        // Update the last cleanup timestamp
+        await GM.setValue("lastCleanup", currentDate.getTime());
+    console.log("deleting stored calibration values");
+    location.reload();
+
+}
+
