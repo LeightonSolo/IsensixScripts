@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Calibrate Buttons for Live View, ARMS and Guardian
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.96
-// @description  Adds a Calibration button to every sensor on the Isensix Live view page, will work on all ARMS and Guardian servers
+// @version      3.97
+// @description  Adds a Calibration button to every sensor on the Isensix Live view page, will work on all ARMS and Guardian servers, Exception buttons WIP
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
 // @match        https://*/arms2/
@@ -29,9 +29,9 @@ let arms = 0;
 
 let twoPointZero = 0;
     try { //determine if the system is Guardian 2.1 or 2.0
-        if(document.getElementsByClassName("ICO_DISCONNECT")[0].innerHTML == "Sign me off"){
-        console.log("Guardian 2.0 server detected");
-        twoPointZero = 1;
+        if((document.getElementsByClassName("ICO_DISCONNECT")[0].innerHTML == "Sign me off") || (document.querySelector("#guardian-bar-wp-logo > a").title == "Guardian 2.0")){
+            console.log("Guardian 2.0 server detected");
+            twoPointZero = 1;
         }
     }
     catch(err){}
@@ -102,7 +102,7 @@ function openCalUrl(id, butt){
                 butt.innerHTML="Calibrate";
 
                 butt.addEventListener("click", () => openCalUrl(id, butt));
-                
+
                 sensorList[i].parentElement.parentElement.appendChild(butt); //adds calibrate button to parent table
 
             }
