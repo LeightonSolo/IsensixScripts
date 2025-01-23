@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrated Checkmarks and Autocollapse Zones
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.51
+// @version      3.55
 // @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated.
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -288,6 +288,12 @@ async function toggleZones(){
                 //}catch(err){};
 
             }
+            //create button to allow manually deleting all stored sensor data if needed  ======
+            let deleteButt=document.createElement("button");
+            deleteButt.innerHTML="Delete Stored Calibration Data from Leighton's Tools";
+            deleteButt.addEventListener("click", () => deleteStoredData());
+            document.querySelector("body > hr").appendChild(deleteButt);
+            //=============================================================================
         }
     }
     //================================================ GUARDIAN 2.0 ================================================================================================
@@ -433,6 +439,12 @@ async function toggleZones(){
 
                 zoneTables[i].prepend(zoneTitle); //adds zone count and calibrated to zone title
             }
+            //create button to allow manually deleting all stored sensor data if needed  ======
+            let deleteButt=document.createElement("button");
+            deleteButt.innerHTML="Delete Stored Calibration Data from Leighton's Tools";
+            deleteButt.addEventListener("click", () => deleteStoredData());
+            document.querySelector("#body").appendChild(deleteButt);
+            //=============================================================================
         }
     }
     //================================================ GUARDIAN 2.1 ================================================================================================
