@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.9
+// @version      1.91
 // @description  Will select certs automatically based on sensor type and highlight certs that you upload for easier calibration.
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -375,23 +375,23 @@ let arms = 0;
                 }
                 else if(stored1 == undefined){
                     GM.setValue("highlightCert1", certName);
-                    alert("Cert saved: " + certName);
+                    alert("New Cert saved: " + certName);
                 }
                 else if(stored2 == undefined){
                     GM.setValue("highlightCert2", certName);
-                    alert("Cert saved: " + certName);
+                    alert("New Cert saved: " + certName);
                 }
                 else if(stored3 == undefined){
                     GM.setValue("highlightCert3", certName);
-                    alert("Cert saved: " + certName);
+                    alert("New Cert saved: " + certName);
                 }
                 else if(stored4 == undefined){
                     GM.setValue("highlightCert4", certName);
-                    alert("Cert saved: " + certName);
+                    alert("New Cert saved: " + certName);
                 }
                 else{
                     GM.setValue("highlightCert1", certName);
-                    alert("Cert saved: " + certName);
+                    alert("New Cert saved: " + certName);
                 }
             }
         });
@@ -420,23 +420,23 @@ let arms = 0;
                 }
                 else if(stored1 == undefined){
                     GM.setValue("highlightCert1", certName);
-                    alert("Cert saved: " + certName);
+                    alert("New Cert saved: " + certName);
                 }
                 else if(stored2 == undefined){
                     GM.setValue("highlightCert2", certName);
-                    alert("Cert saved: " + certName);
+                    alert("New Cert saved: " + certName);
                 }
                 else if(stored3 == undefined){
                     GM.setValue("highlightCert3", certName);
-                    alert("Cert saved: " + certName);
+                    alert("New Cert saved: " + certName);
                 }
                 else if(stored4 == undefined){
                     GM.setValue("highlightCert4", certName);
-                    alert("Cert saved: " + certName);
+                    alert("New Cert saved: " + certName);
                 }
                 else{
                     GM.setValue("highlightCert1", certName);
-                    alert("Cert saved: " + certName);
+                    alert("New Cert saved: " + certName);
                 }
 
         });
