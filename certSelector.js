@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.87
+// @version      1.9
 // @description  Will select certs automatically based on sensor type and highlight certs that you upload for easier calibration.
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -405,9 +405,14 @@ let arms = 0;
         let stored3 = await GM.getValue("highlightCert3");
         let stored4 = await GM.getValue("highlightCert4");
 
+
         BTN_CHECK.addEventListener("click", (event) => { //wait for user to click the save button
 
-                let certName = document.querySelector("#body > form > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(2) > td").textContent;
+            let certName = document.querySelector("#body > form > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(2) > td").textContent;
+
+            if((document.URL).includes("edit=1")){
+                certName = document.querySelector("#cert_description").value;
+            }
 
 
                 if((stored1 == certName) || (stored2 == certName) || (stored3 == certName) || (stored4 == certName)){
