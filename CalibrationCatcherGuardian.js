@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (Guardian)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.1
+// @version      3.3
 // @description  Catch calibration mistakes for Isensix Guardian servers
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -23,6 +23,7 @@
 //Will warn users when entering an offset outside the allowable range for RE, RM, SC, HU, DP, CO2, TC, and TMC. (assuming valid serial number)
 //Will warn if no offset is given or an offset of exactly 0
 //Will warn if no canned message is selected
+//Will warn if there is not a canned message that meets the approved phrasing
 //Will warn if you are calibrating a sensor that has already been calibrated in the past week
 
 
@@ -121,15 +122,33 @@
     const BTN_CHECK = document.getElementById("BTN_CHECK");
     let firstClick = true;
     let failed = false;
+    let replaced = false;
+    let correctCannedFail = false;
+    let correctCannedProper = false;
+    let correctCannedReplaced = false;
 
     BTN_CHECK.addEventListener("click", (event) => { //wait for user to click sensor calibrated button
 
-        for(var i = 0; i < checkBoxes.length; i++){ //go through all canned messages and make sure you have selected at least one
+        for(var i = 0; i < checkBoxes.length; i++){ //go through all canned messages and make sure you have selected at least one, check failure, and check correct type of failure message
+            if(checkBoxes[i].parentElement.textContent.trim().toLowerCase() == "sensor failed calibration/verification, needs to be replaced."){
+                correctCannedFail = true;
+            }
+            if(checkBoxes[i].parentElement.textContent.trim().toLowerCase() == "proper functionality has been verified."){
+                correctCannedProper = true;
+            }
+            if(checkBoxes[i].parentElement.textContent.trim().toLowerCase() == "replaced sensor."){
+                correctCannedReplaced = true;
+            }
+
             if(checkBoxes[i].checked){
                 canSelected = true;
                 if(checkBoxes[i].parentElement.textContent.trim().toLowerCase().includes("failed")){
                     failed = true;
                     console.log("Sensor failed.");
+                }
+                if(checkBoxes[i].parentElement.textContent.trim().toLowerCase().includes("sensor replaced")){
+                    replaced = true;
+                    console.log("Sensor replaced.");
                 }
             }
         }
@@ -190,7 +209,21 @@
             event.preventDefault();
             firstClick = false;
         }
-
+        if(firstClick && !correctCannedProper){
+            alert("A correct canned message was not found for proper functionality. Please create a canned message that is EXACTLY \"Proper functionality has been verified.\"");
+            event.preventDefault();
+            firstClick = false;
+        }
+        if(firstClick && !correctCannedFail && failed){
+            alert("A correct canned message was not found for failing a sensor. Please create a canned message that is EXACTLY \"Sensor failed calibration/verification, needs to be replaced.\"");
+            event.preventDefault();
+            firstClick = false;
+        }
+        if(firstClick && !correctCannedReplaced && replaced){
+            alert("A correct canned message was not found for replacing a sensor. Please create a canned message that is EXACTLY \"Replaced sensor.\"");
+            event.preventDefault();
+            firstClick = false;
+        }
 
     });
 
