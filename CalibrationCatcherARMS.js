@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.4
+// @version      2.5
 // @description  Catch calibration mistakes for Isensix ARMS servers
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/sensorcal.php
@@ -17,9 +17,11 @@
 
 
 //WILL NOT WORK WITHOUT A VALID SENSOR SERIAL NUMBER
+//Works on all ARMS servers
 //Will warn users when entering an offset outside the allowable range for RE, RM, SC, HU, DP, CO2, and TMC. (assuming valid serial number)
 //Will warn if no offset is given or an offset of exactly 0.
 //Will warn if no canned message is selected
+//Will warn if there a canned message that does not meet the approved phrasing
 
 
 (function() {
@@ -86,24 +88,39 @@
     let canSelected = false;
     let firstClick = true;
     let failed = false;
+    let replaced = false;
+    let correctCannedFail = false;
+    let correctCannedProper = false;
+    let correctCannedReplaced = false;
 
     const BTN_CHECK = document.getElementsByName("submit")[2];
 
     //TEST BUTTON, uncomment to test failure catching without submitting the calibration
-    /*let btn = document.createElement("BUTTON");
-    btn.textContent = 'Test';
+    /*let BTN_CHECK = document.createElement("BUTTON");
+    BTN_CHECK.textContent = 'Test';
     let div = document.getElementsByClassName("headline3")[0];
     let cell = document.createElement("td");
-    cell.appendChild(btn);
+    cell.appendChild(BTN_CHECK);
     div.prepend(cell);*/
     //=====================================
 
     const offset = document.getElementsByName("newoffset")[0].value; //get value of offset entered
 
     BTN_CHECK.addEventListener("click", (event) => { //wait for user to Set Sensor Offset button
-    //btn.addEventListener("click", (event) => {
 
         for(var i = 0; i < checkBoxes.length; i++){ //go through all canned messages and make sure you have selected at least one
+            if(checkBoxes[i].nextSibling.textContent.trim().toLowerCase() == "sensor failed calibration/verification, needs to be replaced."){
+                correctCannedFail = true;
+                console.log("Failed canned correct.");
+            }
+            if(checkBoxes[i].nextSibling.textContent.trim().toLowerCase() == "proper functionality has been verified."){
+                correctCannedProper = true;
+                console.log("Proper functionally canned correct.");
+            }
+            if(checkBoxes[i].nextSibling.textContent.trim().toLowerCase() == "replaced sensor."){
+                correctCannedReplaced = true;
+                console.log("Replaced canned correct.");
+            }
             if(checkBoxes[i].checked){
                 canSelected = true;
                 const text = checkBoxes[i].nextSibling.textContent.trim().toLowerCase();
@@ -112,12 +129,31 @@
                     failed = true;
                     console.log("Sensor failed.");
                 }
+                if (text.includes("sensor replaced")) {
+                    replaced = true;
+                    console.log("Sensor replaced.");
+                }
 
             }
         }
 
         if(firstClick && (!canSelected)){
             alert("Please make sure you select a Canned Message.");
+            event.preventDefault();
+            firstClick = false;
+        }
+        if(firstClick && !correctCannedProper){
+            alert("A correct canned message was not found for proper functionality. Please create a canned message that is EXACTLY \"Proper functionality has been verified.\"");
+            event.preventDefault();
+            firstClick = false;
+        }
+        if(firstClick && !correctCannedFail && failed){
+            alert("A correct canned message was not found for failing a sensor. Please create a canned message that is EXACTLY \"Sensor failed calibration/verification, needs to be replaced.\"");
+            event.preventDefault();
+            firstClick = false;
+        }
+        if(firstClick && !correctCannedReplaced && replaced){
+            alert("A correct canned message was not found for replacing a sensor. Please create a canned message that is EXACTLY \"Replaced sensor.\"");
             event.preventDefault();
             firstClick = false;
         }
@@ -133,7 +169,6 @@
     newCell.style.color = "red";
     newCell.style.fontWeight = "bold";
     newCell.setAttribute("colspan", "5")
-
 
      if(!failed){
             if((type == "RE" || type == "RM") && (offset >= 1.5 || offset <= -1.5)){
