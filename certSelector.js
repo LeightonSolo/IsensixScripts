@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.91
-// @description  Will select certs automatically based on sensor type and highlight certs that you upload for easier calibration.
+// @version      2.0
+// @description  Will select certs automatically based on sensor type, highlight certs that you upload for easier calibration, and autofill cert data on Guardian 2.1.
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -365,6 +365,28 @@ let arms = 0;
         let stored3 = await GM.getValue("highlightCert3");
         let stored4 = await GM.getValue("highlightCert4");
 
+        let firstTh = document.querySelector("#certificateDataTable thead th:first-child");
+
+        /*if (firstTh) {
+            // Create the button element
+            let fillButton = document.createElement("button");
+            fillButton.textContent = "Fill Values (WIP)";
+            fillButton.className = "ui-button ui-corner-all ui-widget"; // Match styling
+            fillButton.type = "button";
+
+            // Add click event
+            fillButton.addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent any unintended default behavior
+            alert("Button clicked!"); // Replace with your desired action
+
+            });
+
+            // Insert button into the <th>
+            firstTh.appendChild(fillButton);
+        }*/
+        // Check for stored data and show Autofill button if available
+        checkForStoredData();
+
         BTN_CHECK.addEventListener("click", (event) => { //wait for user to click the save button
             let certBox = document.getElementById("cat2");
             if(certBox.checked){// && checkbox.checked){ //save the cert if the certificate box is checked
@@ -393,6 +415,7 @@ let arms = 0;
                     GM.setValue("highlightCert1", certName);
                     alert("New Cert saved: " + certName);
                 }
+                saveCertificateData();
             }
         });
     }
@@ -484,7 +507,6 @@ let arms = 0;
                     GM.setValue("highlightCert1", certName);
                     alert("Cert saved: " + certName);
                 }
-
         });
     }
 
@@ -546,3 +568,91 @@ async function deleteCert(certNumber) {
     }
     catch(err){}
 }
+
+function saveCertificateData() {
+    let certKey = document.querySelector("#description").value.trim();
+    let tableRows = document.querySelectorAll("#certificateDataTable tbody tr");
+
+    let valuesArray = Array.from(tableRows).map(row => {
+        let inputs = row.querySelectorAll("input[type='number']");
+        return [
+            inputs[0]?.value || "",
+            inputs[1]?.value || "",
+            inputs[2]?.value || ""
+        ];
+    });
+
+    GM.setValue(certKey, valuesArray);
+    console.log("Data saved successfully!");
+}
+
+
+function checkForStoredData() {
+    console.log("Checking for stored data");
+    let description = document.querySelector("#description");
+    if (!description) return;
+
+    description.addEventListener("input", async function () { // Make the function async
+        let certKey = description.value.trim();
+        let storedData = await GM.getValue(certKey, null); // Await the stored data
+
+        let firstTh = document.querySelector("#certificateDataTable thead th:first-child");
+        let existingButton = document.querySelector("#autofillButton");
+
+        if (storedData) {
+            console.log("Stored data found for:", certKey);
+            if (!existingButton) {
+                let autofillButton = document.createElement("button");
+                autofillButton.textContent = "Autofill";
+                autofillButton.className = "ui-button ui-corner-all ui-widget";
+                autofillButton.id = "autofillButton";
+                autofillButton.type = "button";
+
+                autofillButton.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    autofillCertificateData(certKey);
+                });
+
+                firstTh.appendChild(autofillButton);
+            }
+        } else {
+            console.log("No data exists for:", certKey);
+            if (existingButton) {
+                existingButton.remove(); // Remove button if no data exists
+            }
+        }
+    });
+}
+
+async function autofillCertificateData(certKey) {
+    console.log("Autofilling data for:", certKey);
+
+    let storedData = await GM.getValue(certKey, null);
+    if (!storedData || !Array.isArray(storedData)) {
+        console.log("No valid stored data found.");
+        return;
+    }
+
+    let tableBody = document.querySelector("#certificateDataTable tbody");
+    let addButton = document.querySelector("#btnDuplicateCertificateRow");
+
+    // Clear existing rows before adding new ones
+    tableBody.innerHTML = "";
+
+    storedData.forEach(row => {
+    addButton.click(); // Simulate clicking "Add" button to generate a new row
+    let lastRow = tableBody.lastElementChild;
+    if (lastRow) {
+        let inputs = lastRow.querySelectorAll("input");
+        if (inputs.length === 3) {
+            inputs[0].value = row[0]; // Celsius value (Index 0)
+            inputs[1].value = row[1]; // Fahrenheit value (Index 1)
+            inputs[2].value = row[2]; // Offset value (Index 2)
+        }
+    }
+});
+    console.log("Autofill complete.");
+}
+
+// Ensure this function is available in global scope
+window.autofillCertificateData = autofillCertificateData;
