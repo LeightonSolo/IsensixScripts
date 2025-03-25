@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.1
+// @version      2.11
 // @description  Will select certs automatically based on sensor type, highlight certs that you upload for easier calibration, and autofill cert data on Guardian 2.1.
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -423,6 +423,8 @@ let arms = 0;
     else if((document.URL).includes("?mode=SETUP_CERT")){ //guardian 2.0 cert pages
 
         const BTN_CHECK = document.querySelector("#body > form > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(7) > td > input:nth-child(1)");
+        if(!BTN_CHECK){BTN_CHECK = document.querySelector('input[type="submit"][value="Save"]');}
+
 
         let stored1 = await GM.getValue("highlightCert1");
         let stored2 = await GM.getValue("highlightCert2");
