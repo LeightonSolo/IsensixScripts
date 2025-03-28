@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Last 5 Calibrations Table
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.96
+// @version      1.98
 // @description  Shows the last 5 calibrations you've done to prevent meter time overlap
 // @author       Leighton Solomon
 // @match        https://*/arms2/calsetup.php
@@ -12,7 +12,7 @@
 // @match        https://*/arms/admin/index.php?*
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/LastCalibrationsTable.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/LastCalibrationsTable.js
-// @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
 // @grant GM_getValue
 // @grant GM.setValue
 // ==/UserScript==
@@ -208,6 +208,7 @@ let arms = 0;
             let lastCal2 = await GM.getValue("lastCal1");
             GM.setValue("lastCal2", lastCal2);
             GM.setValue("lastCal1", lastCal.innerHTML);
+            localStorage.setItem("lastCal1", lastCal.innerHTML);
 
         }
 
@@ -315,6 +316,8 @@ let arms = 0;
         let lastCal2 = await GM.getValue("lastCal1");
         GM.setValue("lastCal2", lastCal2);
         GM.setValue("lastCal1", lastCal.innerHTML);
+        localStorage.setItem("lastCal1", lastCal.innerHTML);
+
 
     }
 
