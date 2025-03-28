@@ -14,7 +14,7 @@ Leighton’s Tools is a collection of scripts that run via the Tampermonkey brow
 - [LastCalibrationsTable.js](/LastCalibrationsTable.js) - Shows the last 5 calibrations you've done, useful to prevent meter time overlap and keep track of what you've done.
 - [CalibrationCatcherGuardian.js](/CalibrationCatcherGuardian.js) - For Isensix Guardian servers, the user is notified for out of range or empty offsets, no canned message selection or improper canned message, and if the sensor was already calibrated in the past week.
 - [CalibrationCatcherARMS.js](/CalibrationCatcherARMS.js) - For Isensix ARMS servers, the user is notified for out of range or empty offsets, if no canned message was selected, or for improper canned messages.
-- [certSelector.js](/certSelector.js) - Automatically selects the appropriate certificate based on sensor type and highlights certs that you upload for easier selection.
+- [certSelector.js](/certSelector.js) - Automatically selects the appropriate certificate based on sensor type and highlights certs that you upload for easier selection. On Guardian 2.1 servers, the offsets entered for the certificate will be saved and can be autofilled after.
 - [CalibratedCheckmarks.js](/CalibratedCheckmarks.js) - Shows which sensors have already been calibrated on the live view. This data only updates whenever the calibration overview, calibration summary, or arms debug query is viewed.
 - [LatestCalibrationTimes.js](/LatestCalibrationTimes.js) - Tells latest calibration time on the calibration overview tab, Isensix Calibration Summary Tab, and ARMS Debug Query.
 - [ARMSDebugQuery.js](/ARMSDebugQuery.js) - Creates a button on ARMS servers that when clicked will open, autofill query, and copy from debug_query.php.
