@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.11
+// @version      2.2
 // @description  Will select certs automatically based on sensor type, highlight certs that you upload for easier calibration, and autofill cert data on Guardian 2.1.
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -589,7 +589,7 @@ function saveCertificateData() {
     console.log("Data saved successfully!");
 }
 
-
+/*
 function checkForStoredData() {
     console.log("Checking for stored data");
     let description = document.querySelector("#description");
@@ -625,6 +625,48 @@ function checkForStoredData() {
             }
         }
     });
+}*/
+
+async function checkForStoredData() {
+    console.log("Checking for stored data");
+    let description = document.querySelector("#description");
+    if (!description) return;
+
+    async function updateAutofillButton() {
+        let certKey = description.value.trim();
+        let storedData = await GM.getValue(certKey, null);
+        let firstTh = document.querySelector("#certificateDataTable thead th:first-child");
+        let existingButton = document.querySelector("#autofillButton");
+
+        if (storedData) {
+            console.log("Stored data found for:", certKey);
+            if (!existingButton) {
+                let autofillButton = document.createElement("button");
+                autofillButton.textContent = "Autofill";
+                autofillButton.className = "ui-button ui-corner-all ui-widget";
+                autofillButton.id = "autofillButton";
+                autofillButton.type = "button";
+
+                autofillButton.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    autofillCertificateData(certKey);
+                });
+
+                firstTh.appendChild(autofillButton);
+            }
+        } else {
+            console.log("No data exists for:", certKey);
+            if (existingButton) {
+                existingButton.remove(); // Remove button if no data exists
+            }
+        }
+    }
+
+    // Run once on load in case the value is already filled
+    updateAutofillButton();
+
+    // Also run on every input change
+    description.addEventListener("input", updateAutofillButton);
 }
 
 async function autofillCertificateData(certKey) {
