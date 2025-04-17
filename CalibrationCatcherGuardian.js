@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (Guardian)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.3
+// @version      3.32
 // @description  Catch calibration mistakes for Isensix Guardian servers
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -146,7 +146,7 @@
                     failed = true;
                     console.log("Sensor failed.");
                 }
-                if(checkBoxes[i].parentElement.textContent.trim().toLowerCase().includes("sensor replaced")){
+                if(checkBoxes[i].parentElement.textContent.trim().toLowerCase().includes("sensor replaced") || checkBoxes[i].parentElement.textContent.trim().toLowerCase().includes("replaced sensor")){
                     replaced = true;
                     console.log("Sensor replaced.");
                 }
