@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (Guardian)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.32
+// @version      3.33
 // @description  Catch calibration mistakes for Isensix Guardian servers
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -91,6 +91,10 @@
     else if(firstFour.includes("co2")){
         type = "CO2";
         allowOffset = "±2%";
+    }
+    else if(firstFour.includes("o2")){
+        type = "O2";
+        allowOffset = "N/A";
     }
     else if(firstFour.includes("dp")){
         type = "DP";
