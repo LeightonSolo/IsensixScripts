@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.21
+// @version      2.3
 // @description  Will select certs automatically based on sensor type, highlight certs that you upload for easier calibration, and autofill cert data on Guardian 2.1.
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -229,7 +229,7 @@ let arms = 0;
             }
         }// END HU
         else if(meterType == "CO2"){ //will auto select Vaisala CO2 for CO2 type
-            if(certName1.includes("Vaisala CO2")){
+            if(certName1.includes("Vaisala CO2") || certName1.includes("ViaSensor")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
                         cert1index = i;
@@ -240,7 +240,7 @@ let arms = 0;
                     }
                 }
             }
-            if(certName2.includes("Vaisala CO2")){
+            if(certName2.includes("Vaisala CO2") || certName2.includes("ViaSensor")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
                         cert2index = i;
@@ -251,7 +251,7 @@ let arms = 0;
                     }
                 }
             }
-            if(certName3.includes("Vaisala CO2")){
+            if(certName3.includes("Vaisala CO2") || certName3.includes("ViaSensor")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
                         cert3index = i;
@@ -262,7 +262,7 @@ let arms = 0;
                     }
                 }
             }
-            if(certName4.includes("Vaisala CO2")){
+            if(certName4.includes("Vaisala CO2") || certName4.includes("ViaSensor")){
                 for (let i = 0; i < dropdown.options.length; i++) {
                     if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
                         cert4index = i;
@@ -368,24 +368,6 @@ let arms = 0;
 
         let firstTh = document.querySelector("#certificateDataTable thead th:first-child");
 
-        /*if (firstTh) {
-            // Create the button element
-            let fillButton = document.createElement("button");
-            fillButton.textContent = "Fill Values (WIP)";
-            fillButton.className = "ui-button ui-corner-all ui-widget"; // Match styling
-            fillButton.type = "button";
-
-            // Add click event
-            fillButton.addEventListener("click", function (event) {
-            event.preventDefault(); // Prevent any unintended default behavior
-            alert("Button clicked!"); // Replace with your desired action
-
-            });
-
-            // Insert button into the <th>
-            firstTh.appendChild(fillButton);
-        }*/
-        // Check for stored data and show Autofill button if available
         checkForStoredData();
 
         BTN_CHECK.addEventListener("click", (event) => { //wait for user to click the save button
