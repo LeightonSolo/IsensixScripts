@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Report Error Checking
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      0.6
+// @version      0.62
 // @description  Ensures canned messages correct, meter matches sensor type, and offset matches canned message (WIP)
 // @author       Leighton Solomon
 // @match        https://*.isensix.com/cust/?id=*
@@ -25,7 +25,7 @@
   },
   {
     keywords: ["CO2_A_20"],
-    validValues: ["Vaisala CO2"],
+    validValues: ["Vaisala CO2", "ViaSensor"],
   },
   {
     keywords: ["DiffPress"],
@@ -76,6 +76,5 @@ for (let i = 1; i < table.rows.length; i++) {
     meterCell.style.backgroundColor = "red";
   }
 }
-
 
 })();
