@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Report Error Checking
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      0.62
+// @version      0.65
 // @description  Ensures canned messages correct, meter matches sensor type, and offset matches canned message (WIP)
 // @author       Leighton Solomon
 // @match        https://*.isensix.com/cust/?id=*
@@ -21,7 +21,7 @@
   },
   {
     keywords: ["RE", "RM", "TMC", "SC", "TC"],
-    validValues: ["Oakton", "Fluke"],
+    validValues: ["Oakton", "Fluke", "Digisense"],
   },
   {
     keywords: ["CO2_A_20"],
@@ -63,14 +63,14 @@ for (let i = 1; i < table.rows.length; i++) {
   if (statusText.includes("Sensor Disabled")) continue; // Skip disabled sensors
 
   const typeText = typeCell.textContent.trim();
-  const meterText = meterCell.textContent.trim();
+  const meterText = meterCell.textContent.trim().toLowerCase();
 
   // Find a rule where any keyword matches the type text
    const rule = rules.find(r =>
     r.keywords.some(k => typeText.includes(k))
   );
 
-  if (rule && !rule.validValues.some(v => meterText.includes(v))) {
+  if (rule && !rule.validValues.some(v => meterText.includes(v.toLowerCase()))) {
     // Highlight both cells if brand doesn't match expected
     typeCell.style.backgroundColor = "red";
     meterCell.style.backgroundColor = "red";
