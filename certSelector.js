@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.3
+// @version      2.4
 // @description  Will select certs automatically based on sensor type, highlight certs that you upload for easier calibration, and autofill cert data on Guardian 2.1.
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -554,10 +554,17 @@ async function deleteCert(certNumber) {
     catch(err){}
 }
 
-function saveCertificateData() {
-    let certKey = document.querySelector("#description").value.trim();
+async function saveCertificateData() {
+    let certKey = document.querySelector("#description")?.value.trim();
+    if (!certKey) {
+        console.error("No certificate key found.");
+        return;
+    }
     let tableRows = document.querySelectorAll("#certificateDataTable tbody tr");
-
+    if (tableRows.length === 0) {
+        console.error("No table rows found.");
+        return;
+    }
     let valuesArray = Array.from(tableRows).map(row => {
         let inputs = row.querySelectorAll("input[type='number']");
         return [
@@ -566,10 +573,23 @@ function saveCertificateData() {
             inputs[2]?.value || ""
         ];
     });
-
-    GM.setValue(certKey, valuesArray);
-    console.log("Data saved successfully!");
+    // Check if the new data is actually valid (not all empty)
+    let isEmpty = valuesArray.every(row => row.every(val => val === ""));
+    if (isEmpty) {
+        console.warn("All inputs are empty. Aborting save to prevent overwriting existing data.");
+        return;
+    }
+    // Optional: Check if there was already existing data
+    let existingData = await GM.getValue(certKey, null);
+    if (existingData && existingData.length > 0 && isEmpty) {
+        console.warn("Existing data detected. New data is empty. Not overwriting.");
+        return;
+    }
+    // Save only if new data isn't junk
+    await GM.setValue(certKey, valuesArray);
+    console.log("Data saved successfully for:", certKey);
 }
+
 
 async function checkForStoredData() {
     console.log("Checking for stored data");
