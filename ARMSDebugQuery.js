@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         ARMS Debug Query
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.4
-// @description  Creates a button on older ARMS servers that when clicked will open, autofill query, and copy from debug_query.php
+// @version      3.0
+// @description  Creates a button on older ARMS servers that when clicked will open, autofill query, and copy from debug_query.php along with server information
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/
 // @match        https://*/arms/debug/debug.php
@@ -54,6 +54,8 @@ let arms = 0;
     }
     catch(err){}
 
+let match = window.location.href.match(/:(\d{3,5})/); // match like :7888
+let serverId = match ? match[1].slice(-3) : "UNKNOWN"; // get last 3 digits
 
 function selectElementContents(el) {
         var body = document.body, range, sel;
@@ -95,34 +97,39 @@ function removeEmptyLastColumn(table) {
     }
 }
 
+
+
 function copyTable(copyBtn){
-
-
     var table = document.getElementsByTagName("table")[0];
 
     // Remove the last column if it is empty
     removeEmptyLastColumn(table);
 
-                selectElementContents(table);
+    let rows = Array.from(table.rows);
+    let newRows = [];
 
-                const selection = window.getSelection();
-                const text = selection.toString();
-                const newText = text.slice(1); //should remove pesky newline that keeps happening only on Chrome
+    let version = "ARMS";
 
-                //document.execCommand('copy');   deprecated
-                navigator.clipboard.writeText(newText).then(
-                    () => {
-                        //alert("Calibration Summary Copied!");
-                        copyBtn.textContent = 'Copied to your clipboard!';
-                        copyBtn.style.background='#5beb34';
-                        window.getSelection().removeAllRanges();
-                    },
-                    (message) => {
-                        alert("Could not copy! Error: " + message);
-                    },
-                );
+    for (let row of rows) {
+        let cells = Array.from(row.cells).map(cell => cell.textContent.trim());
+        cells.push(serverId, version); // Add the two new columns
+        newRows.push(cells.join("\t"));
+    }
 
+    const finalText = newRows.join("\n");
+
+    navigator.clipboard.writeText(finalText).then(
+        () => {
+            copyBtn.textContent = 'Copied to your clipboard!';
+            copyBtn.style.background = '#5beb34';
+            window.getSelection().removeAllRanges();
+        },
+        (message) => {
+            alert("Could not copy! Error: " + message);
+        },
+    );
 }
+
 
 
 (function() {
