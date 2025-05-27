@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.4
+// @version      2.8
 // @description  Will select certs automatically based on sensor type, highlight certs that you upload for easier calibration, and autofill cert data on Guardian 2.1.
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -39,6 +39,7 @@ let arms = 0;
         let certName2 = await GM.getValue("highlightCert2");
         let certName3 = await GM.getValue("highlightCert3");
         let certName4 = await GM.getValue("highlightCert4");
+        let certName5 = await GM.getValue("highlightCert5");
 
         if(certName1 == undefined){
             certName1 = "empty";
@@ -51,6 +52,9 @@ let arms = 0;
         }
         if(certName4 == undefined){
             certName4 = "empty";
+        }
+        if(certName5 == undefined){
+            certName5 = "empty";
         }
 
         let dropdown = document.getElementById("slCalibrationCertificate");
@@ -114,7 +118,7 @@ let arms = 0;
             if(arms == 1){
                 match = check.split(" Exp:")[0];
             }
-            if((match == certName1) || (match == certName2) || (match == certName3) || (match == certName4)){ //check if matches a stored cert name
+            if((match == certName1) || (match == certName2) || (match == certName3) || (match == certName4) || (match == certName5)){ //check if matches a stored cert name
                 dropdown.selectedIndex = i;
                 options[i].style.fontWeight = "bold";
                 options[i].style.color = "darkblue";
@@ -124,6 +128,7 @@ let arms = 0;
         let cert2index = 0;
         let cert3index = 0;
         let cert4index = 0;
+        let cert5index = 0;
 
         console.log("Meter Type Detected: " + meterType);
 
@@ -181,6 +186,19 @@ let arms = 0;
                     }
                 }
             }
+            if(certName5.includes("Oakton") || certName5.includes("Fluke")){
+                for (let i = 0; i < dropdown.options.length; i++) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName5 || dropdown.options[i].text.split(" Exp:")[0] === certName5) {
+                        cert5index = i;
+                        dropdown.selectedIndex = cert5index;
+                        if(meterType != "UNKNOWN"){
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
+                        }
+                        break; // Exit the loop if found
+                    }
+                }
+            }
         }// END RE
         else if(meterType == "HU"){ //will auto select Vaisala for HU type sensors
             if(certName1.includes("Vaisala") && !certName1.includes("CO2")){
@@ -221,6 +239,17 @@ let arms = 0;
                     if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
                         cert4index = i;
                         dropdown.selectedIndex = cert4index;
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
+                        break; // Exit the loop if found
+                    }
+                }
+            }
+            if(certName5.includes("Vaisala") && !certName5.includes("CO2")){
+                for (let i = 0; i < dropdown.options.length; i++) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName5 || dropdown.options[i].text.split(" Exp:")[0] === certName5) {
+                        cert5index = i;
+                        dropdown.selectedIndex = cert5index;
                         dropdown.style.fontWeight = "bold";
                         dropdown.style.color = "darkblue";
                         break; // Exit the loop if found
@@ -273,6 +302,17 @@ let arms = 0;
                     }
                 }
             }
+            if(certName5.includes("Vaisala CO2") || certName5.includes("ViaSensor")){
+                for (let i = 0; i < dropdown.options.length; i++) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName5 || dropdown.options[i].text.split(" Exp:")[0] === certName5) {
+                        cert5index = i;
+                        dropdown.selectedIndex = cert5index;
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
+                        break; // Exit the loop if found
+                    }
+                }
+            }
         }// END CO2
         else if(meterType == "DP"){ //will auto select Dwyer for DP type sensors
             if(certName1.includes("Dwyer")){
@@ -319,6 +359,17 @@ let arms = 0;
                     }
                 }
             }
+            if(certName5.includes("Dwyer")){
+                for (let i = 0; i < dropdown.options.length; i++) {
+                    if (dropdown.options[i].text.split(" - ")[0] === certName5 || dropdown.options[i].text.split(" Exp:")[0] === certName5) {
+                        cert5index = i;
+                        dropdown.selectedIndex = cert5index;
+                        dropdown.style.fontWeight = "bold";
+                        dropdown.style.color = "darkblue";
+                        break; // Exit the loop if found
+                    }
+                }
+            }
         }// END DP
     }
 
@@ -343,16 +394,19 @@ let arms = 0;
         if(certNames[2] == undefined){certNames[2] = "empty"};
         certNames[3] = await GM.getValue("highlightCert4");
         if(certNames[3] == undefined){certNames[3] = "empty"};
+        certNames[4] = await GM.getValue("highlightCert5");
+        if(certNames[4] == undefined){certNames[4] = "empty"};
 
         const deleteButtons = [
             { text: "Delete", clickFunction: () => deleteCert(1) },
             { text: "Delete", clickFunction: () => deleteCert(2) },
             { text: "Delete", clickFunction: () => deleteCert(3) },
             { text: "Delete", clickFunction: () => deleteCert(4) },
+            { text: "Delete", clickFunction: () => deleteCert(5) },
         ];
 
         const line1 = document.createTextNode("\u00A0 \u00A0Assigned Certificates");
-        createTable(container, [1,2,3,4], certNames, deleteButtons); //create table of stored certs
+        createTable(container, [1,2,3,4,5], certNames, deleteButtons); //create table of stored certs
         container.prepend(line1);
 
     }
@@ -365,6 +419,7 @@ let arms = 0;
         let stored2 = await GM.getValue("highlightCert2");
         let stored3 = await GM.getValue("highlightCert3");
         let stored4 = await GM.getValue("highlightCert4");
+        let stored5 = await GM.getValue("highlightCert5");
 
         let firstTh = document.querySelector("#certificateDataTable thead th:first-child");
 
@@ -375,7 +430,7 @@ let arms = 0;
             if(certBox.checked){// && checkbox.checked){ //save the cert if the certificate box is checked
                 let certName = document.getElementById("description").value;
 
-                if((stored1 == certName) || (stored2 == certName) || (stored3 == certName) || (stored4 == certName)){
+                if((stored1 == certName) || (stored2 == certName) || (stored3 == certName) || (stored4 == certName) || (stored5 == certName)){
                     alert("Cert saved: " + certName);
                 }
                 else if(stored1 == undefined){
@@ -392,6 +447,10 @@ let arms = 0;
                 }
                 else if(stored4 == undefined){
                     GM.setValue("highlightCert4", certName);
+                    alert("New Cert saved: " + certName);
+                }
+                else if(stored5 == undefined){
+                    GM.setValue("highlightCert5", certName);
                     alert("New Cert saved: " + certName);
                 }
                 else{
@@ -412,6 +471,7 @@ let arms = 0;
         let stored2 = await GM.getValue("highlightCert2");
         let stored3 = await GM.getValue("highlightCert3");
         let stored4 = await GM.getValue("highlightCert4");
+        let stored5 = await GM.getValue("highlightCert5");
 
 
         BTN_CHECK.addEventListener("click", (event) => { //wait for user to click the save button
@@ -421,9 +481,7 @@ let arms = 0;
             if((document.URL).includes("edit=1")){
                 certName = document.querySelector("#cert_description").value;
             }
-
-
-                if((stored1 == certName) || (stored2 == certName) || (stored3 == certName) || (stored4 == certName)){
+                if((stored1 == certName) || (stored2 == certName) || (stored3 == certName) || (stored4 == certName) || (stored5 == certName)){
                     alert("Cert saved: " + certName);
                 }
                 else if(stored1 == undefined){
@@ -440,6 +498,10 @@ let arms = 0;
                 }
                 else if(stored4 == undefined){
                     GM.setValue("highlightCert4", certName);
+                    alert("New Cert saved: " + certName);
+                }
+                else if(stored5 == undefined){
+                    GM.setValue("highlightCert5", certName);
                     alert("New Cert saved: " + certName);
                 }
                 else{
@@ -459,6 +521,7 @@ let arms = 0;
         let stored2 = await GM.getValue("highlightCert2");
         let stored3 = await GM.getValue("highlightCert3");
         let stored4 = await GM.getValue("highlightCert4");
+        let stored5 = await GM.getValue("highlightCert5");
 
 
         BTN_CHECK.addEventListener("click", (event) => { //wait for user to click the save button
@@ -469,7 +532,7 @@ let arms = 0;
             }
 
 
-                if((stored1 == certName) || (stored2 == certName) || (stored3 == certName) || (stored4 == certName)){
+                if((stored1 == certName) || (stored2 == certName) || (stored3 == certName) || (stored4 == certName) || (stored5 == certName)){
                     alert("Cert saved: " + certName);
                 }
                 else if(stored1 == undefined){
@@ -486,6 +549,10 @@ let arms = 0;
                 }
                 else if(stored4 == undefined){
                     GM.setValue("highlightCert4", certName);
+                    alert("Cert saved: " + certName);
+                }
+                else if(stored5 == undefined){
+                    GM.setValue("highlightCert5", certName);
                     alert("Cert saved: " + certName);
                 }
                 else{
@@ -514,7 +581,7 @@ function createTable(append, number, names, buttons) {
         document.getElementById("arms_menu_1").appendChild(append);
     }
 
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < 5; i++) {
         var row = table.insertRow(i);
 
         // Create cells for number and name
