@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Autoclose Calibration Tabs
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.1
+// @version      1.2
 // @description  Automatically closes the calibration tab based on a custom number of seconds on Guardian 2.0, 2.1 and ARMS servers
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calreport.php*
@@ -85,6 +85,9 @@ function createSlider(append) {
 
     if((document.URL).includes("/calreport.php") && (document.URL).includes("/arms2")){ //GUARDIAN 2.1   DONE
         let div = document.querySelector("body > div.noprint.shadow");
+        if(!div){
+            div = document.getElementById("primary_nav_wrap");
+        }
         createSlider(div);
         closeWindow();
     }
