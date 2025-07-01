@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (Guardian)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.33
-// @description  Catch calibration mistakes for Isensix Guardian servers
+// @version      4.0
+// @description  Catch calibration mistakes for Isensix Guardian servers (3.0 support in Beta)
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php*
 // @match        https://*/arms/calsensor.php*
 // @match        https://*/arms2/calsensor.php*
+// @match        https://*/guardian/calibration/calsensor.php?id=*
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrationCatcherGuardian.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrationCatcherGuardian.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
@@ -19,8 +20,8 @@
 
 
 //OFFSET CATCHING WILL NOT WORK WITHOUT A VALID SENSOR SERIAL NUMBER
-//Works on Guardian 2.0 and 2.1 Servers
-//Will warn users when entering an offset outside the allowable range for RE, RM, SC, HU, DP, CO2, TC, and TMC. (assuming valid serial number)
+//Works on Guardian 2.0, 2.1 and 3.0 Servers
+//Will warn users when entering an offset outside the allowable range for RE, RM, SC, HU, DP, CO2, TC, and TMC. (assuming valid serial number, or Guardian 3.0)
 //Will warn if no offset is given or an offset of exactly 0
 //Will warn if no canned message is selected
 //Will warn if there is not a canned message that meets the approved phrasing
@@ -30,6 +31,14 @@
 (function() {
     'use strict';
 
+    let threePoint0 = false;
+    try {//determine if the server is Guardian 3.0
+        if(document.querySelector("#isemainmenu > li:nth-child(1) > a").title == "Guardian 3.0"){
+            threePoint0 = true;
+        }
+    }
+    catch(err){}
+
     const form = document.getElementById("calsen");
     const table = form.getElementsByTagName("table")[0];
     const d = table.getElementsByTagName("tr")[6];
@@ -38,7 +47,7 @@
     const dateObj = d2.getElementsByTagName("td")[0];
     const serial = serialObj.innerHTML; //full serial number here
     const date = dateObj.innerHTML; //last calibration date here
-    const firstFour = serial.slice(0, 4).toLowerCase(); //get first four letters of sensor serial number, used to check sensor type
+    let firstFour = serial.slice(0, 4).toLowerCase(); //get first four letters of sensor serial number, used to check sensor type
     var type = "";
     var allowOffset = 0;
 
@@ -64,11 +73,17 @@
 
                 const cert = selectedOption.text;
 
+    let threeType = "";
+
+    if(threePoint0){
+        threeType = document.querySelector("#tab-f6147c9c9b908be9b52803698be57ad2-1 > table:nth-child(1) > tbody > tr:nth-child(1) > td > em:nth-child(2)").innerHTML.toLowerCase();
+        firstFour = threeType;
+    }
 
 
     serialObj.style.color="#008000";
 
-    if(firstFour.includes("re")){
+    if(firstFour.includes("re") || threeType == "re"){
         type = "RE";
         allowOffset = "±1.5°C";
     }
@@ -84,7 +99,7 @@
         type = "HU";
         allowOffset = "±5%";
     }
-    else if(firstFour.includes("tmc")){
+    else if(firstFour.includes("tmc") || threeType.includes("tmc")){
         type = "TMC";
         allowOffset = "±4°C";
     }
@@ -116,7 +131,9 @@
 
     const sensorText = document.createTextNode(" \u00A0 \u00A0 Sensor Type Detected: " + type + "  \u00A0 \u00A0 \u00A0 Allowed Offset: " + allowOffset);
 
-    serialObj.appendChild(sensorText);
+    if(!threePoint0){
+        serialObj.appendChild(sensorText);
+    }
 
 
     const checkBoxes = document.getElementsByName("cmsg[]"); //get the list of canned messages
