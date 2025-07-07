@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Paylocity QOL Scripts
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      0.9
+// @version      1.0
 // @description  WIP: Adds a button to autofill Per Diem, autofill Monday through Friday hours on time sheet
 // @author       Leighton Solomon
 // @match        https://app.paylocity.com/Expense/dashboardV2/reports*
@@ -39,7 +39,7 @@
 
                                 let dropdown = document.getElementById("TimeSheet_" + dayId + "__Entries_0__PayTypeId");
 
-                                if(dropdown.value != 5){
+                                if(dropdown.value != 5 && dropdown.value != 29){
 
                                     dropdown.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
 
