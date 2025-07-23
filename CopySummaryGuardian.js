@@ -1,11 +1,12 @@
 // ==UserScript==
-// @name Copy Isensix Calibration Summary (Guardian)
-// @namespace https://github.com/LeightonSolo/IsensixScripts
-// @version 2.1
-// @description This script will automatically copy the text from the Isensix Calibration Summary on guardian servers when the button is pressed
-// @author Leighton Solomon
+// @name         Copy Isensix Calibration Summary (Guardian) (3.0)
+// @namespace    https://github.com/LeightonSolo/IsensixScripts
+// @version      3.0
+// @description  This script will automatically copy the text from the Isensix Calibration Summary on guardian servers when the button is pressed
+// @author       Leighton Solomon
 // @match        https://*/arms2/iserep1.php
 // @match        https://*/arms/iserep1.php
+// @match        https://*/guardian/iserep1.php*
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CopySummaryGuardian.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CopySummaryGuardian.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
@@ -17,7 +18,7 @@
 //'      `--'      `--'      `--'      `--'      `--'      `--'      `--'      `
 
 
-//Works on Guardian 2.0 and 2.1 Servers. Will add a button above the Calibration Query table found on the "Isensix Calibration Summary" section of the Setup tab.
+//Works on Guardian 2.0, 2.1 and 3.0 Servers. Will add a button above the Calibration Query table found on the "Isensix Calibration Summary" section of the Setup tab.
 //Clicking this button will automatically copy the contents of the table to the clipboard, which can then be pasted on the Isensix Calibration Visualizer, 
 //along with server information like SID and version
 
@@ -35,6 +36,13 @@ let serverType = "G2.1";
         if((document.getElementsByClassName("ICO_DISCONNECT")[0].innerHTML == "Sign me off") || (document.querySelector("#guardian-bar-wp-logo > a").title == "Guardian 2.0")){
             //console.log("Guardian 2.0 server detected");
             serverType = "G2.0";
+        }
+    }
+    catch(err){}
+
+    try {//determine if the server is Guardian 3.0
+        if(document.querySelector("#isemainmenu > li:nth-child(1) > a").title == "Guardian 3.0"){
+            serverType = "G3.0";
         }
     }
     catch(err){}
@@ -90,6 +98,10 @@ function selectElementContents(el) {
 
         // Split by newline to get each row
         let rows = newText.split("\n");
+
+        if (serverType === "G3.0") {
+            rows.shift(); // This removes the first row
+        }
 
         // Add the SID and version to each row
         let updatedRows = rows.map(row => {
