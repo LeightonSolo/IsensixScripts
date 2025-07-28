@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Copy Isensix Calibration Summary (Guardian) (3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.0
+// @version      3.1
 // @description  This script will automatically copy the text from the Isensix Calibration Summary on guardian servers when the button is pressed
 // @author       Leighton Solomon
 // @match        https://*/arms2/iserep1.php
@@ -72,54 +72,48 @@ function selectElementContents(el) {
 
 
 (function() {
+    let btn = document.createElement("BUTTON");
+    btn.textContent = 'Copy Calibration Query';
 
-        let btn = document.createElement("BUTTON");
-        btn.textContent = 'Copy Calibration Query';
-
-        let div = document.querySelector("#ui-id-1");
-        try {
-            div.appendChild(btn);
-        }
-        catch(err) {
-            let div = document.querySelector("#tab1");
-            div.prepend(btn);
-        }
+    let div = document.querySelector("#ui-id-1") || document.querySelector("#tab1");
+    div.appendChild(btn);
 
     btn.onclick = () => {
+        const table = document.getElementsByClassName('arms p100')[0];
+        const rows = Array.from(table.querySelectorAll("tr"));
+        const updatedRows = [];
 
-        var table = document.getElementsByClassName('arms p100')[0];
+        rows.forEach((tr) => {
+            const ths = tr.querySelectorAll("th");
+            const tds = tr.querySelectorAll("td");
 
-        selectElementContents(table);
-
-        const selection = window.getSelection();
-        const text = selection.toString();
-        let newText = text.replace("Calibration Query", "").trim();
-
-
-        // Split by newline to get each row
-        let rows = newText.split("\n");
-
-        if (serverType === "G3.0") {
-            rows.shift(); // This removes the first row
-        }
-
-        // Add the SID and version to each row
-        let updatedRows = rows.map(row => {
-            return row + `\t${serverId}\t${serverType}`;
+            if (ths.length > 0) {
+                // preserve header row
+                const headerTexts = Array.from(ths).map(th => th.textContent.trim());
+                // headers for SID and Version too
+                headerTexts.push("SID", "Version");
+                updatedRows.push(headerTexts.join("\t"));
+            } else if (tds.length > 0) {
+                // data rows, add SID and Version
+                const cellTexts = Array.from(tds).map(td => td.textContent.trim());
+                cellTexts.push(serverId, serverType);
+                updatedRows.push(cellTexts.join("\t"));
+            }
+            // Skip rows that have neither <th> nor <td>
         });
 
-        let finalText = updatedRows.join("\n");
+        const finalText = updatedRows.join("\n");
 
         navigator.clipboard.writeText(finalText).then(
             () => {
                 btn.textContent = 'Copied to your clipboard!';
                 btn.style.background = '#5beb34';
-                window.getSelection().removeAllRanges();
             },
-            (message) => {
-                alert("Could not copy! Error: " + message);
-            },
+            (err) => {
+                alert("Could not copy! Error: " + err);
+            }
         );
     };
+
 
 })();
