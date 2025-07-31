@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Calibrated Checkmarks and Autocollapse Zones
+// @name         Calibrated Checkmarks and Autocollapse Zones (3.0 in Beta)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.55
-// @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated.
+// @version      4.1
+// @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated. 3.0 Support in Beta
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
 // @match        https://*/arms2/
@@ -10,6 +10,11 @@
 // @match        https://*/arms/index.php*
 // @match        https://*/arms/calreport.php?*
 // @match        https://*/arms2/calibration/calreport.php*
+// @match        https://*/guardian/calibration/calreport.php*
+// @match        https://*/guardian/calibration//calreport.php*
+// @match        https://*/guardian/iserep1.php*
+// @match        https://*/guardian/index.php?*
+// @match        https://*/guardian/
 // @match        https://*/arms2/calibration//calreport.php*
 // @match        https://*/arms2/calsetup.php*
 // @match        https://*/arms/calsetup.php*
@@ -36,6 +41,16 @@ if(url.includes("debug_query.php")){
    console.log("ARMS detected");
 }
 
+
+let threePoint0 = false;
+    try {//determine if the server is Guardian 3.0
+        if(document.querySelector("#isemainmenu > li:nth-child(1) > a").title == "Guardian 3.0"){
+            threePoint0 = true;
+            console.log("3.0 Detected");
+        }
+    }
+    catch(err){}
+
     try { //determine if the system is ARMS or Guardian
         if((document.getElementsByClassName("headline2")[0].innerHTML == "(Advanced Remote Monitoring System)")){
             arms = 1;
@@ -52,6 +67,8 @@ let twoPointZero = 0;
         }
     }
     catch(err){}
+
+
 
 let toggleKey = `toggleState_${window.location.host}`;
 
@@ -447,10 +464,10 @@ async function toggleZones(){
             //=============================================================================
         }
     }
-    //================================================ GUARDIAN 2.1 ================================================================================================
+    //================================================ GUARDIAN 2.1 and 3.0 ================================================================================================
     else if(twoPointZero == 0){
 
-        if((document.URL).includes("/calreport.php")){
+        if((document.URL).includes("/calreport.php")){ //store calibration data from calibration page - WORKS ON 3.0
 
             const table = document.getElementsByTagName("table")[0];
             let sensorId = "";
@@ -463,13 +480,21 @@ async function toggleZones(){
             //});
             for (let i = 1; i < (tableRows.length); i++) { //go through all table rows
                 // Get the date from the table row
-                let dateSpan = tableRows[i].querySelector('tr td:nth-child(7)');
+                let dateSpan = tableRows[i].querySelector('tr td:nth-child(7)').innerHTML;
+                if(threePoint0){
+                    dateSpan = tableRows[i].querySelector("td:nth-child(7) > span:nth-child(1)").innerHTML; //.split(" ")[0];
+                }
+                //console.log(dateSpan);
 
-                const parsed = Date.parse(dateSpan.innerHTML) / 1000; //get a unix timestamp of the last calibration date (javascript works with milliseconds since epoch)
+                const parsed = Date.parse(dateSpan) / 1000; //get a unix timestamp of the last calibration date (javascript works with milliseconds since epoch)
+                //console.log(parsed);
 
                 if(((Date.now() / 1000) - parsed) < 604800){ //determine if sensor has been calibrated in past week
                 //alert("past week");
                     let sensorId = tableRows[i].querySelector('tr td:nth-child(1)').textContent.trim();
+                    if(threePoint0){
+                        sensorId = tableRows[i].querySelector('#r424 > td:nth-child(3)').textContent.trim().match(/(\d+)/)[0];
+                    }
                     let storeName = server + "," + sensorId; //store the sensor as calibrated in the format of SERVER,SENSORID
                     GM.setValue(storeName, true);
                     console.log("Storing sensor as calibrated: " + storeName);
@@ -503,8 +528,14 @@ async function toggleZones(){
             }
         }
         else{
-            const sensorList = document.getElementsByClassName("slnk poplink"); //gets list of all sensors on the live view page
-            const zoneHideButton = document.getElementsByClassName("noprint flex_nav")[0];
+            let sensorList = document.getElementsByClassName("slnk poplink"); //gets list of all sensors on the live view page
+            if(threePoint0){
+                sensorList = document.getElementsByClassName("slnk");
+            }
+            //console.log(sensorList);
+
+            let zoneHideButton = document.getElementsByClassName("noprint flex_nav")[0];
+            if(threePoint0){ zoneHideButton = document.getElementsByClassName("noprint flex_nav")[1]; }
 
             let butt=document.createElement("button");
             //let toggleZoneState = await GM.getValue("toggleZones");
@@ -519,7 +550,7 @@ async function toggleZones(){
             }
             butt.addEventListener("click", () => toggleZones());
 
-            zoneHideButton.appendChild(butt);
+            if(!threePoint0){zoneHideButton.appendChild(butt);}
 
             for (let i = 0; i < sensorList.length; i++) {
                 let id = sensorList[i].onclick.toString().slice(33, 37); //gets the ID of the sensor from the html
@@ -535,7 +566,8 @@ async function toggleZones(){
                     sensorList[i].parentElement.parentElement.style.fontSize = '11px';
                     sensorList[i].parentElement.parentElement.style.fontWeight = 'bold';
                     sensorList[i].parentElement.parentElement.prepend(checkMark);
-                    sensorList[i].parentElement.parentElement.style.opacity = 0.35;
+                    if(threePoint0){sensorList[i].parentElement.parentElement.parentElement.parentElement.parentElement.style.opacity = 0.35;}
+                    else{sensorList[i].parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.style.opacity = 0.35;}
                 }
             }
 
@@ -548,7 +580,8 @@ async function toggleZones(){
 
 
 
-            const zoneTables = document.getElementsByClassName("zone p100");
+            let zoneTables = document.getElementsByClassName("zone p100");
+            if(threePoint0){zoneTables = document.getElementsByClassName("ui-widget-header zonetop apad");}
 
             const ajaxBodyElement = document.querySelector('.ajaxbody');
             if (ajaxBodyElement) {
@@ -557,56 +590,64 @@ async function toggleZones(){
 
             for(let i = 0; i < zoneTables.length; i++){
 
-                //alert(zoneTable.innerHTML);
-                 let images = zoneTables[i].querySelectorAll('img');
+                if(threePoint0){
 
-                // Filter the images to match the specific source
-                let filteredImages = Array.from(images).filter(img => img.src.includes('graph-icon'));
+                   //let zoneName = zoneTables[i].querySelector("div:nth-child(2) > a").textContent;
 
-                let zoneCount = 0;
 
-                try{zoneCount = filteredImages.length;}
-                catch(err){}
+                }
+                else{
 
-                let calibratedCount = 0;
-                //alert(zoneTables.length) //28
-                const table = zoneTables[i];
+                    //alert(zoneTable.innerHTML);
+                    let images = zoneTables[i].querySelectorAll('img');
 
-                // Get the innerText of the table (text content without HTML tags)
-                const tableText = table.innerText;
-                // Count occurrences of calibrated
-                const occurrences = tableText.split("✓").length - 1;
+                    // Filter the images to match the specific source
+                    let filteredImages = Array.from(images).filter(img => img.src.includes('graph-icon'));
 
-                // Add the occurrences to the total count
-                calibratedCount += occurrences;
-                //console.log("Zone: " + i);
-                //console.log("Calibrated: " + calibratedCount);
-                //const zoneName = document.querySelector("tbody > tr:nth-child(1) > td > table > tbody > tr > td.zonename > a.zonelink");
+                    let zoneCount = 0;
 
-                const zoneName = zoneTables[i].querySelector("tbody > tr:nth-child(1) > td > table > tbody > tr > td.l.zonename.p100 > a:nth-child(9)").textContent;
+                    try{zoneCount = filteredImages.length;}
+                    catch(err){}
 
-                let zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Sensors, ' + calibratedCount + ' Calibrated. ' + (zoneCount - calibratedCount) + ' left.');
+                    let calibratedCount = 0;
+                    //alert(zoneTables.length) //28
+                    const table = zoneTables[i];
 
-                zoneTables[i].style = "white-space:nowrap";
-                zoneTables[i].style.fontSize = '17px';
-                //zoneTables[i].style.fontWeight = 'bold';
+                    // Get the innerText of the table (text content without HTML tags)
+                    const tableText = table.innerText;
+                    // Count occurrences of calibrated
+                    const occurrences = tableText.split("✓").length - 1;
 
-                if((calibratedCount == zoneCount) && (toggleZoneState == "ON")){
-                    zoneTables[i].style.backgroundColor = '#9eff7f';
-                    zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Sensors, ' + calibratedCount + ' Calibrated. ');
-                    //close zone
-                    /* const firstLink = table.querySelector('a');
+                    // Add the occurrences to the total count
+                    calibratedCount += occurrences;
+                    //console.log("Zone: " + i);
+                    //console.log("Calibrated: " + calibratedCount);
+                    //const zoneName = document.querySelector("tbody > tr:nth-child(1) > td > table > tbody > tr > td.zonename > a.zonelink");
+
+                    let zoneName = zoneTables[i].querySelector("tbody > tr:nth-child(1) > td > table > tbody > tr > td.l.zonename.p100 > a:nth-child(9)").textContent;
+
+                    let zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Sensors, ' + calibratedCount + ' Calibrated. ' + (zoneCount - calibratedCount) + ' left.');
+
+                    zoneTables[i].style = "white-space:nowrap";
+                    zoneTables[i].style.fontSize = '17px';
+                    //zoneTables[i].style.fontWeight = 'bold';
+
+                    if((calibratedCount == zoneCount) && (toggleZoneState == "ON")){
+                        zoneTables[i].style.backgroundColor = '#9eff7f';
+                        zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Sensors, ' + calibratedCount + ' Calibrated. ');
+                        //close zone
+                        /* const firstLink = table.querySelector('a');
                     if (firstLink) {
                         firstLink.click();
                     }*/
-                    //console.log("removing");
-                    zoneTables[i].children[0].remove();
+                        //console.log("removing");
+                        zoneTables[i].children[0].remove();
+                    }
+                    if(zoneCount == 0){
+                        zoneTitle = document.createTextNode(zoneName + ' - 0 Active or Hidden');
+                    }
+                    zoneTables[i].prepend(zoneTitle); //adds zone count and calibrated to zone title
                 }
-                if(zoneCount == 0){
-                     zoneTitle = document.createTextNode(zoneName + ' - 0 Active or Hidden');
-                }
-                                zoneTables[i].prepend(zoneTitle); //adds zone count and calibrated to zone title
-
             }
         }
     }
