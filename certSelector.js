@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Cert Selector (Guardian and ARMS)
+// @name         Cert Selector (Guardian and ARMS) (3.0 in Beta)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.8
-// @description  Will select certs automatically based on sensor type, highlight certs that you upload for easier calibration, and autofill cert data on Guardian 2.1.
+// @version      3.0
+// @description  Will select certs automatically based on sensor type, highlight certs that you upload for easier calibration, and autofill cert data on Guardian 2.1. 3.0 support in beta
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -13,6 +13,7 @@
 // @match        https://*/arms/admin/index.php?mode=SETUP_CERT*
 // @match        https://*/arms2/calsensor.php?id=*
 // @match        https://*/arms/calsensor.php?id=*
+// @match        https://*/guardian/media/photo_manager.php*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/certSelector.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/certSelector.js
@@ -29,6 +30,15 @@ let arms = 0;
         if(document.getElementsByClassName("headline2")[0].innerHTML == "(Advanced Remote Monitoring System)"){
         //console.log("ARMS server detected");
         arms = 1;
+        }
+    }
+    catch(err){}
+
+let threePoint0 = false;
+    try {//determine if the server is Guardian 3.0
+        if(document.querySelector("#isemainmenu > li:nth-child(1) > a").title == "Guardian 3.0"){
+            threePoint0 = true;
+            console.log("3.0 Detected");
         }
     }
     catch(err){}
@@ -411,7 +421,7 @@ let arms = 0;
 
     }
 
-    if((document.URL).includes("photo_manager.php?id")){ //guardian 2.1 cert pages
+    if((document.URL).includes("photo_manager.php?id")){ //guardian 2.1 and 3.0 cert pages
 
         const BTN_CHECK = document.getElementById("save");
 
@@ -426,11 +436,18 @@ let arms = 0;
         checkForStoredData();
 
         BTN_CHECK.addEventListener("click", (event) => { //wait for user to click the save button
-            let certBox = document.getElementById("cat2");
-            if(certBox.checked){// && checkbox.checked){ //save the cert if the certificate box is checked
-                let certName = document.getElementById("description").value;
+            let certBox = "";
+            if(threePoint0){
+                let dropdown = document.querySelector("#cat");
+                certBox = dropdown.options[dropdown.selectedIndex].text;
+            }
+            else{
+                certBox = document.getElementById("cat2");
+            }
+            if(certBox.checked || certBox == "Certificate"){// && checkbox.checked){ //save the cert if the certificate box is checked
+                let certName = document.getElementById("description").value.trim();
 
-                if((stored1 == certName) || (stored2 == certName) || (stored3 == certName) || (stored4 == certName) || (stored5 == certName)){
+                if((stored1.toLowerCase() == certName.toLowerCase()) || (stored2.toLowerCase() == certName.toLowerCase()) || (stored3.toLowerCase() == certName.toLowerCase()) || (stored4.toLowerCase() == certName.toLowerCase()) || (stored5.toLowerCase() == certName.toLowerCase())){
                     alert("Cert saved: " + certName);
                 }
                 else if(stored1 == undefined){
@@ -476,12 +493,12 @@ let arms = 0;
 
         BTN_CHECK.addEventListener("click", (event) => { //wait for user to click the save button
 
-            let certName = document.querySelector("#body > form > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(2) > td").textContent;
+            let certName = document.querySelector("#body > form > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(2) > td").textContent.trim();
 
             if((document.URL).includes("edit=1")){
-                certName = document.querySelector("#cert_description").value;
+                certName = document.querySelector("#cert_description").value.trim();
             }
-                if((stored1 == certName) || (stored2 == certName) || (stored3 == certName) || (stored4 == certName) || (stored5 == certName)){
+                if((stored1.toLowerCase() == certName.toLowerCase()) || (stored2.toLowerCase() == certName.toLowerCase()) || (stored3.toLowerCase() == certName.toLowerCase()) || (stored4.toLowerCase() == certName.toLowerCase()) || (stored5.toLowerCase() == certName.toLowerCase())){
                     alert("Cert saved: " + certName);
                 }
                 else if(stored1 == undefined){
@@ -532,7 +549,7 @@ let arms = 0;
             }
 
 
-                if((stored1 == certName) || (stored2 == certName) || (stored3 == certName) || (stored4 == certName) || (stored5 == certName)){
+                if((stored1.toLowerCase() == certName.toLowerCase()) || (stored2.toLowerCase() == certName.toLowerCase()) || (stored3.toLowerCase() == certName.toLowerCase()) || (stored4.toLowerCase() == certName.toLowerCase()) || (stored5.toLowerCase() == certName.toLowerCase())){
                     alert("Cert saved: " + certName);
                 }
                 else if(stored1 == undefined){
@@ -575,7 +592,12 @@ function createTable(append, number, names, buttons) {
         //table.style.marginLeft = '50px';
 
     if(arms == 0){
-        document.getElementById("outer").appendChild(append);
+        if(threePoint0){
+            document.querySelector("body > div.ise-container > aside.ise-nav.noprint.ui-widget-header").appendChild(append);
+        }
+        else{
+            document.getElementById("outer").appendChild(append);
+        }
     }
     else if(arms == 1){
         document.getElementById("arms_menu_1").appendChild(append);
@@ -622,7 +644,7 @@ async function deleteCert(certNumber) {
 }
 
 async function saveCertificateData() {
-    let certKey = document.querySelector("#description")?.value.trim();
+    let certKey = document.querySelector("#description")?.value.toLowerCase().trim();
     if (!certKey) {
         console.error("No certificate key found.");
         return;
@@ -664,7 +686,7 @@ async function checkForStoredData() {
     if (!description) return;
 
     async function updateAutofillButton() {
-        let certKey = description.value.trim();
+        let certKey = description.value.toLowerCase().trim();
         let storedData = await GM.getValue(certKey, null);
         let firstTh = document.querySelector("#certificateDataTable thead th:first-child");
         let existingButton = document.querySelector("#autofillButton");
