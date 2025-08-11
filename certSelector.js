@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS) (3.0 in Beta)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.0
+// @version      3.1
 // @description  Will select certs automatically based on sensor type, highlight certs that you upload for easier calibration, and autofill cert data on Guardian 2.1. 3.0 support in beta
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -431,6 +431,15 @@ let threePoint0 = false;
         let stored4 = await GM.getValue("highlightCert4");
         let stored5 = await GM.getValue("highlightCert5");
 
+        try {
+            let stored1 = stored1.toLowerCase();
+            let stored2 = stored2.toLowerCase();
+            let stored3 = stored3.toLowerCase();
+            let stored4 = stored4.toLowerCase();
+            let stored5 = stored5.toLowerCase();
+        }
+        catch(err){}
+
         let firstTh = document.querySelector("#certificateDataTable thead th:first-child");
 
         checkForStoredData();
@@ -447,7 +456,7 @@ let threePoint0 = false;
             if(certBox.checked || certBox == "Certificate"){// && checkbox.checked){ //save the cert if the certificate box is checked
                 let certName = document.getElementById("description").value.trim();
 
-                if((stored1.toLowerCase() == certName.toLowerCase()) || (stored2.toLowerCase() == certName.toLowerCase()) || (stored3.toLowerCase() == certName.toLowerCase()) || (stored4.toLowerCase() == certName.toLowerCase()) || (stored5.toLowerCase() == certName.toLowerCase())){
+                if((stored1 == certName.toLowerCase()) || (stored2 == certName.toLowerCase()) || (stored3 == certName.toLowerCase()) || (stored4 == certName.toLowerCase()) || (stored5 == certName.toLowerCase())){
                     alert("Cert saved: " + certName);
                 }
                 else if(stored1 == undefined){
@@ -490,6 +499,16 @@ let threePoint0 = false;
         let stored4 = await GM.getValue("highlightCert4");
         let stored5 = await GM.getValue("highlightCert5");
 
+        try {
+            let stored1 = stored1.toLowerCase();
+            let stored2 = stored2.toLowerCase();
+            let stored3 = stored3.toLowerCase();
+            let stored4 = stored4.toLowerCase();
+            let stored5 = stored5.toLowerCase();
+
+        }
+        catch(err){}
+
 
         BTN_CHECK.addEventListener("click", (event) => { //wait for user to click the save button
 
@@ -498,7 +517,7 @@ let threePoint0 = false;
             if((document.URL).includes("edit=1")){
                 certName = document.querySelector("#cert_description").value.trim();
             }
-                if((stored1.toLowerCase() == certName.toLowerCase()) || (stored2.toLowerCase() == certName.toLowerCase()) || (stored3.toLowerCase() == certName.toLowerCase()) || (stored4.toLowerCase() == certName.toLowerCase()) || (stored5.toLowerCase() == certName.toLowerCase())){
+                if((stored1 == certName.toLowerCase()) || (stored2 == certName.toLowerCase()) || (stored3 == certName.toLowerCase()) || (stored4 == certName.toLowerCase()) || (stored5 == certName.toLowerCase())){
                     alert("Cert saved: " + certName);
                 }
                 else if(stored1 == undefined){
@@ -532,13 +551,24 @@ let threePoint0 = false;
     else if((document.URL).includes("editcalcert.php")){ //ARMS cert pages
 
         let BTN_CHECK = document.querySelector('input[type="submit"][value="Accept"]'); //ARMS accept cert button
-        if(!BTN_CHECK){BTN_CHECK = document.querySelector('input[type="submit"][value="Save"]');}
+        if(!BTN_CHECK){BTN_CHECK = document.querySelector('input[type="submit"][value="Save"]');
+                      }
 
         let stored1 = await GM.getValue("highlightCert1");
         let stored2 = await GM.getValue("highlightCert2");
         let stored3 = await GM.getValue("highlightCert3");
         let stored4 = await GM.getValue("highlightCert4");
         let stored5 = await GM.getValue("highlightCert5");
+
+        try {
+            let stored1 = stored1.toLowerCase();
+            let stored2 = stored2.toLowerCase();
+            let stored3 = stored3.toLowerCase();
+            let stored4 = stored4.toLowerCase();
+            let stored5 = stored5.toLowerCase();
+
+        }
+        catch(err){}
 
 
         BTN_CHECK.addEventListener("click", (event) => { //wait for user to click the save button
@@ -549,7 +579,7 @@ let threePoint0 = false;
             }
 
 
-                if((stored1.toLowerCase() == certName.toLowerCase()) || (stored2.toLowerCase() == certName.toLowerCase()) || (stored3.toLowerCase() == certName.toLowerCase()) || (stored4.toLowerCase() == certName.toLowerCase()) || (stored5.toLowerCase() == certName.toLowerCase())){
+                if((stored1 == certName.toLowerCase()) || (stored2 == certName.toLowerCase()) || (stored3 == certName.toLowerCase()) || (stored4 == certName.toLowerCase()) || (stored5 == certName.toLowerCase())){
                     alert("Cert saved: " + certName);
                 }
                 else if(stored1 == undefined){
