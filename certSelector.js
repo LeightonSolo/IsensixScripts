@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cert Selector (Guardian and ARMS) (3.0 in Beta)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.1
+// @version      3.2
 // @description  Will select certs automatically based on sensor type, highlight certs that you upload for easier calibration, and autofill cert data on Guardian 2.1. 3.0 support in beta
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -432,11 +432,11 @@ let threePoint0 = false;
         let stored5 = await GM.getValue("highlightCert5");
 
         try {
-            let stored1 = stored1.toLowerCase();
-            let stored2 = stored2.toLowerCase();
-            let stored3 = stored3.toLowerCase();
-            let stored4 = stored4.toLowerCase();
-            let stored5 = stored5.toLowerCase();
+            stored1 = stored1.toLowerCase().trim();
+            stored2 = stored2.toLowerCase().trim();
+            stored3 = stored3.toLowerCase().trim();
+            stored4 = stored4.toLowerCase().trim();
+            stored5 = stored5.toLowerCase().trim();
         }
         catch(err){}
 
@@ -500,11 +500,11 @@ let threePoint0 = false;
         let stored5 = await GM.getValue("highlightCert5");
 
         try {
-            let stored1 = stored1.toLowerCase();
-            let stored2 = stored2.toLowerCase();
-            let stored3 = stored3.toLowerCase();
-            let stored4 = stored4.toLowerCase();
-            let stored5 = stored5.toLowerCase();
+            stored1 = stored1.toLowerCase().trim();
+            stored2 = stored2.toLowerCase().trim();
+            stored3 = stored3.toLowerCase().trim();
+            stored4 = stored4.toLowerCase().trim();
+            stored5 = stored5.toLowerCase().trim();
 
         }
         catch(err){}
@@ -561,11 +561,11 @@ let threePoint0 = false;
         let stored5 = await GM.getValue("highlightCert5");
 
         try {
-            let stored1 = stored1.toLowerCase();
-            let stored2 = stored2.toLowerCase();
-            let stored3 = stored3.toLowerCase();
-            let stored4 = stored4.toLowerCase();
-            let stored5 = stored5.toLowerCase();
+            stored1 = stored1.toLowerCase().trim();
+            stored2 = stored2.toLowerCase().trim();
+            stored3 = stored3.toLowerCase().trim();
+            stored4 = stored4.toLowerCase().trim();
+            stored5 = stored5.toLowerCase().trim();
 
         }
         catch(err){}
@@ -577,6 +577,9 @@ let threePoint0 = false;
             if((document.URL).includes("&edit=1")){
                 certName = document.querySelector("body > form > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(3) > td:nth-child(2) > input[type=text]").value.trim();
             }
+
+
+            console.log("Certname = " + certName + " stored1 = " + stored1);
 
 
                 if((stored1 == certName.toLowerCase()) || (stored2 == certName.toLowerCase()) || (stored3 == certName.toLowerCase()) || (stored4 == certName.toLowerCase()) || (stored5 == certName.toLowerCase())){
