@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Copy Isensix Calibration Summary (Guardian) (3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.1
+// @version      3.2
 // @description  This script will automatically copy the text from the Isensix Calibration Summary on guardian servers when the button is pressed
 // @author       Leighton Solomon
 // @match        https://*/arms2/iserep1.php
@@ -73,9 +73,17 @@ function selectElementContents(el) {
 
 (function() {
     let btn = document.createElement("BUTTON");
+    btn.style.margin = '5px';
     btn.textContent = 'Copy Calibration Query';
 
     let div = document.querySelector("#ui-id-1") || document.querySelector("#tab1");
+    if(serverType == "G2.0"){
+        div = document.querySelector("#tabs > ul");
+        btn.style.margin = '10px';
+    }
+    else{
+        btn.style.margin = '2px 10px';
+    }
     div.appendChild(btn);
 
     btn.onclick = () => {
