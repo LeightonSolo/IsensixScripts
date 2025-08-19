@@ -1,17 +1,20 @@
 // ==UserScript==
 // @name         Warning on Unconfirmed Calibration and Timezone Mismatch
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.01
-// @description  Will warn if you have sat on the calibration confirmation page for too long without confirming, will warn if server Timezone does not match system time
+// @version      1.53
+// @description  Will warn if you have sat on the calibration confirmation page for too long without confirming, will warn if server Timezone does not match system time, will prevent idle logout (WIP)
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php*
 // @match        https://*/arms/calsensor.php*
 // @match        https://*/arms2/calsensor.php*
 // @match        https://*/arms/admin/index.php?mode=11&id=*
+// @match        https://*/arms2/index.php*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/TimeoutWarning.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/TimeoutWarning.js
 // @grant        window.focus
+// @grant        GM_getValue
+// @grant        GM_setValue
 // ==/UserScript==
 
 //  .--.      .--.      .--.      .--.      .--.      .--.      .--.      .--.
@@ -135,5 +138,104 @@ function alertWarning() {
         }
 
     }
+
+    //PREVENT IDLE LOG OUT ON GUARDIAN 2.1
+    //===========================================================================================
+    if(!twoPointZero){
+        let idlePreventionEnabled = GM_getValue("idlePreventionEnabled", true); // Load saved state, default ON
+
+        function disableIdleHandler() {
+            if (typeof jQuery !== 'undefined') {
+                console.log("Tampermonkey script running - Idle logout prevention engaged");
+
+                // Prevent installIdleHandler from reattaching events
+                window.installIdleHandler = function() {
+                    if (idlePreventionEnabled) {
+                        console.log("Blocked installIdleHandler");
+                    }
+                };
+
+                // Function to remove idle detection if it was re-added
+                function checkAndRemoveIdleHandler() {
+                    if (!idlePreventionEnabled) return; // Skip if disabled
+
+                    if (typeof idleHandlerCallback === 'function' && $(document).data("idleHandlerActive") !== false) {
+                        console.log("Idle handler detected, removing...");
+
+                        $(document).off("mousedown", idleHandlerCallback);
+                        $(document).off("mouseup", idleHandlerCallback);
+                        $(document).off("scroll", idleHandlerCallback);
+
+                        $(document).data("idleHandlerActive", false);
+                        console.log("Idle handler removed.");
+                    }
+                }
+
+                // Monitor for reinstallation and remove when necessary
+                const observer = new MutationObserver(() => {
+                    if (idlePreventionEnabled && typeof idleHandlerCallback === 'function' && $(document).data("idleHandlerActive") !== false) {
+                        checkAndRemoveIdleHandler();
+                    }
+                });
+
+                observer.observe(document, { childList: true, subtree: true });
+
+                // Prevent idle timeout from logging you out
+                window.setTimeout = new Proxy(window.setTimeout, {
+                    apply: function(target, thisArg, argumentsList) {
+                        if (idlePreventionEnabled && argumentsList[1] > 60000) { // Blocks long timeouts
+                            console.log("Blocked forced logout timeout");
+                            return;
+                        }
+                        return Reflect.apply(target, thisArg, argumentsList);
+                    }
+                });
+
+                console.log(`Idle logout prevention ${idlePreventionEnabled ? "enabled" : "disabled"} (persistent).`);
+                addToggleButton(); // Add the toggle button
+            } else {
+                console.log("jQuery not available yet. Retrying...");
+                setTimeout(disableIdleHandler, 500);
+            }
+        }
+
+        function addToggleButton() {
+            if (document.getElementById("idleToggleBtn")) return; // Prevent duplicate buttons
+
+            const button = document.createElement("button");
+            button.id = "idleToggleBtn";
+            updateButtonState(button);
+
+            //button.style.position = "fixed";
+            button.style.top = "5px";
+            button.style.right = "5px";
+            //button.style.zIndex = "9999";
+            button.style.padding = "5px";
+            button.style.color = "white";
+            button.style.border = "none";
+            button.style.cursor = "pointer";
+            button.style.fontSize = "12px";
+            button.style.borderRadius = "3px";
+
+            button.onclick = function() {
+                idlePreventionEnabled = !idlePreventionEnabled;
+                GM_setValue("idlePreventionEnabled", idlePreventionEnabled); // Save state
+                updateButtonState(button);
+                console.log(`Idle logout prevention is now ${idlePreventionEnabled ? "ENABLED" : "DISABLED"} (saved).`);
+            };
+            let append = document.getElementsByClassName("noprint flex_nav")[0];
+
+            append.prepend(button);
+        }
+
+        function updateButtonState(button) {
+            button.textContent = idlePreventionEnabled ? "Enable Idle Logout" : "Disable Idle Logout";
+            button.style.backgroundColor = idlePreventionEnabled ? "#4CAF50" : "#f44336";
+        }
+
+        disableIdleHandler();
+    }
+    //===========================================================================================
+
 
 })();
