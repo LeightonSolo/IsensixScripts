@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrated Checkmarks and Autocollapse Zones (3.0 in Beta)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      4.2
+// @version      4.25
 // @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated. 3.0 support in beta
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -244,7 +244,7 @@ async function toggleZones(){
                         sensorList[i].parentElement.parentElement.style.fontSize = '11px';
                         sensorList[i].parentElement.parentElement.style.fontWeight = 'bold';
                         sensorList[i].parentElement.parentElement.prepend(checkMark); //adds checkmark to parent table
-                        sensorList[i].parentElement.parentElement.style.opacity = 0.4;
+                        sensorList[i].parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.style.opacity = 0.4;
                         //alert("adding check");
                        }
                 }
