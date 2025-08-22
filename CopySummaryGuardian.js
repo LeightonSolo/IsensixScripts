@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Copy Isensix Calibration Summary (Guardian) (3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.3
+// @version      3.4
 // @description  Copies the data from the Isensix Calibration Summary on guardian servers when the button is pressed, and link to the calibration report generator
 // @author       Leighton Solomon
 // @match        https://*/arms2/iserep1.php
@@ -88,14 +88,16 @@ function selectElementContents(el) {
     }
     div.appendChild(btn);
 
-    if(serverType == "G2.1" || serverType == "G3.0"){
-        let btn2 = document.createElement("BUTTON");
-        btn2.style.margin = '5px';
-        btn2.textContent = 'Generate Calibration Report';
-        div.appendChild(btn2);
+    let btn2 = document.createElement("BUTTON");
+    btn2.style.margin = '5px';
+    btn2.textContent = 'Generate Calibration Report';
+    div.appendChild(btn2);
 
-         btn2.onclick = () => {
-         openCalReport();
+    btn2.onclick = () => {
+        if(serverType == "G2.0"){
+            openCalReport(true);
+        }else{
+            openCalReport();
         }
     }
 
@@ -139,12 +141,18 @@ function selectElementContents(el) {
 
 })();
 
-function openCalReport() {
-        let url = window.location.href;
-        // remove everything after last "/"
-        let base = url.substring(0, url.lastIndexOf("/") + 1);
-        let newUrl = base + "full_calreport.php";
+function openCalReport(twoPointZero = false) {
+        let newUrl;
 
-        // open in new tab
+        if (twoPointZero) {
+            // if parameter is true, just use the fixed link
+            newUrl = "https://172.16.64.2/sshto/cal.php";
+        } else {
+            // otherwise use current URL logic
+            let url = window.location.href;
+            let base = url.substring(0, url.lastIndexOf("/") + 1);
+            newUrl = base + "full_calreport.php";
+        }
+
         window.open(newUrl, "_blank");
     }
