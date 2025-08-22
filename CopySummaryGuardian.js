@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Copy Isensix Calibration Summary (Guardian) (3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.21
-// @description  This script will automatically copy the text from the Isensix Calibration Summary on guardian servers when the button is pressed
+// @version      3.3
+// @description  Copies the data from the Isensix Calibration Summary on guardian servers when the button is pressed, and link to the calibration report generator
 // @author       Leighton Solomon
 // @match        https://*/arms2/iserep1.php
 // @match        https://*/arms/iserep1.php
@@ -76,6 +76,8 @@ function selectElementContents(el) {
     btn.style.margin = '5px';
     btn.textContent = 'Copy Calibration Query';
 
+
+
     let div = document.querySelector("#ui-id-1") || document.querySelector("#tab1");
     if(serverType == "G2.0"){
         div = document.querySelector("#tabs > ul");
@@ -85,6 +87,18 @@ function selectElementContents(el) {
         btn.style.margin = '0px 10px';
     }
     div.appendChild(btn);
+
+    if(serverType == "G2.1" || serverType == "G3.0"){
+        let btn2 = document.createElement("BUTTON");
+        btn2.style.margin = '5px';
+        btn2.textContent = 'Generate Calibration Report';
+        div.appendChild(btn2);
+
+         btn2.onclick = () => {
+         openCalReport();
+        }
+    }
+
 
     btn.onclick = () => {
         const table = document.getElementsByClassName('arms p100')[0];
@@ -123,5 +137,14 @@ function selectElementContents(el) {
         );
     };
 
-
 })();
+
+function openCalReport() {
+        let url = window.location.href;
+        // remove everything after last "/"
+        let base = url.substring(0, url.lastIndexOf("/") + 1);
+        let newUrl = base + "full_calreport.php";
+
+        // open in new tab
+        window.open(newUrl, "_blank");
+    }
