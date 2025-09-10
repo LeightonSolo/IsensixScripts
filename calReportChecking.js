@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Calibration Report Error Checking
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      0.65
+// @version      0.7
 // @description  Ensures canned messages correct, meter matches sensor type, and offset matches canned message (WIP)
 // @author       Leighton Solomon
 // @match        https://*.isensix.com/cust/?id=*
+// @match        https://*/arms2/full_calreport.php
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/calReportChecking.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/calReportChecking.js
