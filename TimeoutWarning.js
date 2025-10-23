@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Warning on Unconfirmed Calibration and Timezone Mismatch
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.53
+// @version      1.55
 // @description  Will warn if you have sat on the calibration confirmation page for too long without confirming, will warn if server Timezone does not match system time, will prevent idle logout (WIP)
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -9,6 +9,7 @@
 // @match        https://*/arms2/calsensor.php*
 // @match        https://*/arms/admin/index.php?mode=11&id=*
 // @match        https://*/arms2/index.php*
+// @match        https://*/arms2/iserep1.php
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/TimeoutWarning.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/TimeoutWarning.js
@@ -192,7 +193,9 @@ function alertWarning() {
                 });
 
                 console.log(`Idle logout prevention ${idlePreventionEnabled ? "enabled" : "disabled"} (persistent).`);
-                addToggleButton(); // Add the toggle button
+                if(!(document.URL).includes('iserep1')){
+                    addToggleButton(); // Add the toggle button
+                }
             } else {
                 console.log("jQuery not available yet. Retrying...");
                 setTimeout(disableIdleHandler, 500);
