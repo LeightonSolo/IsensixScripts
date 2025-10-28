@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrated Checkmarks and Autocollapse Zones
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      4.4
+// @version      4.5
 // @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated. 3.0 support in beta
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -496,7 +496,9 @@ async function toggleZones(){
                     let sensorId = tableRows[i].querySelector('tr td:nth-child(1)').textContent.trim();
                     if(threePoint0){
                         try{
-                        sensorId = tableRows[i].querySelector('#r424 > td:nth-child(3)').textContent.trim().match(/(\d+)/)[0];
+                        sensorId = tableRows[i].querySelector('tr td:nth-child(3)').textContent.trim().match(/(\d+)/)[0];
+                            console.log(sensorId);
+
                         }
                         catch(err){}
                     }
@@ -563,6 +565,7 @@ async function toggleZones(){
                 id = id.match(/(\d+)/)[0]; //gets only the digits from the sensor ID if it contains trailing ");"
 
                 let storedName = server + "," + id;
+                //console.log(storedName);
                 let check = await GM.getValue(storedName);
                 //console.log(check);
 
@@ -570,9 +573,14 @@ async function toggleZones(){
                     let checkMark = document.createTextNode(' \u2713 Calibrated');
                     sensorList[i].parentElement.parentElement.style.fontSize = '11px';
                     sensorList[i].parentElement.parentElement.style.fontWeight = 'bold';
-                    sensorList[i].parentElement.parentElement.prepend(checkMark);
-                    if(threePoint0){sensorList[i].parentElement.parentElement.parentElement.parentElement.parentElement.style.opacity = 0.35;}
-                    else{sensorList[i].parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.style.opacity = 0.35;}
+                    if(threePoint0){
+                        sensorList[i].parentElement.parentElement.prepend(checkMark);
+                        sensorList[i].parentElement.parentElement.parentElement.parentElement.parentElement.style.opacity = 0.35;
+                    }else{
+                        sensorList[i].parentElement.parentElement.prepend(checkMark);
+                        sensorList[i].parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.style.opacity = 0.35;
+                    }
+
                 }
             }
 
