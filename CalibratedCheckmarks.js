@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Calibrated Checkmarks and Autocollapse Zones (3.0 in Beta)
+// @name         Calibrated Checkmarks and Autocollapse Zones
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      4.35
+// @version      4.4
 // @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated. 3.0 support in beta
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -479,6 +479,7 @@ async function toggleZones(){
             //tableRows.forEach(function(item, index) {
             //    console.log('Item ' + index + ':', item);
             //});
+            //console.log(tableRows.length);
             for (let i = 1; i < (tableRows.length); i++) { //go through all table rows
                 // Get the date from the table row
                 let dateSpan = tableRows[i].querySelector('tr td:nth-child(7)').innerHTML;
@@ -494,7 +495,10 @@ async function toggleZones(){
                 //alert("past week");
                     let sensorId = tableRows[i].querySelector('tr td:nth-child(1)').textContent.trim();
                     if(threePoint0){
+                        try{
                         sensorId = tableRows[i].querySelector('#r424 > td:nth-child(3)').textContent.trim().match(/(\d+)/)[0];
+                        }
+                        catch(err){}
                     }
                     let storeName = server + "," + sensorId; //store the sensor as calibrated in the format of SERVER,SENSORID
                     GM.setValue(storeName, true);
