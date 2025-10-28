@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrated Checkmarks and Autocollapse Zones (3.0 in Beta)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      4.3
+// @version      4.35
 // @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated. 3.0 support in beta
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -13,7 +13,7 @@
 // @match        https://*/guardian/calibration/calreport.php*
 // @match        https://*/guardian/calibration//calreport.php*
 // @match        https://*/guardian/iserep1.php*
-// @match        https://*/guardian/index.php?*
+// @match        https://*/guardian/index.php*
 // @match        https://*/guardian/
 // @match        https://*/arms2/calibration//calreport.php*
 // @match        https://*/arms2/calsetup.php*
