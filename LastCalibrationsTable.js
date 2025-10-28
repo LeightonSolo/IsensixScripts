@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Last 5 Calibrations Table
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.0
+// @version      2.1
 // @description  Shows the last 5 calibrations you've done to prevent meter time overlap
 // @author       Leighton Solomon
 // @match        https://*/arms2/calsetup.php
@@ -47,7 +47,9 @@ function createTable(append, addresses, names, certs, times) {
         table.style.border = '1px solid #000';
         //table.style.marginLeft = '50px';
         if(threePoint0){
-                    document.getElementsByClassName("c")[1].appendChild(append);
+                   // document.getElementsByClassName("c")[1].appendChild(append);
+            document.querySelector("#isxmain").appendChild(append);
+
         }else{
         document.getElementById("outer").appendChild(append);
         }
