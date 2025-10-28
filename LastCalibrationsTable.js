@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Last 5 Calibrations Table
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.98
+// @version      2.0
 // @description  Shows the last 5 calibrations you've done to prevent meter time overlap
 // @author       Leighton Solomon
 // @match        https://*/arms2/calsetup.php
@@ -10,6 +10,7 @@
 // @match        https://*/arms/calsensor.php*
 // @match        https://*/arms/calreport.php?*
 // @match        https://*/arms/admin/index.php?*
+// @match        https://*/guardian/calibration/calsensor.php*
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/LastCalibrationsTable.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/LastCalibrationsTable.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
@@ -20,6 +21,15 @@
 //  .--.      .--.      .--.      .--.      .--.      .--.      .--.      .--.
 //:::::.\::::::::.\::::::::.\  Leighton's Tools \::::::::.\::::::::.\::::::::.\
 //'      `--'      `--'      `--'      `--'      `--'      `--'      `--'      `
+
+let threePoint0 = false;
+    try {//determine if the server is Guardian 3.0
+        if(document.querySelector("#isemainmenu > li:nth-child(1) > a").title == "Guardian 3.0"){
+            threePoint0 = true;
+            console.log("3.0 Detected");
+        }
+    }
+    catch(err){}
 
 function createTable(append, addresses, names, certs, times) {
 
@@ -36,7 +46,11 @@ function createTable(append, addresses, names, certs, times) {
         table.style.width = '1050px';
         table.style.border = '1px solid #000';
         //table.style.marginLeft = '50px';
+        if(threePoint0){
+                    document.getElementsByClassName("c")[1].appendChild(append);
+        }else{
         document.getElementById("outer").appendChild(append);
+        }
     }
 
     for (var i = 0; i < 6; i++) {
@@ -106,7 +120,7 @@ let arms = 0;
 
             BTN_CHECK.addEventListener("click", (event) => { //wait for user to click sensor calibrated button
 
-                let dropdown = document.getElementById("slCalibrationCertificate"); //Guardian 2.1
+                let dropdown = document.getElementById("slCalibrationCertificate"); //Guardian 2.1 and 3.0
 
                 let selectedOption = "";
 
@@ -122,7 +136,7 @@ let arms = 0;
 
                 GM.setValue("tempCert", tempCert);
 
-                const date = document.getElementsByClassName("at p100 date hasDatepicker")[0].innerHTML;
+                //const date = document.getElementsByClassName("at p100 date hasDatepicker")[0].innerHTML;
 
             });
         }
@@ -133,29 +147,46 @@ let arms = 0;
             let address = "";
             let lastCal = "N/A";
 
-            for(var i = 0; i < table.getElementsByTagName("tr").length; i++){
-            try {
-                let d = table.getElementsByTagName("tr")[i];
-                let check = d.getElementsByTagName("th")[0];
-                if(check.innerHTML == "CP Serial Number"){
-                    address = d.getElementsByTagName("td")[0];
-                }
-                else if(check.innerHTML == "Sensor Name"){
-                    name = d.getElementsByTagName("td")[0];
-                }
+            if(threePoint0){ //G3.0
+                name = document.querySelector("#tab-f6147c9c9b908be9b52803698be57ad2-1 > table:nth-child(1) > tbody > tr:nth-child(3) > td > span");
+                address = document.querySelector("#tab-f6147c9c9b908be9b52803698be57ad2-1 > table:nth-child(1) > tbody > tr:nth-child(6) > td");
+                lastCal = document.querySelector("#tab-f6147c9c9b908be9b52803698be57ad2-1 > table:nth-child(28) > tbody > tr:nth-child(3) > td.c.nb");
+                console.log("Address: ", address);
+                console.log("Name: ", name);
+                console.log("lastCal: ", lastCal);
             }
-            catch(err){}
+            else{
 
-            }
+                for(var i = 0; i < table.getElementsByTagName("tr").length; i++){
+                    try {
+                        let d = table.getElementsByTagName("tr")[i];
+                        let check = d.getElementsByTagName("th")[0];
+                        if(check.innerHTML == "CP Serial Number"){
+                            address = d.getElementsByTagName("td")[0];
+                            console.log("Address: ", address);
+                        }
+                        else if(check.innerHTML == "Sensor Name"){
+                            name = d.getElementsByTagName("td")[0];
+                            console.log("Name: ", name);
 
-
-            try {
+                        }
+                    }
+                    catch(err){}
+                }
+                try {
                 const table2 = document.getElementsByTagName("table")[2];
                 const d2 = table2.getElementsByTagName("tr")[4];
                 lastCal = d2.getElementsByTagName("td")[0];
+                                    console.log("lastCal: ", lastCal);
+
             }
             catch(err){
             }
+
+            }
+
+
+            
 
             //Add Cert information to table
             var row = table.insertRow(7);
