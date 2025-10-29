@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrate Buttons for Live View, ARMS and Guardian
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      5.25
+// @version      5.3
 // @description  Adds a Calibration button to every sensor on the Isensix Live view page, will work on all ARMS and Guardian servers, Exception buttons WIP
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -76,12 +76,17 @@ function openCalUrl(id, butt){
 
     if(arms == 0){//if system is detected to be guardian
         if(threePoint0){ //G3.0
-            let sensorList = document.getElementsByClassName("slnk"); //gets list of all sensors on the live view page
+            //let sensorList = document.getElementsByClassName("slnk"); //gets list of all sensors on the live view page
+            let sensorList = [
+              ...document.getElementsByClassName("slnk"),
+              ...document.getElementsByClassName("slnk-title")
+            ];
 
             const sensorList2 = document.getElementsByClassName("lvhead");
 
             for (let i = 0; i < sensorList.length; i++) {
                 let id = sensorList[i].onclick.toString().slice(27, 42);
+                console.log(id);
                 //console.log(id);//gets the ID of the sensor from the html
                 let butt=document.createElement("button");
 
