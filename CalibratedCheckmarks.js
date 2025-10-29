@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrated Checkmarks and Autocollapse Zones
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      4.5
+// @version      4.6
 // @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated. 3.0 support in beta
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -497,7 +497,7 @@ async function toggleZones(){
                     if(threePoint0){
                         try{
                         sensorId = tableRows[i].querySelector('tr td:nth-child(3)').textContent.trim().match(/(\d+)/)[0];
-                            console.log(sensorId);
+                            //console.log(sensorId);
 
                         }
                         catch(err){}
@@ -537,7 +537,11 @@ async function toggleZones(){
         else{
             let sensorList = document.getElementsByClassName("slnk poplink"); //gets list of all sensors on the live view page
             if(threePoint0){
-                sensorList = document.getElementsByClassName("slnk");
+                //sensorList = document.getElementsByClassName("slnk");
+                 sensorList = [
+              ...document.getElementsByClassName("slnk"),
+              ...document.getElementsByClassName("slnk-title")
+            ];
             }
             //console.log(sensorList);
 
