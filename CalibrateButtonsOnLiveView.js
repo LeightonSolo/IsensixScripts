@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrate Buttons for Live View, ARMS and Guardian
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      5.2
+// @version      5.21
 // @description  Adds a Calibration button to every sensor on the Isensix Live view page, will work on all ARMS and Guardian servers, Exception buttons WIP
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -86,7 +86,6 @@ function openCalUrl(id, butt){
 
                 id = id.match(/(\d+)/)[0]; //gets only the digits from the sensor ID if it contains trailing ");"
 
-                console.log(id);
 
                 butt.innerHTML="Cal";
 
