@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrate Buttons for Live View, ARMS and Guardian
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      5
+// @version      5.2
 // @description  Adds a Calibration button to every sensor on the Isensix Live view page, will work on all ARMS and Guardian servers, Exception buttons WIP
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -9,6 +9,7 @@
 // @match        https://*/arms/
 // @match        https://*/arms/index.php*
 // @match        https://*/guardian/index.php*
+// @match        https://*/guardian/
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrateButtonsOnLiveView.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrateButtonsOnLiveView.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
@@ -79,10 +80,13 @@ function openCalUrl(id, butt){
             const sensorList2 = document.getElementsByClassName("lvhead");
 
             for (let i = 0; i < sensorList.length; i++) {
-                let id = sensorList[i].onclick.toString().slice(33, 37); //gets the ID of the sensor from the html
+                let id = sensorList[i].onclick.toString().slice(27, 42);
+                //console.log(id);//gets the ID of the sensor from the html
                 let butt=document.createElement("button");
 
                 id = id.match(/(\d+)/)[0]; //gets only the digits from the sensor ID if it contains trailing ");"
+
+                console.log(id);
 
                 butt.innerHTML="Cal";
 
@@ -98,7 +102,9 @@ function openCalUrl(id, butt){
                     row = document.createElement("row");
                     sensorList2[i].appendChild(row);
                 }*/
-                                    sensorList2[i].appendChild(butt);
+                                    //sensorList2[i].appendChild(butt);
+                                                    sensorList[i].parentElement.parentElement.appendChild(butt);
+
 
                 // Add button to sensor table cell
                 //cell.appendChild(butt);
