@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrate Buttons for Live View, ARMS and Guardian
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      5.21
+// @version      5.25
 // @description  Adds a Calibration button to every sensor on the Isensix Live view page, will work on all ARMS and Guardian servers, Exception buttons WIP
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -10,6 +10,7 @@
 // @match        https://*/arms/index.php*
 // @match        https://*/guardian/index.php*
 // @match        https://*/guardian/
+// @match        https://*guardian//index.php*
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrateButtonsOnLiveView.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrateButtonsOnLiveView.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
