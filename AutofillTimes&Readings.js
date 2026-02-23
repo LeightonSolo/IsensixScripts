@@ -1,13 +1,14 @@
 // ==UserScript==
-// @name         WIP Autofill Calibration Times and Readings (ARMS, Guardian 2.0)
+// @name         Autofill Calibration Times and Readings (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      0.95
-// @description  Will automatically input the current time into the times for your readings and update them dynamically, currently just works for ARMS and Guardian 2.0 in Beta, ARMS will autofill second two readings based on first
+// @version      1.7
+// @description  Will automatically input the current time into the times for your readings and update them dynamically, Autofills second two readings based on first. Works on ARMS, G2.0, G2.1, and G3.0
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/index.php*mode=11*
 // @match        https://*/arms2/calibration/calsensor.php*
 // @match        https://*/arms/calsensor.php*
 // @match        https://*/arms2/calsensor.php*
+// @match        https://*/guardian/calibration/calsensor.php?id=*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/refs/heads/main/AutofillTimes%26Readings.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/refs/heads/main/AutofillTimes%26Readings.js
@@ -48,6 +49,14 @@ let twoPointZero = 0;
     }
     catch(err){}
 
+let threePoint0 = false;
+    try {//determine if the server is Guardian 3.0
+        if(document.querySelector("#isemainmenu > li:nth-child(1) > a").title == "Guardian 3.0"){
+            threePoint0 = true;
+            console.log("3.0 Detected");
+        }
+    }
+    catch(err){}
 
 
 
@@ -211,7 +220,182 @@ else if(twoPointZero == 1){ //Guardian 2.0
 
 
 }
-else{ //Guardian 2.1 (WIP)
+
+else if(threePoint0){ //Guardian 3.0 (WIP)    ======================================================================================
+
+        (function() {
+  // Helper function to safely get an input once it's available
+  function waitForSelector(selector, callback) {
+    const el = document.querySelector(selector);
+    if (el) return callback(el);
+    const observer = new MutationObserver(() => {
+      const el = document.querySelector(selector);
+      if (el) {
+        observer.disconnect();
+        callback(el);
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
+  const firstSelector = "#readings > tr:nth-child(1) > td:nth-child(2) > input";
+  const secondSelector = "#readings > tr:nth-child(2) > td:nth-child(2) > input";
+  const thirdSelector = "#readings > tr:nth-child(3) > td:nth-child(2) > input";
+
+  waitForSelector(firstSelector, first => {
+    // When the first changes, copy to the second (once it exists)
+      let sensType = document.querySelector("#tab-f6147c9c9b908be9b52803698be57ad2-1 > table:nth-child(1) > tbody > tr:nth-child(1) > td > em:nth-child(2)").innerHTML;
+       if((sensType != "DP.25") && (sensType != "CO2_A_20")){
+          document.getElementsByClassName("ar p100 textInput")[0].step = 0.1;
+       }
+    first.addEventListener("input", () => {
+      waitForSelector(secondSelector, second => {
+
+          if((sensType != "DP.25") && (sensType != "CO2_A_20")){
+                document.getElementsByClassName("ar p100 textInput")[1].step = 0.1; //fix step value cause why would we want 0.0001
+          }
+
+        second.value = first.value;
+        triggerRealisticInput(second);
+      });
+    });
+  });
+
+  waitForSelector(secondSelector, second => {
+    // When the second changes, copy to the third (once it exists)
+    second.addEventListener("input", () => {
+      waitForSelector(thirdSelector, third => {
+          let sensType = document.querySelector("#tab-f6147c9c9b908be9b52803698be57ad2-1 > table:nth-child(1) > tbody > tr:nth-child(1) > td > em:nth-child(2)").innerHTML;
+           if((sensType != "DP.25") && (sensType != "CO2_A_20")){
+                document.getElementsByClassName("ar p100 textInput")[2].step = 0.1;
+           }
+
+        third.value = second.value;
+        triggerRealisticInput(third);
+      });
+    });
+  });
+})();
+
+    function triggerRealisticInput(el) { //page doesnt detect script input so pretend we're human
+  el.dispatchEvent(new Event("focus", { bubbles: true }));
+  el.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "1" }));
+  el.dispatchEvent(new Event("input", { bubbles: true }));
+  el.dispatchEvent(new Event("change", { bubbles: true }));
+  el.dispatchEvent(new KeyboardEvent("keyup", { bubbles: true, key: "1" }));
+  el.dispatchEvent(new Event("blur", { bubbles: true }));
+}
+
+
+}
+else{ //Guardian 2.1 (WIP)       ======================================================================================
+
+    let counter = 0; // number of extra boxes filled
+    let boxes = [];
+
+    // Format as MM/DD/YYYY HH:mm
+    const pad = (n) => n.toString().padStart(2, '0');
+    function formatDate(date) {
+        return `${pad(date.getMonth() + 1)}/${pad(date.getDate())}/${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+
+    // Update all date/time boxes relative to the first one
+    function updateLinkedTimes() {
+        if (boxes.length === 0) return;
+        const firstBox = boxes[0];
+        if (!firstBox.value) return;
+
+
+            //let minutes = now.getMinutes() + 1;
+
+        let baseDate = new Date(firstBox.value);
+
+        /*if (diffInMinutes < 30) {
+            let baseDate = new Date(formatDate(lastCalTime));
+            //firstBox.value = lastCalTime;
+        }*/
+
+        if (isNaN(baseDate)) return; // invalid date typed in
+
+        for (let i = 1; i < boxes.length; i++) {
+            let newTime = new Date(baseDate.getTime() + i * 60000); // +1 min each
+
+            boxes[i].value = formatDate(newTime);
+        }
+
+        //Click calculate buttons
+        const buttons = document.querySelectorAll('input[type="button"][value="Calculate"], button');
+
+        // Filter in case some <button> elements just show text
+        const calculateButtons = Array.from(buttons).filter(btn => {
+            return btn.value === "Calculate" || btn.textContent.trim() === "Calculate";
+        });
+
+        // Click the first three, if they exist
+        for (let i = 0; i < 3 && i < calculateButtons.length; i++) {
+            calculateButtons[i].click();
+        }
+    }
+
+    function updateLinkedReadings() {
+
+    }
+
+    // --- Step 1: Auto-click "Now" button first time it appears
+    function clickNowButton() {
+        const btn = document.querySelector('button.ui-datepicker-current[data-handler="today"]');
+        if (btn) {
+            console.log("Clicking 'Now' button...");
+            btn.click();
+
+            // Wait for the first box to populate
+            setTimeout(() => {
+                boxes = Array.from(document.querySelectorAll('tr#reading input.date'));
+                if (boxes.length > 0) {
+                    console.log("Captured first box:", boxes[0]);
+
+                    // Attach listener so edits to first box update others
+                    boxes[0].addEventListener("input", updateLinkedTimes);
+                }
+            }, 200);
+            return true;
+        }
+        return false;
+    }
+
+    // --- Step 2: Watch for new rows being added
+    const rowObserver = new MutationObserver(() => {
+        const newBoxes = Array.from(document.querySelectorAll('tr#reading input.date'));
+        if (newBoxes.length > boxes.length) {
+            boxes = newBoxes;
+            counter = boxes.length - 1;
+            console.log("New row added, total boxes:", boxes.length);
+
+            updateLinkedTimes(); // auto-fill with updated times
+        }
+    });
+
+    rowObserver.observe(document.body, { childList: true, subtree: true });
+
+    // --- Step 3: Watch for "Now" button once
+    const btnObserver = new MutationObserver(() => {
+        //if (diffInMinutes < 30){
+            if (clickNowButton()) {
+                btnObserver.disconnect();
+            }
+        /*}
+        else{
+            boxes[0].value =
+            //put last caltime + 1 minute
+        }*/
+
+    });
+
+    btnObserver.observe(document.body, { childList: true, subtree: true });
+
+    // In case it's already there
+    clickNowButton();
 
 
 }
