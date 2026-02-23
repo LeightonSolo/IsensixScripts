@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrate Buttons for Live View, ARMS and Guardian
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      5.31
+// @version      5.39
 // @description  Adds a Calibration button to every sensor on the Isensix Live view page, will work on all ARMS and Guardian servers, Exception buttons WIP
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -51,19 +51,40 @@ let threePoint0 = false;
 const url = document.URL;
 let calUrl = "";
 if(arms == 1){
-    calUrl = url.slice(0, 38) + "admin/index.php?mode=11&id="; //sets to calibation mode for older ARMS servers
+    if(url.includes("ics3")){
+        calUrl = url.slice(0, 35) + "admin/index.php?mode=11&id="; //sets to calibation mode for older ARMS servers
+    }else{
+        calUrl = url.slice(0, 38) + "admin/index.php?mode=11&id="; //sets to calibation mode for older ARMS servers
+    }
 }
 else if(url.slice(33, 38) == "arms/"){
-   calUrl = url.slice(0, 38) + "calsensor.php?id=";
+        if(url.includes("ics3")){
+               calUrl = url.slice(0, 35) + "calsensor.php?id=";
+
+        }else{
+               calUrl = url.slice(0, 38) + "calsensor.php?id=";
+        }
 }
 else if(twoPointZero == 1){ //sets calibration URL for Guardian 2.0
-    calUrl = url.slice(0, 39) + "calsensor.php?id=";
+            if(url.includes("ics3")){
+                calUrl = url.slice(0, 36) + "calsensor.php?id=";
+            }else{
+                calUrl = url.slice(0, 39) + "calsensor.php?id=";
+            }
 }
 else if(threePoint0 == 1){ //sets calibration URL for Guardian 3.0
-    calUrl = url.slice(0, 42) + "calibration/calsensor.php?id=";
+    if(url.includes("ics3")){
+            calUrl = url.slice(0, 39) + "calibration/calsensor.php?id=";
+    }else{
+        calUrl = url.slice(0, 42) + "calibration/calsensor.php?id=";
+    }
 }
 else{ //sets calibration URL for Guardian 2.1
-    calUrl = url.slice(0, 39) + "calibration/calsensor.php?id=";
+        if(url.includes("ics3")){
+            calUrl = url.slice(0, 36) + "calibration/calsensor.php?id=";
+        }else{
+            calUrl = url.slice(0, 39) + "calibration/calsensor.php?id=";
+        }
 }
 
 function openCalUrl(id, butt){
