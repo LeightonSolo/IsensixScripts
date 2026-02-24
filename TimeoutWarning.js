@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         Warning on Unconfirmed Calibration and Timezone Mismatch
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.55
+// @version      1.6
 // @description  Will warn if you have sat on the calibration confirmation page for too long without confirming, will warn if server Timezone does not match system time, will prevent idle logout (WIP)
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php*
 // @match        https://*/arms/calsensor.php*
+// @match        https://*/guardian/calibration/calsensor.php*
 // @match        https://*/arms2/calsensor.php*
 // @match        https://*/arms/admin/index.php?mode=11&id=*
 // @match        https://*/arms2/index.php*
@@ -40,6 +41,15 @@ let twoPointZero = false;
     }
     catch(err){}
 
+let threePoint0 = false;
+    try {//determine if the server is Guardian 3.0
+        if(document.querySelector("#isemainmenu > li:nth-child(1) > a").title == "Guardian 3.0"){
+            threePoint0 = true;
+        }
+    }
+    catch(err){}
+
+
 function alertWarning() {
     window.focus();
     alert("Make sure you confirm this calibration before it times out!");
@@ -73,7 +83,14 @@ function alertWarning() {
 
 
         else{
-            serverTime = document.querySelector("#primary_nav_wrap > ul > li:nth-child(11) > a").text.replace(/\.$/, ""); //Guardian 2.1
+            serverTime = document.querySelector("#primary_nav_wrap > ul > li:nth-child(11) > a");
+            if(serverTime){
+                serverTime = serverTime.text.replace(/\.$/, ""); //Guardian 2.1
+            }
+            else{
+                serverTime = document.querySelector("#servertime").innerHTML; //Guardian 3.0
+                console.log(serverTime);
+            }
             serverTimeAndTimezone = serverTime;
         }
 
@@ -126,8 +143,14 @@ function alertWarning() {
                     }
                     else{
                         let div = document.getElementById("outer");
-                        div.style.marginTop = "20px";
+                        if(threePoint0){
+                            div = document.getElementById("isxmain");
+                        }
+                        else{
+                             div.style.marginTop = "20px";
                         document.getElementById("body").style.marginTop = "10px";
+                        }
+                       
                         div.prepend(warningSpan);
                     }
                 }
