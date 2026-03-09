@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Isensix Calibration Catcher (Guardian)
+// @name         Isensix Calibration Catcher (Guardian) (3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      4.0
+// @version      4.01
 // @description  Catch calibration mistakes for Isensix Guardian servers (3.0 support in Beta)
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -76,7 +76,8 @@
     let threeType = "";
 
     if(threePoint0){
-        threeType = document.querySelector("#tab-f6147c9c9b908be9b52803698be57ad2-1 > table:nth-child(1) > tbody > tr:nth-child(1) > td > em:nth-child(2)").innerHTML.toLowerCase();
+        threeType = document.querySelector("#tab-f6147c9c9b908be9b52803698be57ad2-1 > table:nth-child(1) > tbody > tr:nth-child(1) > td > em:nth-child(2)").innerHTML.toLowerCase().slice(0, 6);
+        //console.log(threeType);
         firstFour = threeType;
     }
 
@@ -130,6 +131,8 @@
     }
 
     const sensorText = document.createTextNode(" \u00A0 \u00A0 Sensor Type Detected: " + type + "  \u00A0 \u00A0 \u00A0 Allowed Offset: " + allowOffset);
+
+    console.log("Sensor Type Detected: " + type);
 
     if(!threePoint0){
         serialObj.appendChild(sensorText);
