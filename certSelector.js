@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Cert Selector (Guardian and ARMS) (3.0 in Beta)
+// @name         Cert Selector (ARMS, G2.0, G2.1) (3.0 in Beta)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.2
+// @version      3.4
 // @description  Will select certs automatically based on sensor type, highlight certs that you upload for easier calibration, and autofill cert data on Guardian 2.1. 3.0 support in beta
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -415,13 +415,33 @@ let threePoint0 = false;
             { text: "Delete", clickFunction: () => deleteCert(5) },
         ];
 
-        const line1 = document.createTextNode("\u00A0 \u00A0Assigned Certificates");
-        createTable(container, [1,2,3,4,5], certNames, deleteButtons); //create table of stored certs
+        // Build the uploaded status array
+        let uploadedList = [];
+        const pageText = document.body.innerText; // grab all visible text on the page
+
+        for (let i = 0; i < certNames.length; i++) {
+            const name = certNames[i];
+            // A cert is "uploaded" if it's a real name AND appears somewhere in the page text
+            uploadedList[i] = (name !== "empty" && pageText.toLowerCase().includes(name.toLowerCase()));
+        }
+
+        const uploadedChecks = uploadedList.map((isUploaded, i) => ({
+            text: isUploaded ? "✔ Uploaded" : "✘ Not Uploaded",
+        }));
+
+        const line1 = document.createElement("span");
+        line1.textContent = "\u00A0 \u00A0Assigned Certificates";
+        line1.title = "Certificates you upload will appear here and be highlighted and autoselected when calibrating.";
+        createTable(container, [1,2,3,4,5], certNames, deleteButtons, uploadedChecks); //create table of stored certs
         container.prepend(line1);
 
     }
 
     if((document.URL).includes("photo_manager.php?id")){ //guardian 2.1 and 3.0 cert pages
+
+
+        //document.querySelector("#certificateDataTable > tfoot > tr > td");
+
 
         const BTN_CHECK = document.getElementById("save");
 
@@ -443,6 +463,7 @@ let threePoint0 = false;
         let firstTh = document.querySelector("#certificateDataTable thead th:first-child");
 
         checkForStoredData();
+
 
         BTN_CHECK.addEventListener("click", (event) => { //wait for user to click the save button
             let certBox = "";
@@ -615,12 +636,12 @@ let threePoint0 = false;
 })();
 
 
-function createTable(append, number, names, buttons) {
+function createTable(append, number, names, buttons, uploadedChecks) {
 
     var table = document.createElement("TABLE"); //makes a table element for the page
 
         append.style.margin = "0 auto";
-        table.style.width = '350px';
+        table.style.width = '490px';
         table.style.border = '1px solid #000';
         //table.style.marginLeft = '50px';
 
@@ -648,16 +669,23 @@ function createTable(append, number, names, buttons) {
 
         // Create cell for button
         var cellButton = row.insertCell(2);
-
         // Create a button element
         var buttonElement = document.createElement("button");
         buttonElement.innerText = buttons[i].text;
-
         // Add click event listener to the button
         buttonElement.addEventListener("click", buttons[i].clickFunction);
-
         // Append the button element to the cell
         cellButton.appendChild(buttonElement);
+        cellButton.title = "Remove this cert from Leighton's Tools and stop highlighting it when calibrating. This does not delete the pdf/png file from this server.";
+
+        var cellUploaded = row.insertCell(3);
+        cellUploaded.innerText = uploadedChecks[i].text;
+        cellUploaded.style.textAlign = "center";
+        cellUploaded.style.color = uploadedChecks[i].text.includes("✔") ? "green" : "red";
+        cellUploaded.style.fontWeight = "bold";
+        cellUploaded.title = uploadedChecks[i].text.includes("✔")
+    ? "This cert text was found on this server"
+    : "This cert was not found on this server";
 
     }
     append.prepend(table);
@@ -736,6 +764,14 @@ async function checkForStoredData() {
                 autofillButton.addEventListener("click", function (event) {
                     event.preventDefault();
                     autofillCertificateData(certKey);
+
+                    //TRY AND PREVENT STUPID 3.0 BUG OF NOT ALLOWING HUNDREDTHS
+                    let certVals = document.getElementsByClassName("p100 certValue");
+
+                    for(let i=0; i < certVals.length; i++){
+                        certVals[i].step = 0.01;
+                    }
+                    //================================================================================================================================
                 });
 
                 firstTh.appendChild(autofillButton);
