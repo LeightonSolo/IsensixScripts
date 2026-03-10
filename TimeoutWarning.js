@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Warning on Unconfirmed Calibration and Timezone Mismatch
+// @name         Warning on Unconfirmed Calibration and Timezone Mismatch (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.6
+// @version      1.62
 // @description  Will warn if you have sat on the calibration confirmation page for too long without confirming, will warn if server Timezone does not match system time, will prevent idle logout (WIP)
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -226,32 +226,36 @@ function alertWarning() {
         }
 
         function addToggleButton() {
-            if (document.getElementById("idleToggleBtn")) return; // Prevent duplicate buttons
+            if(!threePoint0){
+                if(!(document.URL).includes('calsensor.php?')){
+                    if (document.getElementById("idleToggleBtn")) return; // Prevent duplicate buttons
 
-            const button = document.createElement("button");
-            button.id = "idleToggleBtn";
-            updateButtonState(button);
+                    const button = document.createElement("button");
+                    button.id = "idleToggleBtn";
+                    updateButtonState(button);
 
-            //button.style.position = "fixed";
-            button.style.top = "5px";
-            button.style.right = "5px";
-            //button.style.zIndex = "9999";
-            button.style.padding = "5px";
-            button.style.color = "white";
-            button.style.border = "none";
-            button.style.cursor = "pointer";
-            button.style.fontSize = "12px";
-            button.style.borderRadius = "3px";
+                    //button.style.position = "fixed";
+                    button.style.top = "5px";
+                    button.style.right = "5px";
+                    //button.style.zIndex = "9999";
+                    button.style.padding = "5px";
+                    button.style.color = "white";
+                    button.style.border = "none";
+                    button.style.cursor = "pointer";
+                    button.style.fontSize = "12px";
+                    button.style.borderRadius = "3px";
 
-            button.onclick = function() {
-                idlePreventionEnabled = !idlePreventionEnabled;
-                GM_setValue("idlePreventionEnabled", idlePreventionEnabled); // Save state
-                updateButtonState(button);
-                console.log(`Idle logout prevention is now ${idlePreventionEnabled ? "ENABLED" : "DISABLED"} (saved).`);
-            };
-            let append = document.getElementsByClassName("noprint flex_nav")[0];
+                    button.onclick = function() {
+                        idlePreventionEnabled = !idlePreventionEnabled;
+                        GM_setValue("idlePreventionEnabled", idlePreventionEnabled); // Save state
+                        updateButtonState(button);
+                        console.log(`Idle logout prevention is now ${idlePreventionEnabled ? "ENABLED" : "DISABLED"} (saved).`);
+                    };
+                    let append = document.getElementsByClassName("noprint flex_nav")[0];
 
-            append.prepend(button);
+                    append.prepend(button);
+                }
+            }
         }
 
         function updateButtonState(button) {
