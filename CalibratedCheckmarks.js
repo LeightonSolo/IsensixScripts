@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Calibrated Checkmarks and Autocollapse Zones
+// @name         Calibrated Checkmarks and Autocollapse Zones (ARMS, G2.0, G2.1) (3.0 in Beta)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      4.6
+// @version      4.62
 // @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated. 3.0 support in beta
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -592,6 +592,7 @@ async function toggleZones(){
             let deleteButt=document.createElement("button");
             deleteButt.innerHTML="Delete Stored Calibration Data from Leighton's Tools";
             deleteButt.addEventListener("click", () => deleteStoredData());
+            deleteButt.title = "This will make Leighton's Tools scripts forget which sensors have been calibrated across all servers. No data on the servers themselves will be affected.";
             document.querySelector("#body").appendChild(deleteButt);
             //=============================================================================
 
