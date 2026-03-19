@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cert Selector (ARMS, G2.0, G2.1) (3.0 in Beta)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.4
+// @version      3.52
 // @description  Will select certs automatically based on sensor type, highlight certs that you upload for easier calibration, and autofill cert data on Guardian 2.1. 3.0 support in beta
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
@@ -128,7 +128,7 @@ let threePoint0 = false;
             if(arms == 1){
                 match = check.split(" Exp:")[0];
             }
-            if((match == certName1) || (match == certName2) || (match == certName3) || (match == certName4) || (match == certName5)){ //check if matches a stored cert name
+            if((match.toLowerCase() == certName1.toLowerCase()) || (match.toLowerCase() == certName2.toLowerCase()) || (match.toLowerCase() == certName3.toLowerCase()) || (match.toLowerCase() == certName4.toLowerCase()) || (match.toLowerCase() == certName5.toLowerCase())){ //check if matches a stored cert name
                 dropdown.selectedIndex = i;
                 options[i].style.fontWeight = "bold";
                 options[i].style.color = "darkblue";
@@ -145,7 +145,7 @@ let threePoint0 = false;
         if((meterType == "RE") || (meterType == "UNKNOWN")){ //will auto select Oakton and Flukes for RE type sensors
             if(certName1.includes("Oakton") || certName1.includes("Fluke")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName1.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase() === certName1.toLowerCase()) {
                         cert1index = i;
                         dropdown.selectedIndex = cert1index;
                         if(meterType != "UNKNOWN"){
@@ -158,7 +158,7 @@ let threePoint0 = false;
             }
             if(certName2.includes("Oakton") || certName2.includes("Fluke")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName2.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase()=== certName2.toLowerCase()) {
                         cert2index = i;
                         dropdown.selectedIndex = cert2index;
                         if(meterType != "UNKNOWN"){
@@ -172,7 +172,7 @@ let threePoint0 = false;
             }
             if(certName3.includes("Oakton") || certName3.includes("Fluke")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName3.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase()=== certName3.toLowerCase()) {
                         cert3index = i;
                         dropdown.selectedIndex = cert3index;
                         if(meterType != "UNKNOWN"){
@@ -185,7 +185,7 @@ let threePoint0 = false;
             }
             if(certName4.includes("Oakton") || certName4.includes("Fluke")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName4.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase()=== certName4.toLowerCase()) {
                         cert4index = i;
                         dropdown.selectedIndex = cert4index;
                         if(meterType != "UNKNOWN"){
@@ -198,7 +198,7 @@ let threePoint0 = false;
             }
             if(certName5.includes("Oakton") || certName5.includes("Fluke")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName5 || dropdown.options[i].text.split(" Exp:")[0] === certName5) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName5.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase()=== certName5.toLowerCase()) {
                         cert5index = i;
                         dropdown.selectedIndex = cert5index;
                         if(meterType != "UNKNOWN"){
@@ -213,7 +213,7 @@ let threePoint0 = false;
         else if(meterType == "HU"){ //will auto select Vaisala for HU type sensors
             if(certName1.includes("Vaisala") && !certName1.includes("CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName1.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase() === certName1.toLowerCase()) {
                         cert1index = i;
                         dropdown.selectedIndex = cert1index;
                         dropdown.style.fontWeight = "bold";
@@ -224,7 +224,7 @@ let threePoint0 = false;
             }
             if(certName2.includes("Vaisala") && !certName2.includes("CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName2.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase() === certName2.toLowerCase()) {
                         cert2index = i;
                         dropdown.selectedIndex = cert2index;
                         dropdown.style.fontWeight = "bold";
@@ -235,7 +235,7 @@ let threePoint0 = false;
             }
             if(certName3.includes("Vaisala") && !certName3.includes("CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName3.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase() === certName3.toLowerCase()) {
                         cert3index = i;
                         dropdown.selectedIndex = cert3index;
                         dropdown.style.fontWeight = "bold";
@@ -246,7 +246,7 @@ let threePoint0 = false;
             }
             if(certName4.includes("Vaisala") && !certName4.includes("CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName4.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase() === certName4.toLowerCase()) {
                         cert4index = i;
                         dropdown.selectedIndex = cert4index;
                         dropdown.style.fontWeight = "bold";
@@ -257,7 +257,7 @@ let threePoint0 = false;
             }
             if(certName5.includes("Vaisala") && !certName5.includes("CO2")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName5 || dropdown.options[i].text.split(" Exp:")[0] === certName5) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName5.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase() === certName5.toLowerCase()) {
                         cert5index = i;
                         dropdown.selectedIndex = cert5index;
                         dropdown.style.fontWeight = "bold";
@@ -270,7 +270,7 @@ let threePoint0 = false;
         else if(meterType == "CO2"){ //will auto select Vaisala CO2 for CO2 type
             if(certName1.includes("Vaisala CO2") || certName1.includes("ViaSensor")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName1.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase()=== certName1.toLowerCase()) {
                         cert1index = i;
                         dropdown.selectedIndex = cert1index;
                         dropdown.style.fontWeight = "bold";
@@ -281,7 +281,7 @@ let threePoint0 = false;
             }
             if(certName2.includes("Vaisala CO2") || certName2.includes("ViaSensor")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName2.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase()=== certName2.toLowerCase()) {
                         cert2index = i;
                         dropdown.selectedIndex = cert2index;
                         dropdown.style.fontWeight = "bold";
@@ -292,7 +292,7 @@ let threePoint0 = false;
             }
             if(certName3.includes("Vaisala CO2") || certName3.includes("ViaSensor")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName3.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase()=== certName3.toLowerCase()) {
                         cert3index = i;
                         dropdown.selectedIndex = cert3index;
                         dropdown.style.fontWeight = "bold";
@@ -303,7 +303,7 @@ let threePoint0 = false;
             }
             if(certName4.includes("Vaisala CO2") || certName4.includes("ViaSensor")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName4.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase()=== certName4.toLowerCase()) {
                         cert4index = i;
                         dropdown.selectedIndex = cert4index;
                         dropdown.style.fontWeight = "bold";
@@ -314,7 +314,7 @@ let threePoint0 = false;
             }
             if(certName5.includes("Vaisala CO2") || certName5.includes("ViaSensor")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName5 || dropdown.options[i].text.split(" Exp:")[0] === certName5) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName5.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase()=== certName5.toLowerCase()) {
                         cert5index = i;
                         dropdown.selectedIndex = cert5index;
                         dropdown.style.fontWeight = "bold";
@@ -327,7 +327,7 @@ let threePoint0 = false;
         else if(meterType == "DP"){ //will auto select Dwyer for DP type sensors
             if(certName1.includes("Dwyer")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName1 || dropdown.options[i].text.split(" Exp:")[0] === certName1) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName1.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase()=== certName1.toLowerCase()) {
                         cert1index = i;
                         dropdown.selectedIndex = cert1index;
                         dropdown.style.fontWeight = "bold";
@@ -338,7 +338,7 @@ let threePoint0 = false;
             }
             if(certName2.includes("Dwyer")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName2 || dropdown.options[i].text.split(" Exp:")[0] === certName2) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName2.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase()=== certName2.toLowerCase()) {
                         cert2index = i;
                         dropdown.selectedIndex = cert2index;
                         dropdown.style.fontWeight = "bold";
@@ -349,7 +349,7 @@ let threePoint0 = false;
             }
             if(certName3.includes("Dwyer")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName3 || dropdown.options[i].text.split(" Exp:")[0] === certName3) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName3.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase()=== certName3.toLowerCase()) {
                         cert3index = i;
                         dropdown.selectedIndex = cert3index;
                         dropdown.style.fontWeight = "bold";
@@ -360,7 +360,7 @@ let threePoint0 = false;
             }
             if(certName4.includes("Dwyer")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName4 || dropdown.options[i].text.split(" Exp:")[0] === certName4) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName4.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase()=== certName4.toLowerCase()) {
                         cert4index = i;
                         dropdown.selectedIndex = cert4index;
                         dropdown.style.fontWeight = "bold";
@@ -371,7 +371,7 @@ let threePoint0 = false;
             }
             if(certName5.includes("Dwyer")){
                 for (let i = 0; i < dropdown.options.length; i++) {
-                    if (dropdown.options[i].text.split(" - ")[0] === certName5 || dropdown.options[i].text.split(" Exp:")[0] === certName5) {
+                    if (dropdown.options[i].text.split(" - ")[0].toLowerCase() === certName5.toLowerCase() || dropdown.options[i].text.split(" Exp:")[0].toLowerCase()=== certName5.toLowerCase()) {
                         cert5index = i;
                         dropdown.selectedIndex = cert5index;
                         dropdown.style.fontWeight = "bold";
@@ -452,11 +452,21 @@ let threePoint0 = false;
         let stored5 = await GM.getValue("highlightCert5");
 
         try {
-            stored1 = stored1.toLowerCase().trim();
-            stored2 = stored2.toLowerCase().trim();
-            stored3 = stored3.toLowerCase().trim();
-            stored4 = stored4.toLowerCase().trim();
-            stored5 = stored5.toLowerCase().trim();
+            stored1 = stored1.trim();
+            stored2 = stored2.trim();
+            stored3 = stored3.trim();
+            stored4 = stored4.trim();
+            stored5 = stored5.trim();
+
+        }
+        catch(err){}
+        try {
+            stored1 = stored1.toLowerCase();
+            stored2 = stored2.toLowerCase();
+            stored3 = stored3.toLowerCase();
+            stored4 = stored4.toLowerCase();
+            stored5 = stored5.toLowerCase();
+
         }
         catch(err){}
 
@@ -470,6 +480,16 @@ let threePoint0 = false;
             if(threePoint0){
                 let dropdown = document.querySelector("#cat");
                 certBox = dropdown.options[dropdown.selectedIndex].text;
+
+                //Fix step size for middle values (fahrenheit) when saving cert. Without this you cannot save certs with more than 1 decimal place in middle column by default
+                //===================================================================================================================
+                let fVals = document.getElementsByName("certValueF[]");
+                for(let i = 0; i < fVals.length; i++){
+                    fVals[i].step = "any";
+                    console.log(fVals[i].value + " set to any step size");
+                }
+                //===================================================================================================================
+
             }
             else{
                 certBox = document.getElementById("cat2");
@@ -521,11 +541,20 @@ let threePoint0 = false;
         let stored5 = await GM.getValue("highlightCert5");
 
         try {
-            stored1 = stored1.toLowerCase().trim();
-            stored2 = stored2.toLowerCase().trim();
-            stored3 = stored3.toLowerCase().trim();
-            stored4 = stored4.toLowerCase().trim();
-            stored5 = stored5.toLowerCase().trim();
+            stored1 = stored1.trim();
+            stored2 = stored2.trim();
+            stored3 = stored3.trim();
+            stored4 = stored4.trim();
+            stored5 = stored5.trim();
+
+        }
+        catch(err){}
+        try {
+            stored1 = stored1.toLowerCase();
+            stored2 = stored2.toLowerCase();
+            stored3 = stored3.toLowerCase();
+            stored4 = stored4.toLowerCase();
+            stored5 = stored5.toLowerCase();
 
         }
         catch(err){}
@@ -582,11 +611,20 @@ let threePoint0 = false;
         let stored5 = await GM.getValue("highlightCert5");
 
         try {
-            stored1 = stored1.toLowerCase().trim();
-            stored2 = stored2.toLowerCase().trim();
-            stored3 = stored3.toLowerCase().trim();
-            stored4 = stored4.toLowerCase().trim();
-            stored5 = stored5.toLowerCase().trim();
+            stored1 = stored1.trim();
+            stored2 = stored2.trim();
+            stored3 = stored3.trim();
+            stored4 = stored4.trim();
+            stored5 = stored5.trim();
+
+        }
+        catch(err){}
+        try {
+            stored1 = stored1.toLowerCase();
+            stored2 = stored2.toLowerCase();
+            stored3 = stored3.toLowerCase();
+            stored4 = stored4.toLowerCase();
+            stored5 = stored5.toLowerCase();
 
         }
         catch(err){}
