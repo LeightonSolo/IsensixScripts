@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Calibration Report Error Checking (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.2
-// @description  Ensures canned messages correct, meter matches sensor type, and offset matches canned message (WIP) - ARMS, Guardian 2.0, 2.1, and 3.0
+// @version      1.3
+// @description  Ensures canned messages correct, meter matches sensor type, and correct amount of samples entered - ARMS, Guardian 2.0, 2.1, and 3.0
 // @author       Leighton Solomon
 // @match        https://*.isensix.com/cust/?id=*
 // @match        https://*/arms2/full_calreport.php
@@ -43,22 +43,30 @@
         "Sensor Disabled"
     ];
 
+    const validSamples = ["3/3", "0/0", "/"];
+
     function markRed(cell) {
         cell.dataset.flagged = "true";
         highlightedCells.push(cell);
     }
 
-    // ── row scanning (same logic as before) ───────────────────────────────────
+    // ── row scanning───────────────────────────────────
     for (let i = 1; i < table.rows.length; i++) {
         let cell       = table.rows[i].cells[isGuardian ? 13 : 12];
         let typeCell   = table.rows[i].cells[isGuardian ?  5 :  4];
         let meterCell  = table.rows[i].cells[isGuardian ? 14 : 13];
         let statusCell = table.rows[i].cells[isGuardian ? 13 : 12];
+        let samplesCell = table.rows[i].cells[isGuardian ? 12 : 11];
 
         // Canned message check
         if (cell) {
             const text = cell.textContent || cell.innerText;
             if (!requiredText.some(t => text.includes(t))) markRed(cell);
+        }
+
+        if (samplesCell) {
+            const samplesText = samplesCell.textContent.trim();
+            if (!validSamples.includes(samplesText)) markRed(samplesCell);
         }
 
         // Meter/type mismatch check
