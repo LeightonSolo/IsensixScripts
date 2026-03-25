@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         ARMS Debug Query
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.0
-// @description  Creates a button on older ARMS servers that when clicked will open, autofill query, and copy from debug_query.php along with server information
+// @version      3.1
+// @description  Creates a button on ARMS servers that will open, autofill query, and copy from debug_query.php along with server information. Also creates link to generate calibration report
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/
 // @match        https://*/arms/debug/debug.php
@@ -136,10 +136,25 @@ function copyTable(copyBtn){
     'use strict';
 
     if(arms == 1){//ensure we are on older arms server
-        let btn = document.createElement("BUTTON");
-        btn.textContent = 'Copy Calibration Query';
 
         let div = document.getElementById("arms_menu_1");
+
+        let btn2 = document.createElement("BUTTON");
+        btn2.style.margin = '5px';
+        btn2.textContent = 'Generate Calibration Report';
+        btn2.title = "Type the SID, check don't send mail, and then click submit to generate the full server calibration report";
+
+        div.prepend(btn2);
+
+        btn2.onclick = () => {
+                openCalReport();
+        }
+
+
+        let btn = document.createElement("BUTTON");
+        btn.textContent = 'Copy Calibration Query';
+        btn.title = "Generate a Calibration Summary to be pasted onto a Visualizer";
+
 
         let cell = document.createElement("td");
         cell.appendChild(btn);
@@ -155,6 +170,8 @@ function copyTable(copyBtn){
             window.open(debugUrl); //opens the debug_query.php in a new tab
 
         }
+
+
     }
     else{ //should only run on debug_query.php url
         try {
@@ -189,3 +206,7 @@ function copyTable(copyBtn){
     }
 
 })();
+
+function openCalReport() {
+        window.open("https://172.16.64.2/sshto/cal.php", "_blank");
+    }
