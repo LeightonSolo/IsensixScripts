@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Report Error Checking (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.41
+// @version      1.45
 // @description  Ensures canned messages correct, meter matches sensor type, and correct amount of samples entered - ARMS, Guardian 2.0, 2.1, and 3.0
 // @author       Leighton Solomon
 // @match        https://*.isensix.com/cust/?id=*
@@ -50,24 +50,48 @@
         highlightedCells.push(cell);
     }
 
+    const sampleRow = table.rows[0];
+    console.log({
+        type:    sampleRow?.cells[isGuardian ?  5 :  4]?.textContent.trim(),
+        samples: sampleRow?.cells[isGuardian ? 12 : 11]?.textContent.trim(),
+        newOffsets: sampleRow?.cells[isGuardian ? 11 : 10]?.textContent.trim(),
+        dates:   sampleRow?.cells[isGuardian ?  8 :  7]?.textContent.trim(),
+        status:  sampleRow?.cells[isGuardian ? 13 : 12]?.textContent.trim(),
+        meter:   sampleRow?.cells[isGuardian ? 14 : 13]?.textContent.trim(),
+    });
+
     // ── row scanning───────────────────────────────────
     for (let i = 1; i < table.rows.length; i++) {
-        let cell       = table.rows[i].cells[isGuardian ? 13 : 12];
+        let dates       = table.rows[i].cells[isGuardian ? 8 : 7];
         let typeCell   = table.rows[i].cells[isGuardian ?  5 :  4];
         let meterCell  = table.rows[i].cells[isGuardian ? 14 : 13];
         let statusCell = table.rows[i].cells[isGuardian ? 13 : 12];
         let samplesCell = table.rows[i].cells[isGuardian ? 12 : 11];
+        let newOffsets = table.rows[i].cells[isGuardian ? 11 : 10];
+
 
         // Canned message check
-        if (cell) {
-            const text = cell.textContent || cell.innerText;
-            if (!requiredText.some(t => text.includes(t))) markRed(cell);
+        if (statusCell) {
+            const text = statusCell.textContent || statusCell.innerText;
+            if (!requiredText.some(t => text.includes(t))) markRed(statusCell);
         }
 
+        //right amount of samples entered check
         if (samplesCell) {
             let samplesText = samplesCell.textContent.trim();
             samplesText = samplesText.replace(/\s/g, ''); //remove whitespace which is in 3/3 for some reason??
             if (!validSamples.includes(samplesText)) markRed(samplesCell);
+        }
+
+        // Date freshness check
+        if (dates) {
+            const dateText = dates.textContent.trim();
+            if (dateText) {
+                const parsed = new Date(dateText);
+                const twoWeeksAgo = new Date();
+                twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+                if (isNaN(parsed.getTime()) || parsed < twoWeeksAgo) markRed(dates);
+            }
         }
 
         // Meter/type mismatch check
