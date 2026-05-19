@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrate Buttons for Live View (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      5.40
+// @version      5.45
 // @description  Adds a Calibration button to every sensor on the Isensix Live view page, will work on all ARMS and Guardian servers, Exception buttons WIP
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -113,7 +113,9 @@ function openCalUrl(id, butt){
                 id = id.match(/(\d+)/)[0]; //gets only the digits from the sensor ID if it contains trailing ");"
 
 
-                butt.innerHTML="Cal";
+                butt.innerHTML="⊕";
+                butt.title = "Calibrate";
+
 
                 butt.addEventListener("click", () => openCalUrl(id, butt));
 
@@ -152,7 +154,8 @@ function openCalUrl(id, butt){
 
                 id = id.match(/(\d+)/)[0]; //gets only the digits from the sensor ID if it contains trailing ");"
 
-                butt.innerHTML="Calibrate";
+                butt.innerHTML="⊕";
+                butt.title = "Calibrate";
 
                 butt.addEventListener("click", () => openCalUrl(id, butt));
 
@@ -182,11 +185,13 @@ function openCalUrl(id, butt){
                 const id = sensorList[i].getAttribute("href").toString().slice(20, 23); //gets the ID of the sensor from the html
                 let butt=document.createElement("button");
 
-                butt.innerHTML="Calibrate";
+                butt.innerHTML="⊕";
+                butt.title = "Calibrate";
+
 
                 butt.addEventListener("click", () => openCalUrl(id, butt));
 
-                sensorList[i].parentElement.parentElement.appendChild(butt); //adds calibrate button to parent table
+                sensorList[i].parentElement.parentElement.prepend(butt); //adds calibrate button to parent table
 
             }
         }
