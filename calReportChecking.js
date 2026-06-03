@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Report Error Checking (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.45
+// @version      1.46
 // @description  Ensures canned messages correct, meter matches sensor type, and correct amount of samples entered - ARMS, Guardian 2.0, 2.1, and 3.0
 // @author       Leighton Solomon
 // @match        https://*.isensix.com/cust/?id=*
@@ -43,7 +43,7 @@
         "Sensor Disabled"
     ];
 
-    const validSamples = ["3/3", "0/0", "/", "1/-"];
+    const validSamples = ["3/3", "0/0", "/", "1/-", "3/-"];
 
     function markRed(cell) {
         cell.dataset.flagged = "true";
