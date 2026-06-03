@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Cert Selector (ARMS, G2.0, G2.1) (3.0 in Beta)
+// @name         Cert Selector (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.52
-// @description  Will select certs automatically based on sensor type, highlight certs that you upload for easier calibration, and autofill cert data on Guardian 2.1. 3.0 support in beta
+// @version      3.61
+// @description  Selects certs automatically based on sensor type, highlight certs that you upload, autofill cert data on Guardian 2.1. 3.0, force 3.0 to take any amount of decimal points in cert values
 // @author       Leighton Solomon
 // @match        https://*/arms2/media/photo_manager.php*
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -487,6 +487,20 @@ let threePoint0 = false;
                 for(let i = 0; i < fVals.length; i++){
                     fVals[i].step = "any";
                     console.log(fVals[i].value + " set to any step size");
+                }
+
+                //Fix step size for offset because DP certs will often have an extremely small offset. Without this script you cannot save a DP cert properly on 3.0.
+                let oVals = document.getElementsByName("certOffset[]");
+                for(let i = 0; i < oVals.length; i++){
+                    oVals[i].step = "any";
+                    console.log(oVals[i].value + " set to any step size");
+                }
+
+                //Fix step size for first value column because CO2 certs will often have an offset with multiple decimal points. Without this script you cannot save a CO2 cert properly on 3.0.
+                let cVals = document.getElementsByName("certValue[]");
+                for(let i = 0; i < cVals.length; i++){
+                    cVals[i].step = "any";
+                    console.log(cVals[i].value + " set to any step size");
                 }
                 //===================================================================================================================
 
