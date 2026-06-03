@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Isensix Calibration Catcher (Guardian) (3.0)
+// @name         Isensix Calibration Catcher (G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      4.01
+// @version      4.1
 // @description  Catch calibration mistakes for Isensix Guardian servers (3.0 support in Beta)
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -22,7 +22,7 @@
 //OFFSET CATCHING WILL NOT WORK WITHOUT A VALID SENSOR SERIAL NUMBER
 //Works on Guardian 2.0, 2.1 and 3.0 Servers
 //Will warn users when entering an offset outside the allowable range for RE, RM, SC, HU, DP, CO2, TC, and TMC. (assuming valid serial number, or Guardian 3.0)
-//Will warn if no offset is given or an offset of exactly 0
+//Will warn if no offset is given
 //Will warn if no canned message is selected
 //Will warn if there is not a canned message that meets the approved phrasing
 //Will warn if you are calibrating a sensor that has already been calibrated in the past week
@@ -216,8 +216,8 @@
                 event.preventDefault();
                 firstClick = false;
             }
-            else if(firstClick && (offset == 0 || offset === "") && (type != "VerifyOnly")){
-                alert("Warning: Please make sure you have entered an offset and try to refrain from offsets of exactly 0. Disregard this message if the sensor is only being Verified.");
+            else if(firstClick && (offset === "") && (type != "VerifyOnly")){
+                alert("Warning: Please make sure you have entered an offset. Disregard this message if the sensor is only being Verified.");
                 event.preventDefault();
                 firstClick = false;
             }
