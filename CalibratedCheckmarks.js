@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibrated Checkmarks and Autocollapse Zones (ARMS, G2.0, G2.1) (3.0 in Beta)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      4.62
+// @version      4.65
 // @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated. 3.0 support in beta
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
@@ -236,7 +236,7 @@ async function toggleZones(){
             for (let i = 0; i < sensorList.length; i++) {
                 //alert(sensorList[i].getAttribute("href").toString().slice(0, 12));
                 if(sensorList[i].getAttribute("href").toString().slice(0, 12) == "sensordetail"){
-                    let id = sensorList[i].getAttribute("href").toString().slice(20, 23); //gets the ID of the sensor from the html
+                    let id = sensorList[i].getAttribute("href").toString().slice(20, 24); //gets the ID of the sensor from the html
                     let storedName = server + "," + id;
                     let check = await GM.getValue(storedName);
 
@@ -299,7 +299,7 @@ async function toggleZones(){
                         zoneTables[i].children[0].style = "display:none"; //hide not remove, cause ARMS freaks out otherwise
                     }
                     if(zoneCount == 0){
-                        zoneTitle = document.createTextNode(zoneName + ' - 0 Active or Hidden');
+                        zoneTitle = document.createTextNode(zoneName + ' - 0 Active, or Hidden');
                     }
                     zoneTables[i].prepend(zoneTitle); //adds zone count and calibrated to zone title
 
@@ -452,7 +452,7 @@ async function toggleZones(){
                     zoneTables[i].children[0].remove();
                 }
                 if(zoneCount == 0){
-                     zoneTitle = document.createTextNode(zoneName + ' - 0 Active or Hidden');
+                     zoneTitle = document.createTextNode(zoneName + ' - 0 Active, or Hidden');
                 }
 
                 zoneTables[i].prepend(zoneTitle); //adds zone count and calibrated to zone title
@@ -662,7 +662,7 @@ async function toggleZones(){
                         zoneTables[i].children[0].remove();
                     }
                     if(zoneCount == 0){
-                        zoneTitle = document.createTextNode(zoneName + ' - 0 Active or Hidden');
+                        zoneTitle = document.createTextNode(zoneName + ' - 0 Active, or Hidden');
                     }
                     zoneTables[i].prepend(zoneTitle); //adds zone count and calibrated to zone title
                 }
