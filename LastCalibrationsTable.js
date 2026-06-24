@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Last 5 Calibrations Table
+// @name         Last 5 Calibrations Table and Meter Overlap Prevention (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.1
-// @description  Shows the last 5 calibrations you've done to prevent meter time overlap
+// @version      2.52
+// @description  Shows the last 5 calibrations you've done, highlights the calibration times if it overlaps with the same meter (WIP)
 // @author       Leighton Solomon
 // @match        https://*/arms2/calsetup.php
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -27,6 +27,34 @@ let threePoint0 = false;
         if(document.querySelector("#isemainmenu > li:nth-child(1) > a").title == "Guardian 3.0"){
             threePoint0 = true;
             console.log("3.0 Detected");
+        }
+    }
+    catch(err){}
+
+let arms = 0;
+    try { //determine if the system is ARMS or Guardian
+        if((document.getElementsByClassName("headline2")[0].innerHTML == "(Advanced Remote Monitoring System)")){
+            arms = 1;
+            console.log("ARMS detected");
+
+        }
+    }
+    catch(err){}
+
+let twoPoint0 = 0;
+    try { //determine if the system is Guardian 2.1 or 2.0
+        if(document.getElementsByClassName("ICO_DISCONNECT")[0].innerHTML == "Sign me off"){
+            twoPoint0 = 1;
+            console.log("Guardian 2.0 Detected");
+        }
+    }
+    catch(err){}
+
+let twoPoint1 = 0;
+try { //determine if the system is Guardian 2.1 or 2.0
+        if(document.querySelector("#primary_nav_wrap > ul > li:nth-child(1) > a").title == "Guardian 2.1"){
+            twoPoint1 = 1;
+            console.log("Guardian 2.1 Detected");
         }
     }
     catch(err){}
@@ -80,14 +108,6 @@ function createTable(append, addresses, names, certs, times) {
     append.append(table);
 }
 
-let arms = 0;
-    try { //determine if the system is ARMS or Guardian
-        if(document.getElementsByClassName("headline2")[0].innerHTML == "(Advanced Remote Monitoring System)"){
-        arms = 1;
-        }
-    }
-    catch(err){}
-
 
 (async () => {
     'use strict';
@@ -112,6 +132,14 @@ let arms = 0;
             div.appendChild(line1);
 
             createTable(div, addresses, names, certs, times);
+
+
+
+            // Initial attach for row 1, then observe for rows 2 and 3
+            attachInputListeners();
+            observeReadingsTable();
+            await checkTimeConflicts();
+
 
             let BTN_CHECK = document.getElementById("BTN_CHECK"); //get submit button on guardian 2.1
 
@@ -187,8 +215,6 @@ let arms = 0;
 
             }
 
-
-            
 
             //Add Cert information to table
             var row = table.insertRow(7);
@@ -357,3 +383,131 @@ let arms = 0;
     }
 
 })();
+
+function parseTime(timeStr) {
+    if (!timeStr) return null;
+    // Normalize T separator to space so both formats parse cleanly
+    const normalized = timeStr.trim().replace("T", " ");
+    const dt = new Date(normalized);
+    if (isNaN(dt.getTime())) return null;
+    return dt.getTime(); // milliseconds since epoch — fully accounts for date and hour
+}
+
+// Main conflict checker
+async function checkTimeConflicts() {
+    let dropdown = document.getElementById("slCalibrationCertificate");
+    if(twoPoint0){
+        dropdown = document.querySelector("#cacert");
+    }
+    if (!dropdown) return;
+
+    const selectedCert = dropdown.options[dropdown.selectedIndex]?.text?.trim();
+    if (!selectedCert) return;
+
+    let timeInputs;
+    if (twoPoint1 || twoPoint0) {
+        // Select all inputs with name="calt[]" — covers however many rows exist
+        timeInputs = [...document.querySelectorAll('input[name="calt[]"]')];
+    } else {
+        const timeInputSelectors = [
+            "#readings > tr > td:nth-child(1) > input",
+            "#readings > tr:nth-child(2) > td:nth-child(1) > input",
+            "#readings > tr:nth-child(3) > td:nth-child(1) > input"
+        ];
+        timeInputs = timeInputSelectors.map(sel => document.querySelector(sel));
+    }
+
+    // Load stored certs and last cal times (slots 1-5)
+    const storedCerts = await Promise.all([1,2,3,4,5].map(i => GM.getValue(`cert${i}`)));
+    const storedTimes = await Promise.all([1,2,3,4,5].map(i => GM.getValue(`lastCal${i}`)));
+
+
+    // Collect all stored lastCal times for entries matching selectedCert
+    const TWO_MIN_MS = 2 * 60 * 1000;
+
+    const blockedRanges = [];
+    for (let i = 0; i < 5; i++) {
+        if (storedCerts[i]?.trim() === selectedCert) {
+            const t = parseTime(storedTimes[i]);
+            if (t !== null) {
+                blockedRanges.push({ start: t - TWO_MIN_MS, end: t });
+            }
+        }
+    }
+
+
+    console.log("Selected cert:", selectedCert);
+console.log("Stored certs:", storedCerts);
+console.log("Stored times:", storedTimes);
+console.log("Blocked minutes:", [...blockedRanges]);
+console.log("Current input minutes:", timeInputs.map(i => i ? parseTime(i.value) : null));
+
+    // Check each time input and highlight red if conflict
+    for (const input of timeInputs) {
+        if (!input) continue;
+        const t = parseTime(input.value);
+        const isBlocked = blockedRanges.some(r => t >= r.start && t <= r.end);
+        if (t !== null && isBlocked) {
+            input.style.backgroundColor = "red";
+            input.style.color = "white";
+            input.title = "Meter Overlap Detected. Make sure you didn't use this meter at this time.";
+        } else {
+            input.style.backgroundColor = "";
+            input.style.color = "";
+            input.title = "";
+        }
+    }
+}
+
+function attachInputListeners() {
+
+    let inputs = [];
+    if (twoPoint1 || twoPoint0) {
+        inputs = [...document.querySelectorAll('input[name="calt[]"]')];
+    }
+    else if(threePoint0) {
+        const timeInputSelectors = [
+            "#readings > tr > td:nth-child(1) > input",
+            "#readings > tr:nth-child(2) > td:nth-child(1) > input",
+            "#readings > tr:nth-child(3) > td:nth-child(1) > input"
+        ];
+        inputs = timeInputSelectors.map(sel => document.querySelector(sel));
+    }
+    else if(arms){
+
+    }
+
+    for (const input of inputs) {
+        if (input && !input.dataset.conflictListenerAttached) {
+            input.addEventListener("input", checkTimeConflicts);
+            input.addEventListener("change", checkTimeConflicts);
+            input.dataset.conflictListenerAttached = "true";
+        }
+    }
+}
+
+
+function observeReadingsTable() {
+    let readingsTable = document.getElementById("readings");
+    if(twoPoint0 || twoPoint1){
+        readingsTable = document.querySelector("#calhelper > tbody");
+    }
+    if (!readingsTable) return;
+
+    const observer = new MutationObserver(() => {
+        attachInputListeners();
+        checkTimeConflicts();
+    });
+
+    observer.observe(readingsTable, { childList: true, subtree: true });
+}
+
+// Attach dropdown listener separately (it exists on page load)
+const dropdown = document.getElementById("slCalibrationCertificate");
+if (dropdown) {
+    dropdown.addEventListener("change", checkTimeConflicts);
+}
+
+
+
+
