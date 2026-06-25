@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database (WIP)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.0
+// @version      2.02
 // @description  Capture Calibration data and send to isensix visualizer database in realtime (3.0 and 2.1 only currently)
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
@@ -36,8 +36,9 @@ const TYPE_MAP = {
   'SC':  'Temp-SC',
   'TC':  'Temp-TC',
   'HU':  'Humidity',
-  'DP':  'DiffPressure',
-  'DP.25': 'DiffPressure',
+  'DP':  'DiffPress',
+  'DP.25': 'DiffPress',
+  'DiffPressure': 'DiffPress',
   'MPM': 'Temp-MPM',
   'BIN': 'Binary',
   'O2':  'Oxygen',
@@ -55,7 +56,7 @@ function normalizeType(raw) {
   /* ─── Config ──────────────────────────────────────────── */
   const WORKER_URL = 'https://flat-tree-380f.leightonsolo.workers.dev';
   const API_KEY    = 'Aerodrive123!';
-  const COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes per page type per server
+  const COOLDOWN_MS = 3 * 60 * 1000; // 3 minutes per page type per server
 
   /* ─── Shared utilities ────────────────────────────────── */
   function getServer() {
