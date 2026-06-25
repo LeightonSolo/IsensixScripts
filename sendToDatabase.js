@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database (WIP)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.02
+// @version      2.03
 // @description  Capture Calibration data and send to isensix visualizer database in realtime (3.0 and 2.1 only currently)
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
@@ -39,7 +39,8 @@ const TYPE_MAP = {
   'DP':  'DiffPress',
   'DP.25': 'DiffPress',
   'DiffPressure': 'DiffPress',
-  'MPM': 'Temp-MPM',
+  'DiffPress .25': 'DiffPress',
+  //'MPM': 'MPM',
   'BIN': 'Binary',
   'O2':  'Oxygen',
   //'CO2_A_20': 'CO2',
@@ -175,7 +176,7 @@ function normalizeType(raw) {
 
     // Calibrated by from nav title — strip "Isensix " prefix
     const userLink = document.querySelector('a[href="/guardian/v2prefs.php"]');
-    const calibrated_by = userLink?.getAttribute('title')?.replace(/^Isensix\s+/i, '').trim() ?? null;
+    const calibrated_by = userLink?.getAttribute('title')?.trim() ?? null;
 
     // Hidden inputs
     const getHidden = (name) =>
@@ -338,6 +339,9 @@ function normalizeType(raw) {
 
       const certText = tds[10]?.textContent?.trim();
 
+        console.log("Calibrated at: ", calibrated_at);
+        console.log("Calibrated by: ", calibrated_by);
+
 
       sensors.push({
         sensor_id:     rawId,
@@ -382,6 +386,9 @@ function normalizeType(raw) {
     const calibrated_by = (!rawCalibratedBy || rawCalibratedBy === '-')
       ? null
       : rawCalibratedBy;
+
+    console.log("Calibrated at: ", calibrated_at);
+        console.log("Calibrated by: ", calibrated_by);
 
     // Cal cert — anchor text, skip "n/a"
     const certText = tds[12]?.textContent?.trim();
@@ -459,7 +466,7 @@ function normalizeType(raw) {
         access_point: tds[5]?.textContent?.trim() || null,
         quality:      tds[6]?.textContent?.trim() || null,
         status:       tds[7]?.textContent?.trim() || null,
-        sensor_type:  tds[8]?.textContent?.trim() || null,
+        sensor_type:  normalizeType(tds[8]?.textContent?.trim() || null),
         zone:         decodeHtmlEntities(tds[9]?.textContent?.trim()) || null,
         calibrated_at,
         // calibrated_by intentionally omitted — not available on this page
