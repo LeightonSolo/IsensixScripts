@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database (WIP)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.03
+// @version      2.5
 // @description  Capture Calibration data and send to isensix visualizer database in realtime (3.0 and 2.1 only currently)
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
@@ -9,6 +9,7 @@
 // @match        https://*.isensix.com:*/arms2/calibration/calsensor.php*
 // @match        https://*.isensix.com:*/guardian/calibration/calreport.php*
 // @match        https://*.isensix.com:*/arms2/calibration/calreport.php*
+// @match        https://*.isensix.com:*/arms2/calsetup.php*
 // @match        https://*.isensix.com:*/guardian/iserep1.php*
 // @match        https://*.isensix.com:*/arms2/iserep1.php*
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -26,6 +27,15 @@
         if(document.querySelector("#primary_nav_wrap > ul > li:nth-child(1) > a").title == "Guardian 2.1"){
             twoPointOne = true;
             console.log("2.1 Detected");
+        }
+    }
+    catch(err){}
+
+  let twoPointZero = false;
+    try {//determine if the server is Guardian 3.0
+        if(document.querySelector("#guardian-bar-wp-logo > a").title == "Guardian 2.0"){
+            twoPointZero = true;
+            console.log("2.0 Detected");
         }
     }
     catch(err){}
@@ -57,7 +67,7 @@ function normalizeType(raw) {
   /* ─── Config ──────────────────────────────────────────── */
   const WORKER_URL = 'https://flat-tree-380f.leightonsolo.workers.dev';
   const API_KEY    = 'Aerodrive123!';
-  const COOLDOWN_MS = 3 * 60 * 1000; // 3 minutes per page type per server
+  const COOLDOWN_MS = 1 * 60 * 1000; // 1 minutes per page type per server  CHANGE TO 5 or more later?
 
   /* ─── Shared utilities ────────────────────────────────── */
   function getServer() {
@@ -129,7 +139,7 @@ function normalizeType(raw) {
   const path = window.location.pathname;
 
   if (path.includes('calsensor.php')) handleCalSensor();
-  else if (path.includes('calreport.php')) handleCalReport();
+  else if (path.includes('calreport.php') || path.includes('calsetup.php')) handleCalReport();
   else if (path.includes('iserep1.php')) handleIseRep();
 
   /* ═══════════════════════════════════════════════════════
@@ -298,9 +308,8 @@ function normalizeType(raw) {
       return;
     }
 
-    const sensors = (twoPointOne)
-    ? scrapeCalReport_v21(server)
-    : scrapeCalReport(server);
+    const sensors = (twoPointOne) ? scrapeCalReport_v21(server) : (twoPointZero) ? scrapeCalReport_v20(server) : scrapeCalReport(server);
+
     if (!sensors.length) return;
 
     postBatch(sensors, (count) => {
@@ -316,6 +325,7 @@ function normalizeType(raw) {
 
 
   function scrapeCalReport(server) {
+      console.log("scraping cal report for 3.0 server");
     const rows = document.querySelectorAll('table#tuq1 tbody tr');
     const sensors = [];
 
@@ -332,15 +342,15 @@ function normalizeType(raw) {
 
       const calibrated_at = (!rawCalibratedAt || rawCalibratedAt === '-')
         ? null
-        : new Date(rawCalibratedAt).toISOString();
+        : parseToISO(rawCalibratedAt);
       const calibrated_by = (!rawCalibratedBy || rawCalibratedBy === '-')
         ? null
         : rawCalibratedBy;
 
       const certText = tds[10]?.textContent?.trim();
 
-        console.log("Calibrated at: ", calibrated_at);
-        console.log("Calibrated by: ", calibrated_by);
+        //console.log("Calibrated at: ", calibrated_at);
+        //console.log("Calibrated by: ", calibrated_by);
 
 
       sensors.push({
@@ -361,6 +371,7 @@ function normalizeType(raw) {
   }
 
   function scrapeCalReport_v21(server) {
+      console.log("scraping cal report for 2.1 server");
   const table = document.querySelector('table#tuq1')
              || document.querySelector('table.arms.p100');
   if (!table) return [];
@@ -382,7 +393,7 @@ function normalizeType(raw) {
 
     const calibrated_at = (!rawCalibratedAt || rawCalibratedAt === '-')
       ? null
-      : new Date(rawCalibratedAt).toISOString();
+      : parseToISO(rawCalibratedAt);
     const calibrated_by = (!rawCalibratedBy || rawCalibratedBy === '-')
       ? null
       : rawCalibratedBy;
@@ -410,6 +421,58 @@ function normalizeType(raw) {
   }
   return sensors;
 }
+
+    function scrapeCalReport_v20(server) {
+      console.log("scraping cal report for 2.0 server");
+  const table = document.querySelector('table#tuq1')
+             || document.querySelector('table.arms.p100');
+  if (!table) return [];
+
+  const rows = table.querySelectorAll('tbody tr');
+  const sensors = [];
+
+  for (const row of rows) {
+    const tds = row.querySelectorAll('td');
+    if (tds.length < 10) continue;
+
+    // Sensor ID from row id attribute (e.g. "r171" → "171")
+    const rawId = row.id?.replace(/^r/, '');
+    if (!rawId || isNaN(rawId)) continue;
+
+    // Calibrated at / by — plain text, "-" means null
+    const rawCalibratedAt = tds[5]?.querySelectorAll('span')[1]?.textContent?.trim();
+
+    const rawCalibratedBy = tds[6]?.textContent?.trim();
+
+
+    const calibrated_at = (!rawCalibratedAt || rawCalibratedAt === '-')
+      ? null
+      : parseToISO(rawCalibratedAt);
+    const calibrated_by = (!rawCalibratedBy || rawCalibratedBy === '-')
+      ? null
+      : rawCalibratedBy;
+
+
+    // Cal cert — anchor text, skip "n/a"
+    const certText = tds[11]?.textContent?.trim();
+
+    sensors.push({
+      sensor_id:     rawId,
+      zone:          tds[1]?.textContent?.trim() || null,
+      sensor_name:   tds[2]?.textContent?.trim() || null,
+      sensor_type:   normalizeType(tds[3]?.textContent?.trim() || null),
+      serial_number: tds[4]?.textContent?.trim() || null,
+      calibrated_at,
+      calibrated_by,
+      old_offset:    parseFloatOrNull(tds[7]?.textContent),
+      new_offset:    parseFloatOrNull(tds[8]?.textContent),
+      cal_cert:      (!certText || certText === 'n/a') ? null : certText,
+      server,
+    });
+  }
+  return sensors;
+}
+
 
   /* ═══════════════════════════════════════════════════════
      HANDLER 3 — iserep1.php (calibration query / status)
@@ -455,7 +518,7 @@ function normalizeType(raw) {
       const rawCalibratedAt = tds[10]?.textContent?.trim();
       const calibrated_at = (!rawCalibratedAt || rawCalibratedAt === '-')
         ? null
-        : new Date(rawCalibratedAt).toISOString();
+        : parseToISO(rawCalibratedAt);
 
       sensors.push({
         sensor_id:    rawId,
@@ -489,6 +552,44 @@ function normalizeType(raw) {
     const el = document.createElement('textarea');
     el.innerHTML = text;
     return el.value;
+  }
+
+  function parseToISO(raw) {
+      //console.log("raw: ", raw);
+      if (!raw || raw.trim() === '-') return null;
+      const cleaned = raw.trim();
+
+      // Already ISO-ish: "2026-02-26 13:25:42" or "2026-02-26T13:25:42"
+      if (/^\d{4}-\d{2}-\d{2}/.test(cleaned)) {
+          const d = new Date(cleaned.replace(' ', 'T'));
+          return isNaN(d) ? null : d.toISOString();
+      }
+
+      // calreport format: "02/26/26 1:25 pm" or "04/03/26 11:33"
+      // MM/DD/YY H:MM [am/pm]
+      //const m = cleaned.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(am|pm)?/i);
+      const m = cleaned.match(
+          /^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(am|pm)?$/i
+      );
+      if (m) {
+          let [, month, day, year, hours, minutes, seconds, ampm] = m;
+          let h = parseInt(hours);
+          if (ampm) {
+              if (ampm.toLowerCase() === 'pm' && h !== 12) h += 12;
+              if (ampm.toLowerCase() === 'am' && h === 12) h = 0;
+          }
+          //const fullYear = 2000 + parseInt(year);
+          const fullYear = year.length === 2
+          ? 2000 + parseInt(year, 10)
+          : parseInt(year, 10);
+          const d = new Date(fullYear, parseInt(month)-1, parseInt(day), h, parseInt(minutes), parseInt(seconds||0));
+          return isNaN(d) ? null : d.toISOString();
+      }
+
+      // Last resort — let the browser try
+      const d = new Date(cleaned);
+      //console.log("returned: ", isNaN(d) ? null : d.toISOString());
+      return isNaN(d) ? null : d.toISOString();
   }
 
 })();
