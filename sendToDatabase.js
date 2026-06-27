@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database (WIP)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.5
+// @version      2.51
 // @description  Capture Calibration data and send to isensix visualizer database in realtime (3.0 and 2.1 only currently)
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
@@ -351,6 +351,8 @@ function normalizeType(raw) {
 
         //console.log("Calibrated at: ", calibrated_at);
         //console.log("Calibrated by: ", calibrated_by);
+
+        console.log(certText);
 
 
       sensors.push({
