@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database (WIP)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.51
+// @version      2.54
 // @description  Capture Calibration data and send to isensix visualizer database in realtime (3.0 and 2.1 only currently)
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
@@ -209,7 +209,9 @@ function normalizeType(raw) {
 
     // Calibrated at from visible table cell, convert to ISO
     const calAtRaw = document.querySelector('td[name="ts[]"]')?.textContent?.trim() ?? null;
-    const calibrated_at = calAtRaw ? new Date(calAtRaw).toISOString() : null;
+    //const calibrated_at = calAtRaw ? new Date(calAtRaw).toISOString() : null; before timezone fix
+    const calibrated_at = calAtRaw ? parseToISO(calAtRaw) : null;
+
 
     // Sensor name from onclick span
     const sensor_name = document.querySelector('tr td span[onclick]')?.textContent?.trim() ?? null;
@@ -263,7 +265,10 @@ function normalizeType(raw) {
 
   // old_offset not available in 2.1 — omit
   // calibrated_at not available from ts[] — use current time
-  const calibrated_at = new Date().toISOString();
+  //const calibrated_at = new Date().toISOString();
+      // With this — use current local time formatted without UTC conversion:
+      const now = new Date();
+      const calibrated_at = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
   // Cal cert
   let cal_cert = null;
@@ -352,7 +357,7 @@ function normalizeType(raw) {
         //console.log("Calibrated at: ", calibrated_at);
         //console.log("Calibrated by: ", calibrated_by);
 
-        console.log(certText);
+        //console.log(certText);
 
 
       sensors.push({
@@ -368,6 +373,21 @@ function normalizeType(raw) {
         cal_cert:      (!certText || certText === 'n/a') ? null : certText,
         server,
       });
+        if(rawId == 131){
+            console.log({
+                sensor_id:     rawId,
+                zone:          tds[1]?.querySelector('span')?.textContent?.trim() ?? null,
+                sensor_name:   tds[3]?.querySelector('span')?.textContent?.trim() ?? null,
+                sensor_type:   normalizeType(tds[4]?.querySelector('span')?.textContent?.trim() ?? null),
+                serial_number: tds[5]?.textContent?.trim() ?? null,
+                calibrated_at,
+                calibrated_by,
+                old_offset:    parseFloatOrNull(tds[7]?.textContent),
+                new_offset:    parseFloatOrNull(tds[8]?.textContent),
+                cal_cert:      (!certText || certText === 'n/a') ? null : certText,
+                server,
+            });
+        }
     }
     return sensors;
   }
@@ -556,7 +576,43 @@ function normalizeType(raw) {
     return el.value;
   }
 
-  function parseToISO(raw) {
+    function parseToISO(raw) {
+        if (!raw || raw.trim() === '-') return null;
+        const cleaned = raw.trim();
+
+        // ISO-ish from server: "2026-02-26 13:25:42" or "2026-02-26T13:25:42"
+        // Store as-is normalized to minute, NO UTC conversion
+        // These are server local times — converting to UTC would shift them incorrectly
+        if (/^\d{4}-\d{2}-\d{2}/.test(cleaned)) {
+            return cleaned.replace('T', ' ').slice(0, 16); // "2026-02-26 13:25"
+        }
+
+        // calreport format: "02/26/26 1:25 pm" or "04/03/26 11:33"
+        const m = cleaned.match(
+            /^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(am|pm)?$/i
+        );
+        if (m) {
+            let [, month, day, year, hours, minutes, seconds, ampm] = m;
+            let h = parseInt(hours);
+            if (ampm) {
+                if (ampm.toLowerCase() === 'pm' && h !== 12) h += 12;
+                if (ampm.toLowerCase() === 'am' && h === 12) h = 0;
+            }
+            const fullYear = year.length === 2 ? 2000 + parseInt(year, 10) : parseInt(year, 10);
+            // Format as "YYYY-MM-DD HH:MM" without UTC conversion
+            const MM = String(parseInt(month)).padStart(2, '0');
+            const DD = String(parseInt(day)).padStart(2, '0');
+            const HH = String(h).padStart(2, '0');
+            const mm = String(parseInt(minutes)).padStart(2, '0');
+            return `${fullYear}-${MM}-${DD} ${HH}:${mm}`;
+        }
+
+        // Last resort
+        const d = new Date(cleaned);
+        return isNaN(d) ? null : d.toISOString().replace('T', ' ').slice(0, 16);
+    }
+
+  /*function parseToISO(raw) {
       //console.log("raw: ", raw);
       if (!raw || raw.trim() === '-') return null;
       const cleaned = raw.trim();
@@ -592,6 +648,6 @@ function normalizeType(raw) {
       const d = new Date(cleaned);
       //console.log("returned: ", isNaN(d) ? null : d.toISOString());
       return isNaN(d) ? null : d.toISOString();
-  }
+  }*/
 
 })();
