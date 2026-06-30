@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.52
+// @version      2.61
 // @description  Catch calibration mistakes for Isensix ARMS servers
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/sensorcal.php
@@ -19,9 +19,10 @@
 //WILL NOT WORK WITHOUT A VALID SENSOR SERIAL NUMBER
 //Works on all ARMS servers
 //Will warn users when entering an offset outside the allowable range for RE, RM, SC, HU, DP, CO2, and TMC. (assuming valid serial number)
-//Will warn if no offset is given or an offset of exactly 0.
+//Will warn if no offset is given
 //Will warn if no canned message is selected
 //Will warn if there a canned message that does not meet the approved phrasing
+//Color code canned messages for easier identification
 
 
 (function() {
@@ -96,6 +97,58 @@
     let correctCannedFail = false;
     let correctCannedProper = false;
     let correctCannedReplaced = false;
+
+    const properText = "proper functionality has been verified.";
+    const failText = "sensor failed calibration/verification, needs to be replaced.";
+    const replacedText = "replaced sensor.";
+
+    // Find all <b> tags on the page safely
+    const boldTags = document.querySelectorAll('b');
+    let cannedHeader = null;
+
+    for (const b of boldTags) {
+        if (b.textContent.trim() === "Canned Messages") {
+            cannedHeader = b;
+            break;
+        }
+    }
+
+    if (cannedHeader) {
+        const parentTd = cannedHeader.parentNode;
+
+        const checkboxes = parentTd.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.forEach(checkbox => {
+            let node = checkbox.nextSibling;
+
+            while (node && node.nodeName !== "INPUT") {
+                if (node.nodeType === Node.TEXT_NODE && node.textContent.trim().length > 0) {
+                    const text = node.textContent.toLowerCase();
+                    let textColor = "";
+
+                    if (text.includes(properText)) {
+                        textColor = "#1e7e34"; // Dark Green
+                    } else if (text.includes(failText)) {
+                        textColor = "#bd2130"; // Dark Red
+                    } else if (text.includes(replacedText)) {
+                        textColor = "#d39e00"; // Dark Yellow
+                    }
+
+                    // Color ONLY the matched elements
+                    if (textColor) {
+                        const span = document.createElement("span");
+                        span.style.setProperty("color", textColor, "important");
+                        span.style.setProperty("font-weight", "bold", "important");
+
+                        node.parentNode.insertBefore(span, node);
+                        span.appendChild(node);
+                    }
+                    break; //move to next checkbox
+                }
+                node = node.nextSibling;
+            }
+        });
+}
 
     const BTN_CHECK = document.getElementsByName("submit")[2];
 
@@ -224,8 +277,8 @@
                 newRow.appendChild(newCell);
                 event.preventDefault();
             }
-            else if((offset == 0 || offset === "") && (type != "VerifyOnly")){
-                warning.textContent = "Warning: Please make sure you have entered an offset and try to refrain from offsets of exactly 0. Disregard this message if the sensor is only being Verified.";
+            else if((offset === "") && (type != "VerifyOnly")){
+                warning.textContent = "Warning: Please make sure you have entered an offset. Disregard this message if the sensor is only being Verified.";
                 document.getElementsByName("newoffset")[0].style.color="#ff0000";
                 document.getElementsByName("newoffset")[0].style.fontWeight = 'bold';
                 newRow.appendChild(newCell);
