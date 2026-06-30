@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      4.1
+// @version      4.3
 // @description  Catch calibration mistakes for Isensix Guardian servers (3.0 support in Beta)
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -22,7 +22,7 @@
 //OFFSET CATCHING WILL NOT WORK WITHOUT A VALID SENSOR SERIAL NUMBER
 //Works on Guardian 2.0, 2.1 and 3.0 Servers
 //Will warn users when entering an offset outside the allowable range for RE, RM, SC, HU, DP, CO2, TC, and TMC. (assuming valid serial number, or Guardian 3.0)
-//Will warn if no offset is given
+//Will warn if no offset is given or an offset of exactly 0
 //Will warn if no canned message is selected
 //Will warn if there is not a canned message that meets the approved phrasing
 //Will warn if you are calibrating a sensor that has already been calibrated in the past week
@@ -142,6 +142,38 @@
     const checkBoxes = document.getElementsByName("cmsg[]"); //get the list of canned messages
     let canSelected = false;
 
+    const properText = "proper functionality has been verified.";
+    const failText = "sensor failed calibration/verification, needs to be replaced.";
+    const replacedText = "replaced sensor.";
+
+    const labels = document.querySelectorAll("label");
+
+    labels.forEach(label => {
+        const text = label.textContent.trim().toLowerCase();
+
+        // Reset defaults first so other options don't inherit anything weird
+        label.style.removeProperty("border-left");
+        label.style.removeProperty("padding-left");
+
+        if (text === properText) {
+            label.style.setProperty("border-left", "5px solid #2ecc71", "important"); // Crisp green border
+            label.style.setProperty("padding-left", "8px", "important");
+            label.style.setProperty("background-color", "rgba(46, 204, 113, 0.1)", "important"); // Faint green tint
+            label.style.setProperty("font-weight", "600", "important");
+        }
+        else if (text === failText) {
+            label.style.setProperty("border-left", "5px solid #e74c3c", "important"); // Crisp red border
+            label.style.setProperty("padding-left", "8px", "important");
+            label.style.setProperty("background-color", "rgba(231, 76, 60, 0.1)", "important"); // Faint red tint
+            label.style.setProperty("font-weight", "600", "important");
+        }
+        else if (text === replacedText) {
+            label.style.setProperty("border-left", "5px solid #f1c40f", "important"); // Crisp yellow border
+            label.style.setProperty("padding-left", "8px", "important");
+            label.style.setProperty("background-color", "rgba(241, 196, 15, 0.1)", "important"); // Faint yellow tint
+            label.style.setProperty("font-weight", "600", "important");
+        }
+    });
 
     const BTN_CHECK = document.getElementById("BTN_CHECK");
     let firstClick = true;
@@ -154,13 +186,14 @@
     BTN_CHECK.addEventListener("click", (event) => { //wait for user to click sensor calibrated button
 
         for(var i = 0; i < checkBoxes.length; i++){ //go through all canned messages and make sure you have selected at least one, check failure, and check correct type of failure message
-            if(checkBoxes[i].parentElement.textContent.trim().toLowerCase() == "sensor failed calibration/verification, needs to be replaced."){
+            if(checkBoxes[i].parentElement.textContent.trim().toLowerCase() == failText){
+
                 correctCannedFail = true;
             }
-            if(checkBoxes[i].parentElement.textContent.trim().toLowerCase() == "proper functionality has been verified."){
+            if(checkBoxes[i].parentElement.textContent.trim().toLowerCase() == properText){
                 correctCannedProper = true;
             }
-            if(checkBoxes[i].parentElement.textContent.trim().toLowerCase() == "replaced sensor."){
+            if(checkBoxes[i].parentElement.textContent.trim().toLowerCase() == replacedText){
                 correctCannedReplaced = true;
             }
 
