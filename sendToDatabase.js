@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database (WIP)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.54
+// @version      2.55
 // @description  Capture Calibration data and send to isensix visualizer database in realtime (3.0 and 2.1 only currently)
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
@@ -66,7 +66,7 @@ function normalizeType(raw) {
 
   /* ─── Config ──────────────────────────────────────────── */
   const WORKER_URL = 'https://flat-tree-380f.leightonsolo.workers.dev';
-  const API_KEY    = 'Aerodrive123!';
+  const API_KEY    = 'U87iy7VynFYLJUDnfUYBJHnRKbRiQO3Z';
   const COOLDOWN_MS = 1 * 60 * 1000; // 1 minutes per page type per server  CHANGE TO 5 or more later?
 
   /* ─── Shared utilities ────────────────────────────────── */
