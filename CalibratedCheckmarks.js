@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Calibrated Checkmarks and Autocollapse Zones (ARMS, G2.0, G2.1) (3.0 in Beta)
+// @name         Calibrated Checkmarks and Autocollapse Zones (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      4.65
-// @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated. 3.0 support in beta
+// @version      5.1
+// @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated.
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
 // @match        https://*/arms2/
@@ -64,6 +64,10 @@ let twoPointZero = 0;
         if(document.getElementsByClassName("ICO_DISCONNECT")[0].innerHTML == "Sign me off"){
             twoPointZero = 1;
             console.log("Guardian 2.0 Detected");
+        }
+        if(document.querySelector("#guardian-bar-wp-logo > a").title == "Guardian 2.0"){
+            twoPointZero = 1;
+            console.log("2.0 Detected");
         }
     }
     catch(err){}
@@ -373,17 +377,22 @@ async function toggleZones(){
             const sensorList = document.getElementsByClassName("slnk poplink"); //gets list of all sensors on the live view page
             const zoneHideButton = document.getElementsByClassName("atoolbar")[0];
 
-            let butt=document.createElement("button");
-            //let toggleZoneState = await GM.getValue("toggleZones");
+
+            let butt = document.createElement("button");
+            butt.className = "ui-button-text";
+            butt.style.marginLeft = "12px";
+
             let toggleZoneState = localStorage.getItem(toggleKey);
-            if(toggleZoneState == "ON"){
-                butt.innerHTML="Show All Zones";
+
+            if (toggleZoneState == "ON") {
+                butt.innerHTML = "Show All Zones";
                 butt.style.fontWeight = "bold";
-                butt.style.backgroundColor = '#ff512b';
+                butt.style.color = "#7C0A02";
+
+            } else {
+                butt.innerHTML = "Show Only Non Calibrated Zones";
             }
-            else{
-                butt.innerHTML="Only Show Non Calibrated Zones";
-            }
+
             butt.addEventListener("click", () => toggleZones());
 
             zoneHideButton.appendChild(butt);
@@ -406,6 +415,8 @@ async function toggleZones(){
                     //alert("adding check");
                 }
             }
+
+            // Show counts in zones for 2.0 ======================================
             const zoneTables = document.getElementsByClassName("zone p100");
             const ajaxBodyElement = document.querySelector('ajaxbody');
             if (ajaxBodyElement) {
@@ -441,21 +452,36 @@ async function toggleZones(){
                 //const zoneName = document.querySelector("tbody > tr:nth-child(1) > td > table > tbody > tr > td.zonename > a.zonelink");
                 const zoneName = zoneTables[i].querySelector("tbody > tr:nth-child(1) > td > table > tbody > tr > td.zonename > a.zonelink").textContent;
 
+                const title = zoneTables[i].querySelector(".zonename a:last-of-type");
+                let count = document.createElement("span");
+                    count.textContent = ` - ${calibratedCount}/${zoneCount} Calibrated`;
+                    count.style.fontWeight = "bold";
+
                 let zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Sensors, ' + calibratedCount + ' Calibrated. ' + (zoneCount - calibratedCount) + ' left.');
 
                 zoneTables[i].style = "white-space:nowrap";
                 zoneTables[i].style.fontSize = '14px';
 
-                if((calibratedCount == zoneCount) && (toggleZoneState == "ON")){
-                    zoneTables[i].style.backgroundColor = '#9eff7f';
+                if((calibratedCount == zoneCount)){
+                    title.parentElement.parentElement.parentElement.parentElement.style.backgroundColor = '#9eff7f';
+                    //zoneTables[i].style.backgroundColor = '#9eff7f';
                     zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Sensors, ' + calibratedCount + ' Calibrated.');
-                    zoneTables[i].children[0].remove();
+                    if(toggleZoneState == "ON"){
+                        //zoneTables[i].children[0].remove();
+                        const tbody = zoneTables[i].querySelector("tbody");
+                            if (tbody) {
+                                Array.from(tbody.children).slice(1).forEach(row => {
+                                    row.style.display = "none";
+                                });
+                            }
+                    }
                 }
                 if(zoneCount == 0){
                      zoneTitle = document.createTextNode(zoneName + ' - 0 Active, or Hidden');
                 }
+                title.insertAdjacentElement("afterend", count);
 
-                zoneTables[i].prepend(zoneTitle); //adds zone count and calibrated to zone title
+                //zoneTables[i].prepend(zoneTitle); //adds zone count and calibrated to zone title
             }
             //create button to allow manually deleting all stored sensor data if needed  ======
             let deleteButt=document.createElement("button");
@@ -546,22 +572,31 @@ async function toggleZones(){
             //console.log(sensorList);
 
             let zoneHideButton = document.getElementsByClassName("noprint flex_nav")[0];
+            if(!zoneHideButton){
+                zoneHideButton = document.querySelector("#body > div > form"); //catch for weird G2.0 servers
+            }
             if(threePoint0){ zoneHideButton = document.getElementsByClassName("noprint flex_nav")[1]; }
 
-            let butt=document.createElement("button");
-            //let toggleZoneState = await GM.getValue("toggleZones");
+           
+            let butt = document.createElement("button");
+            butt.className = "ui-button small ui-corner-all ui-widget";
+            butt.style.marginLeft = "12px";
+
             let toggleZoneState = localStorage.getItem(toggleKey);
-            if(toggleZoneState == "ON"){
-                butt.innerHTML="Show All Zones";
+
+            if (toggleZoneState == "ON") {
+                butt.innerHTML = "Show All Zones";
                 butt.style.fontWeight = "bold";
-                butt.style.backgroundColor = '#ff512b';
+                butt.style.color = "#7C0A02";
+
+            } else {
+                butt.innerHTML = "Show Only Non Calibrated Zones";
             }
-            else{
-                butt.innerHTML="Only Show Non Calibrated Zones";
-            }
+
             butt.addEventListener("click", () => toggleZones());
 
-            if(!threePoint0){zoneHideButton.appendChild(butt);}
+            //if(!threePoint0){zoneHideButton.appendChild(butt);}
+            zoneHideButton.appendChild(butt);
 
             for (let i = 0; i < sensorList.length; i++) {
                 let id = sensorList[i].onclick.toString().slice(33, 37); //gets the ID of the sensor from the html
@@ -598,23 +633,74 @@ async function toggleZones(){
 
 
 
-            let zoneTables = document.getElementsByClassName("zone p100");
-            if(threePoint0){zoneTables = document.getElementsByClassName("ui-widget-header zonetop apad");}
+            //if(threePoint0){zoneTables = document.getElementsByClassName("ui-widget-header zonetop apad");}
 
             const ajaxBodyElement = document.querySelector('.ajaxbody');
             if (ajaxBodyElement) {
                ajaxBodyElement.style.lineHeight = '0.7'; //shrink <br> spaces between zones
             }
 
-            for(let i = 0; i < zoneTables.length; i++){
+            if(threePoint0){ //show calibrated counts for each zone on 3.0
 
-                if(threePoint0){
+                    document.querySelectorAll(".zonetop").forEach(zone => {
+                        let total = 0;
+                        let calibrated = 0;
+                        let sensors = [];
 
-                   //let zoneName = zoneTables[i].querySelector("div:nth-child(2) > a").textContent;
+                        // Walk through everything after this zone until the next zone
+                        let el = zone.nextElementSibling;
+                        let zoneContents = [];
+
+                        while (el && !el.classList.contains("zonetop")) {
+                             zoneContents.push(el);
+
+                            // Ignore system sensors/checkpoints
+                            if (
+                                el.classList.contains("senbox") &&
+                                !el.classList.contains("issystem") &&
+                                !el.classList.contains("tdis")
+                            ) {
+                                sensors.push(el);
+                                total++;
+
+                                const head = el.querySelector(".lvhead");
+                                if (el.querySelector(".lvhead")?.textContent.includes("✓")) {
+                                    calibrated++;
+                                }
+
+                            }
+
+                            el = el.nextElementSibling;
+                        }
+
+                        // Add the counts to the zone header
+                        let badge = document.createElement("span");
+                        badge.style.marginLeft = "10px";
+                        badge.style.fontWeight = "bold";
+                        badge.textContent = `${calibrated}/${total} Calibrated`;
 
 
-                }
-                else{
+                        if (total > 0 && calibrated === total) {
+
+                            zone.style.background = "#88E788";
+                            badge.textContent = `${calibrated}/${total} Calibrated ✅`;
+                            if(toggleZoneState == "ON"){
+                                zoneContents.forEach(el => el.style.display = "none");
+                            }
+                        }
+                    if(total == 0){
+                        badge.textContent = ` - 0 Active, or Hidden`;
+                    }
+                    zone.appendChild(badge);
+                });
+
+            }
+            else{ //=================== 2.1 ==========================
+
+                let zoneTables = document.getElementsByClassName("zone p100");
+
+                for(let i = 0; i < zoneTables.length; i++){
+
 
                     //alert(zoneTable.innerHTML);
                     let images = zoneTables[i].querySelectorAll('img');
@@ -640,31 +726,49 @@ async function toggleZones(){
                     calibratedCount += occurrences;
                     //console.log("Zone: " + i);
                     //console.log("Calibrated: " + calibratedCount);
-                    //const zoneName = document.querySelector("tbody > tr:nth-child(1) > td > table > tbody > tr > td.zonename > a.zonelink");
 
-                    let zoneName = zoneTables[i].querySelector("tbody > tr:nth-child(1) > td > table > tbody > tr > td.l.zonename.p100 > a:nth-child(9)").textContent;
+                    //let zoneName = zoneTables[i].querySelector("tbody > tr:nth-child(1) > td > table > tbody > tr > td.l.zonename.p100 > a:nth-child(9)").textContent;
 
-                    let zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Sensors, ' + calibratedCount + ' Calibrated. ' + (zoneCount - calibratedCount) + ' left.');
+                    //let zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Sensors, ' + calibratedCount + ' Calibrated. ' + (zoneCount - calibratedCount) + ' left.');
 
                     zoneTables[i].style = "white-space:nowrap";
                     zoneTables[i].style.fontSize = '17px';
                     //zoneTables[i].style.fontWeight = 'bold';
 
-                    if((calibratedCount == zoneCount) && (toggleZoneState == "ON")){
-                        zoneTables[i].style.backgroundColor = '#9eff7f';
-                        zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Sensors, ' + calibratedCount + ' Calibrated. ');
-                        //close zone
-                        /* const firstLink = table.querySelector('a');
-                    if (firstLink) {
-                        firstLink.click();
-                    }*/
+                    const title = zoneTables[i].querySelector(".zonename a:last-of-type");
+
+                    let count = document.createElement("span");
+                    count.textContent = ` - ${calibratedCount}/${zoneCount} Calibrated`;
+                    count.style.fontWeight = "bold";
+
+
+
+                    if((calibratedCount == zoneCount)){
+                        title.parentElement.style.backgroundColor = '#9eff7f';
+                        //zoneTitle = document.createTextNode(zoneName + ' - ' + zoneCount + ' Sensors, ' + calibratedCount + ' Calibrated. ');
+                        count.textContent = ` - ${calibratedCount}/${zoneCount} Calibrated ✅`;
+
+                        if(toggleZoneState == "ON"){
                         //console.log("removing");
-                        zoneTables[i].children[0].remove();
+                        //zoneTables[i].children[0].style.display = "none";
+                        const tbody = zoneTables[i].querySelector("tbody");
+                            if (tbody) {
+                                Array.from(tbody.children).slice(1).forEach(row => {
+                                    row.style.display = "none";
+                                });
+                            }
+                            /*const collapseLink = table.querySelector("a");    //cant just hide the zones cause has to reload page for each zone
+                            if (collapseLink) {
+                                collapseLink.click();
+                            }*/
+                        }
                     }
                     if(zoneCount == 0){
-                        zoneTitle = document.createTextNode(zoneName + ' - 0 Active, or Hidden');
+                        count.textContent = "- 0 Active, or Hidden";
                     }
-                    zoneTables[i].prepend(zoneTitle); //adds zone count and calibrated to zone title
+                    title.insertAdjacentElement("afterend", count);
+                    //zoneTables[i].children[0].children[0].children[0].children[0].children[0].children[0].insertAdjacentHTML("beforeend", ' <span style="font-weight:bold;">✅</span>'); //adds zone count and calibrated to zone title
+
                 }
             }
         }
