@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database (WIP)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.55
+// @version      2.56
 // @description  Capture Calibration data and send to isensix visualizer database in realtime (3.0 and 2.1 only currently)
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
@@ -373,21 +373,6 @@ function normalizeType(raw) {
         cal_cert:      (!certText || certText === 'n/a') ? null : certText,
         server,
       });
-        if(rawId == 131){
-            console.log({
-                sensor_id:     rawId,
-                zone:          tds[1]?.querySelector('span')?.textContent?.trim() ?? null,
-                sensor_name:   tds[3]?.querySelector('span')?.textContent?.trim() ?? null,
-                sensor_type:   normalizeType(tds[4]?.querySelector('span')?.textContent?.trim() ?? null),
-                serial_number: tds[5]?.textContent?.trim() ?? null,
-                calibrated_at,
-                calibrated_by,
-                old_offset:    parseFloatOrNull(tds[7]?.textContent),
-                new_offset:    parseFloatOrNull(tds[8]?.textContent),
-                cal_cert:      (!certText || certText === 'n/a') ? null : certText,
-                server,
-            });
-        }
     }
     return sensors;
   }
@@ -420,8 +405,8 @@ function normalizeType(raw) {
       ? null
       : rawCalibratedBy;
 
-    console.log("Calibrated at: ", calibrated_at);
-        console.log("Calibrated by: ", calibrated_by);
+    //console.log("Calibrated at: ", calibrated_at);
+        //console.log("Calibrated by: ", calibrated_by);
 
     // Cal cert — anchor text, skip "n/a"
     const certText = tds[12]?.textContent?.trim();
