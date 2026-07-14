@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Calibration Capture - Send to Visualizer Database (WIP)
+// @name         Calibration Capture - Send to Visualizer Database
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.56
-// @description  Capture Calibration data and send to isensix visualizer database in realtime (3.0 and 2.1 only currently)
+// @version      3.0
+// @description  Capture Calibration data and send to isensix visualizer database in realtime.
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
 // @match        https://*.isensix.com:*/guardian/calibration/calsensor.php*
@@ -13,6 +13,8 @@
 // @match        https://*.isensix.com:*/guardian/iserep1.php*
 // @match        https://*.isensix.com:*/arms2/iserep1.php*
 // @match        https://*/arms2/calibration/calsensor.php*
+// @match        https://*.isensix.com:*/arms/admin/sensorcal.php
+// @match        https://*.isensix.com:*/arms/debug/debug_query.php*
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/sendToDatabase.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/sendToDatabase.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
@@ -36,6 +38,16 @@
         if(document.querySelector("#guardian-bar-wp-logo > a").title == "Guardian 2.0"){
             twoPointZero = true;
             console.log("2.0 Detected");
+        }
+    }
+    catch(err){}
+
+
+let arms = false;
+    try { //determine if the system is ARMS or Guardian
+        if(document.getElementsByClassName("headline2")[0].innerHTML == "(Advanced Remote Monitoring System)"){
+        //console.log("ARMS server detected");
+        arms = true;
         }
     }
     catch(err){}
@@ -66,7 +78,7 @@ function normalizeType(raw) {
 
   /* ─── Config ──────────────────────────────────────────── */
   const WORKER_URL = 'https://flat-tree-380f.leightonsolo.workers.dev';
-  const API_KEY    = 'U87iy7VynFYLJUDnfUYBJHnRKbRiQO3Z';
+  const API_KEY = 'U87iy7VynFYLJUDnfUYBJHnRKbRiQO3Z';
   const COOLDOWN_MS = 1 * 60 * 1000; // 1 minutes per page type per server  CHANGE TO 5 or more later?
 
   /* ─── Shared utilities ────────────────────────────────── */
@@ -138,9 +150,10 @@ function normalizeType(raw) {
   /* ─── Page dispatcher ─────────────────────────────────── */
   const path = window.location.pathname;
 
-  if (path.includes('calsensor.php')) handleCalSensor();
+  if (path.includes('calsensor.php') || path.includes('sensorcal.php')) handleCalSensor();
   else if (path.includes('calreport.php') || path.includes('calsetup.php')) handleCalReport();
   else if (path.includes('iserep1.php')) handleIseRep();
+  else if (path.includes('debug_query.php')) handleArmsIseRep();
 
   /* ═══════════════════════════════════════════════════════
      HANDLER 1 — calsensor.php (calibration confirmation)
@@ -149,6 +162,11 @@ function normalizeType(raw) {
      cal_cert, canned_msg, old_offset, new_offset, calibrated_at
   ════════════════════════════════════════════════════════ */
   function handleCalSensor() {
+
+    if(path.includes('sensorcal.php')){
+        handleCalSensor_ARMS();
+        return;
+    }
     const confirmBtn = document.getElementById('BTN_SAVE');
     if (!confirmBtn) return;
 
@@ -298,6 +316,115 @@ function normalizeType(raw) {
     server,
   };
 }
+
+    function handleCalSensor_ARMS() {
+  // ARMS uses a form submit — intercept it and check which button was clicked
+  const form = document.querySelector('form[name="calform"]');
+  if (!form) return;
+
+  let clickedButton = null;
+
+  // Track which submit button was clicked
+  form.querySelectorAll('input[type="submit"]').forEach(btn => {
+    btn.addEventListener('click', () => { clickedButton = btn.value; });
+  });
+
+  form.addEventListener('submit', (e) => {
+    // Only fire on Set Sensor Offset or Replace Sensor, not Cancel
+    if (!clickedButton ||
+        (!clickedButton.includes('Set Sensor Offset') &&
+         !clickedButton.includes('Replace Sensor'))) {
+      return;
+    }
+
+    const data = scrapeCalSensor_ARMS();
+    if (!data) {
+      showBanner('⚠ Could not read sensor data', '#8b1a1a');
+      return;
+    }
+
+    // Fire and forget — don't block the form submission
+    postSingle(data);
+  });
+}
+
+function scrapeCalSensor_ARMS() {
+  const server = getServer();
+
+  // Hidden inputs are the most reliable source for ARMS
+  const getHidden = (name) =>
+    document.querySelector(`input[name="${name}"]`)?.value?.trim() ?? null;
+
+  const sensor_id   = getHidden('id');
+  const sensor_name = getHidden('sname');
+  const serial_number = getHidden('s_sn');
+  const new_offset  = getHidden('newoffset');
+  const old_offset  = getHidden('oldoffset');
+  const calibrated_by_raw = getHidden('uname');
+
+  // Clean up uname — ARMS stores it as "isensix tech." sometimes with trailing period
+  const calibrated_by = calibrated_by_raw?.replace(/\.$/, '').trim() || null;
+
+  // Zone and CP address from the sensor info table
+  // ARMS uses th.sinfoname / th.sinfodesc pairs
+  function getInfoRow(label) {
+    const headers = document.querySelectorAll('th.sinfoname');
+    for (const th of headers) {
+      if (th.textContent.trim() === label) {
+        return th.nextElementSibling?.textContent?.trim() ?? null;
+      }
+    }
+    return null;
+  }
+
+  const zone       = getInfoRow('Zone Name');
+  const cp_address = getInfoRow('CP Address');
+
+  // Cal cert — selected option text from the NIST certificate dropdown
+  const certSelect = document.querySelector('select[name="nistCert"]');
+  const cal_cert = certSelect
+    ? certSelect.options[certSelect.selectedIndex]?.text?.trim() || null
+    : null;
+
+  // Canned messages — collect text of checked checkboxes
+  const checkedMsgs = [];
+  document.querySelectorAll('input[type="checkbox"][name^="cmsg"]').forEach(cb => {
+    if (cb.checked) {
+      const label = cb.nextElementSibling?.textContent?.trim();
+      if (label) checkedMsgs.push(label);
+    }
+  });
+  const canned_msg = checkedMsgs.length ? checkedMsgs.join(' | ') : null;
+
+  // Comment field
+  const comment = document.querySelector('textarea[name="comment"]')?.value?.trim() || null;
+
+  // Combine canned messages and comment
+  const full_msg = [canned_msg, comment].filter(Boolean).join(' | ') || null;
+
+  // calibrated_at — use current time at click, formatted as local YYYY-MM-DD HH:MM
+  const now = new Date();
+  const calibrated_at = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+  if (!sensor_id) return null;
+
+  return {
+    sensor_id,
+    sensor_name,
+    zone,
+    cp_address,
+    serial_number,
+    old_offset:    old_offset    ? parseFloat(old_offset)  : null,
+    new_offset:    new_offset    ? parseFloat(new_offset)  : null,
+    cal_cert,
+    canned_msg:    full_msg,
+    calibrated_at,
+    calibrated_by,
+    server,
+    // sensor_type intentionally omitted — iserep1 is authoritative
+  };
+}
+
 
   /* ═══════════════════════════════════════════════════════
      HANDLER 2 — calreport.php (calibration overview)
@@ -597,42 +724,70 @@ function normalizeType(raw) {
         return isNaN(d) ? null : d.toISOString().replace('T', ' ').slice(0, 16);
     }
 
-  /*function parseToISO(raw) {
-      //console.log("raw: ", raw);
-      if (!raw || raw.trim() === '-') return null;
-      const cleaned = raw.trim();
+    function handleArmsIseRep() {
+  const server = getServer();
+  const cooldownKey = `arms_iserep_sync_${server}`;
 
-      // Already ISO-ish: "2026-02-26 13:25:42" or "2026-02-26T13:25:42"
-      if (/^\d{4}-\d{2}-\d{2}/.test(cleaned)) {
-          const d = new Date(cleaned.replace(' ', 'T'));
-          return isNaN(d) ? null : d.toISOString();
-      }
+  // Table only exists after form submit — if not present, nothing to do
+  const table = document.querySelector('table[border="1"][width="100%"]');
+  if (!table) return;
 
-      // calreport format: "02/26/26 1:25 pm" or "04/03/26 11:33"
-      // MM/DD/YY H:MM [am/pm]
-      //const m = cleaned.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(am|pm)?/i);
-      const m = cleaned.match(
-          /^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(am|pm)?$/i
-      );
-      if (m) {
-          let [, month, day, year, hours, minutes, seconds, ampm] = m;
-          let h = parseInt(hours);
-          if (ampm) {
-              if (ampm.toLowerCase() === 'pm' && h !== 12) h += 12;
-              if (ampm.toLowerCase() === 'am' && h === 12) h = 0;
-          }
-          //const fullYear = 2000 + parseInt(year);
-          const fullYear = year.length === 2
-          ? 2000 + parseInt(year, 10)
-          : parseInt(year, 10);
-          const d = new Date(fullYear, parseInt(month)-1, parseInt(day), h, parseInt(minutes), parseInt(seconds||0));
-          return isNaN(d) ? null : d.toISOString();
-      }
+  if (isCoolingDown(cooldownKey)) {
+    console.log(`ARMS iserep cooldown active for server ${server}`);
+    return;
+  }
 
-      // Last resort — let the browser try
-      const d = new Date(cleaned);
-      //console.log("returned: ", isNaN(d) ? null : d.toISOString());
-      return isNaN(d) ? null : d.toISOString();
-  }*/
+  const sensors = scrapeArmsIseRep(server, table);
+  if (!sensors.length) return;
+
+  postBatch(sensors, (count) => {
+    setCooldown(cooldownKey);
+    showBanner(`✓ Synced ${count} sensors (ARMS status)`, '#1a6e2e');
+  });
+}
+
+function scrapeArmsIseRep(server, table) {
+  const rows = table.querySelectorAll('tbody tr');
+  const sensors = [];
+
+  for (const row of rows) {
+    const tds = row.querySelectorAll('td');
+    if (tds.length < 11) continue;
+
+    const rawId = tds[0]?.textContent?.trim();
+    if (!rawId || isNaN(rawId)) continue;
+
+    // Blank cells in ARMS are &nbsp; which becomes a non-breaking space
+    const getText = (td) => {
+      const t = td?.textContent?.trim().replace(/\u00a0/g, '').trim();
+      return t || null;
+    };
+
+    const rawCalibratedAt = getText(tds[10]);
+    const calibrated_at = rawCalibratedAt ? parseToISO(rawCalibratedAt) : null;
+
+    // Quality cell may be blank for disabled sensors — treat as null
+    const rawQual = getText(tds[6]);
+    const quality = rawQual || null;
+
+    sensors.push({
+      sensor_id:    rawId,
+      cp_address:   getText(tds[1]),
+      sensor_name:  getText(tds[2]),
+      serial_number:getText(tds[3]),
+      new_offset:   parseFloatOrNull(tds[4]?.textContent),
+      access_point: getText(tds[5]),
+      quality,
+      status:       getText(tds[7]),
+      sensor_type:  normalizeType(getText(tds[8])),
+      zone:         getText(tds[9]),
+      calibrated_at,
+      server,
+    });
+  }
+
+  return sensors;
+}
+
 
 })();
