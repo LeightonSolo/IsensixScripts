@@ -1,9 +1,8 @@
 // ==UserScript==
 // @name         Calibrated Checkmarks and Autocollapse Zones (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      5.1
+// @version      5.12
 // @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated.
-// @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
 // @match        https://*/arms2/
 // @match        https://*/arms/
@@ -197,6 +196,7 @@ async function toggleZones(){
         else if((document.URL).includes("/debug_query.php")){ //store calibration data from ARMS Debug Query
 
             let table = document.getElementsByTagName("table")[0];
+            if (!table) return;
             let sensorId = "";
 
             // Get all the rows of the table
