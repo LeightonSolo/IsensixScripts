@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Latest Calibration Times (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.71
+// @version      1.72
 // @description  Tells latest calibration time on the calibration overview tab, Isensix Calibration Summary Tab, and ARMS Debug Query
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calreport.php
@@ -58,6 +58,7 @@ function findMostRecentTime(timeArray) {
     else if((document.URL).includes("/debug_query.php")){ //show most recent calibration time on the ARMS Debug Query screen
 
         let table = document.getElementsByTagName("table")[0];
+        if (!table) return;
         let d = table.getElementsByTagName("tr")[1];
         let check = d.getElementsByTagName("td")[10];
 
