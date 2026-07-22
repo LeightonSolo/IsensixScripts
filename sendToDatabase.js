@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.0
+// @version      3.01
 // @description  Capture Calibration data and send to isensix visualizer database in realtime.
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
@@ -43,14 +43,6 @@
     catch(err){}
 
 
-let arms = false;
-    try { //determine if the system is ARMS or Guardian
-        if(document.getElementsByClassName("headline2")[0].innerHTML == "(Advanced Remote Monitoring System)"){
-        //console.log("ARMS server detected");
-        arms = true;
-        }
-    }
-    catch(err){}
 
 const TYPE_MAP = {
   'RE':  'Temp-RE',
