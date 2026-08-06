@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.1
+// @version      3.15
 // @description  Capture Calibration data and send to isensix visualizer database in realtime.
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
 // @match        https://*.isensix.com:*/guardian/calibration/calsensor.php*
 // @match        https://*.isensix.com:*/arms2/calibration/calsensor.php*
+// @match        https://*.isensix.com:*/arms/calsensor.php*
 // @match        https://*.isensix.com:*/guardian/calibration/calreport.php*
 // @match        https://*.isensix.com:*/arms2/calibration/calreport.php*
 // @match        https://*.isensix.com:*/arms2/calsetup.php*
