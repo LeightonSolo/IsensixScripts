@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Autoclose Calibration Tabs (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.01
+// @version      2.05
 // @description  Automatically closes the calibration tab based on a custom number of seconds on Guardian 2.0, 2.1, 3.0 and ARMS servers
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calreport.php*
@@ -71,6 +71,9 @@ function createSlider(append) {
         else{
         valueDisplay.textContent = `Calibration tabs will close after ${slider.value} seconds.`;
         }
+        //refresh window
+        window.location.href = window.location.href;
+
 
     }
     // Add event listener to update the value when the slider is moved
