@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.15
+// @version      3.3
 // @description  Capture Calibration data and send to isensix visualizer database in realtime.
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
@@ -38,7 +38,8 @@
 
   let twoPointZero = false;
     try {//determine if the server is Guardian 3.0
-        if(document.querySelector("#guardian-bar-wp-logo > a").title == "Guardian 2.0"){
+        if(document.getElementsByClassName("ICO_DISCONNECT")[0].innerHTML == "Sign me off"){
+
             twoPointZero = true;
             console.log("2.0 Detected");
         }
@@ -179,7 +180,10 @@ function normalizeType(raw) {
 
 
   function scrapeCalSensor() {
+      console.log("Scraping CalSensor for 2.0");
     const server = getServer();
+
+    console.log("Server: ", server);
 
     // Helper: find td text by th label
     const getRow = (label) => {
@@ -194,7 +198,10 @@ function normalizeType(raw) {
 
     // Sensor ID cell (contains ID span and type <em>)
     const sensorIdCell = getRow('Sensor ID');
-    const sensor_id = sensorIdCell?.querySelector('span')?.textContent?.trim() ?? null;
+    const sensor_id = sensorIdCell?.querySelector('span')?.textContent?.trim() || document.querySelector('#calsen > table:nth-child(3) > tbody > tr:nth-child(1) > td')?.textContent?.trim() ||
+  null;
+
+      console.log("Sensor ID: ", sensor_id);
     // Don't capture sensor_type here — iserep1 is authoritative for full type names
 
     // Calibrated by from nav title — strip "Isensix " prefix
@@ -222,14 +229,18 @@ function normalizeType(raw) {
 
     // Calibrated at from visible table cell, convert to ISO
     const calAtRaw = document.querySelector('td[name="ts[]"]')?.textContent?.trim() ?? null;
+      console.log("calAtRaw: ", calAtRaw);
     //const calibrated_at = calAtRaw ? new Date(calAtRaw).toISOString() : null; before timezone fix
     const calibrated_at = calAtRaw ? parseToISO(calAtRaw) : null;
 
+      console.log("calibrated_at: ", calibrated_at);
 
     // Sensor name from onclick span
     const sensor_name = document.querySelector('tr td span[onclick]')?.textContent?.trim() ?? null;
 
+
     if (!sensor_id || !calibrated_at) return null;
+
 
     return {
       sensor_id,
