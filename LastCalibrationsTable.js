@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Last 5 Calibrations Table and Meter Overlap Prevention (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.52
+// @version      2.53
 // @description  Shows the last 5 calibrations you've done, highlights the calibration times if it overlaps with the same meter (WIP)
 // @author       Leighton Solomon
 // @match        https://*/arms2/calsetup.php
@@ -436,11 +436,12 @@ async function checkTimeConflicts() {
     }
 
 
-    console.log("Selected cert:", selectedCert);
+/*    console.log("Selected cert:", selectedCert);
 console.log("Stored certs:", storedCerts);
 console.log("Stored times:", storedTimes);
 console.log("Blocked minutes:", [...blockedRanges]);
 console.log("Current input minutes:", timeInputs.map(i => i ? parseTime(i.value) : null));
+*/
 
     // Check each time input and highlight red if conflict
     for (const input of timeInputs) {
