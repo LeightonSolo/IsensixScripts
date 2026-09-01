@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Warning on Unconfirmed Calibration and Timezone Mismatch (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.62
+// @version      1.7
 // @description  Will warn if you have sat on the calibration confirmation page for too long without confirming, will warn if server Timezone does not match system time, will prevent idle logout (WIP)
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -70,7 +70,8 @@ function alertWarning() {
         let regex = /(\d{2}:\d{2}:\d{2} [A-Za-z]+)/;
 
         if(twoPointZero){ //Guardian 2.0
-            let uinfo = document.querySelector("#uinfo").innerHTML;
+            const element = document.querySelector("#uinfo") || document.querySelector("#guardian-bar-top-secondary > li:nth-child(2) > span");
+            let uinfo = element?.innerHTML || "";
             // Match the pattern in the string
             serverTime = uinfo.match(regex);
             serverTimeAndTimezone = serverTime[0];
@@ -102,10 +103,11 @@ function alertWarning() {
 
             // Mapping of common timezone abbreviations to full timezone names
             const timezoneMap = {
-                "CST": "America/Chicago",
-                "PST": "America/Los_Angeles",
-                "EST": "America/New_York",
-                "MST": "America/Denver",
+                "CST": "America/Chicago", "CDT": "America/Chicago",
+                "PST": "America/Los_Angeles", "PDT": "America/Los_Angeles",
+                "EST": "America/New_York", "EDT": "America/New_York",
+                "MST": "America/Denver", "MDT": "America/Denver",
+                "AKST": "America/Anchorage", "AKDT": "America/Anchorage",
             };
 
             // Get the user's system timezone
@@ -253,7 +255,9 @@ function alertWarning() {
                     };
                     let append = document.getElementsByClassName("noprint flex_nav")[0];
 
-                    append.prepend(button);
+                    if(append){
+                        append.prepend(button);
+                    }
                 }
             }
         }
