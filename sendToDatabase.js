@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.3
+// @version      3.31
 // @description  Capture Calibration data and send to isensix visualizer database in realtime.
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
@@ -115,7 +115,7 @@ function normalizeType(raw) {
       data: JSON.stringify(data),
       onload: (res) => {
         if (res.status === 200) {
-          showBanner('✓ Calibration captured', '#1a6e2e');
+          showBanner('✓ Calibration synced to dashboard', '#1a6e2e');
         } else {
           showBanner(`⚠ Capture failed (${res.status})`, '#8b1a1a');
           console.error('Single post failed:', res.responseText);
@@ -452,7 +452,7 @@ function scrapeCalSensor_ARMS() {
 
     postBatch(sensors, (count) => {
       setCooldown(cooldownKey);
-      showBanner(`✓ Synced ${count} sensors (overview)`, '#1a6e2e');
+      showBanner(`✓ Synced ${count} sensors data to dashboard`, '#1a6e2e');
     });
   }
 
@@ -635,7 +635,7 @@ function scrapeCalSensor_ARMS() {
 
     postBatch(sensors, (count) => {
       setCooldown(cooldownKey);
-      showBanner(`✓ Synced ${count} sensors (status)`, '#1a6e2e');
+      showBanner(`✓ Synced ${count} sensors status to dashboard`, '#1a6e2e');
     });
   }
 
@@ -748,7 +748,7 @@ function scrapeCalSensor_ARMS() {
 
   postBatch(sensors, (count) => {
     setCooldown(cooldownKey);
-    showBanner(`✓ Synced ${count} sensors (ARMS status)`, '#1a6e2e');
+    showBanner(`✓ Synced ${count} sensors status to dashboard (ARMS) `, '#1a6e2e');
   });
 }
 
