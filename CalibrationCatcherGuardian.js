@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      4.3
+// @version      4.35
 // @description  Catch calibration mistakes for Isensix Guardian servers (3.0 support in Beta)
 // @author       Leighton Solomon
-// @match        https://*/arms2/calibration/calsensor.php*
-// @match        https://*/arms/calsensor.php*
-// @match        https://*/arms2/calsensor.php*
+// @match        https://*/arms2/calibration/calsensor.php?*
+// @match        https://*/arms/calsensor.php?*
+// @match        https://*/arms2/calsensor.php?*
 // @match        https://*/guardian/calibration/calsensor.php?id=*
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrationCatcherGuardian.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrationCatcherGuardian.js
@@ -63,6 +63,8 @@
 
     let selectedOption = "";
 
+    //if((document.URL).includes("calsensor.php?")){
+
                 try { //try to use guardian 2.1, if error uses 2.0
                     selectedOption = dropdown.options[dropdown.selectedIndex];
                 }
@@ -72,6 +74,7 @@
                 }
 
                 const cert = selectedOption.text;
+
 
     let threeType = "";
 
