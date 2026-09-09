@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Isensix Calibration Catcher (ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      2.61
+// @version      2.62
 // @description  Catch calibration mistakes for Isensix ARMS servers
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/sensorcal.php
@@ -63,7 +63,7 @@
         type = "CO2";
         allowOffset = "±2%";
     }
-    else if(firstFour.includes("o2")){
+    else if(firstFour.includes("o2") && !firstFour.includes("4to")){
         type = "O2";
         allowOffset = "N/A";
     }
