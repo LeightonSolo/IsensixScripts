@@ -1,3 +1,4 @@
+(async function () {
 // ==UserScript==
 // @name         Calibrate Buttons for Live View (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
@@ -200,5 +201,7 @@ function getSensorId(element) {
             }
         }
     }
+
+})();
 
 })();

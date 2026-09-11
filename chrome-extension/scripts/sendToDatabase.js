@@ -1,3 +1,4 @@
+(async function () {
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
@@ -795,5 +796,7 @@ function scrapeArmsIseRep(server, table) {
   return sensors;
 }
 
+
+})();
 
 })();

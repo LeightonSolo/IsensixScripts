@@ -1,0 +1,98 @@
+{
+  "manifest_version": 3,
+  "name": "Leighton's Isensix Tools",
+  "version": "0.1.0",
+  "description": "Calibration workflow tools for Isensix and Paylocity.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://*/*",
+    "https://app.paylocity.com/*",
+    "https://webtime2.paylocity.com/*",
+    "https://flat-tree-380f.leightonsolo.workers.dev/*"
+  ],
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*/arms/admin/", "https://*/arms/debug/debug.php", "https://*/arms/debug/debug_query.php"],
+      "js": ["scripts/ARMSDebugQuery.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*/arms2/index.php*", "https://*/arms2/", "https://*/arms/", "https://*/arms/index.php*", "https://*/guardian/index.php*", "https://*/guardian/", "https://*/guardian//index.php*"],
+      "js": ["scripts/CalibrateButtonsOnLiveView.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*/arms2/calibration/calreport.php*", "https://*/guardian/calibration//calreport.php*", "https://*/arms2/calibration//calreport.php*", "https://*/arms2/calsetup.php?*", "https://*/arms/calsetup.php?*", "https://*/arms/calreport.php?*"],
+      "js": ["compatibility.js", "scripts/AutocloseCalibrationTabs.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*/arms/admin/index.php*mode=11*", "https://*/arms2/calibration/calsensor.php*", "https://*/arms/calsensor.php*", "https://*/arms2/calsensor.php*", "https://*/guardian/calibration/calsensor.php?id=*"],
+      "js": ["compatibility.js", "scripts/AutofillTimes&Readings.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*/arms2/index.php*", "https://*/arms2/", "https://*/arms/", "https://*/arms/index.php*", "https://*/arms/calreport.php?*", "https://*/arms2/calibration/calreport.php*", "https://*/guardian/calibration/calreport.php*", "https://*/guardian/calibration//calreport.php*", "https://*/guardian/iserep1.php*", "https://*/guardian/index.php*", "https://*/guardian/", "https://*/arms2/calibration//calreport.php*", "https://*/arms2/calsetup.php*", "https://*/arms/calsetup.php*", "https://*/arms2/iserep1.php*", "https://*/arms/iserep1.php*", "https://*/arms/debug/debug_query.php*"],
+      "js": ["compatibility.js", "scripts/CalibratedCheckmarks.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*/arms/admin/sensorcal.php"],
+      "js": ["scripts/CalibrationCatcherARMS.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*/arms2/calibration/calsensor.php?*", "https://*/arms/calsensor.php?*", "https://*/arms2/calsensor.php?*", "https://*/guardian/calibration/calsensor.php?id=*"],
+      "js": ["scripts/CalibrationCatcherGuardian.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*.isensix.com/cust/?id=*", "https://*/arms2/full_calreport.php", "https://*/guardian/full_calreport.php"],
+      "js": ["scripts/calReportChecking.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*/arms2/media/photo_manager.php*", "https://*/arms2/calibration/calsensor.php*", "https://*/arms/admin/index.php?mode=11&certs=1*", "https://*/arms/admin/editcalcert.php*", "https://*/arms/admin/sensorcal.php", "https://*/arms2/admin/index.php?mode=SETUP_CERT*", "https://*/arms/admin/index.php?mode=SETUP_CERT*", "https://*/arms2/calsensor.php?id=*", "https://*/arms/calsensor.php?id=*", "https://*/guardian/media/photo_manager.php*"],
+      "js": ["compatibility.js", "scripts/certSelector.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*/arms2/iserep1.php", "https://*/arms/iserep1.php", "https://*/guardian/iserep1.php*"],
+      "js": ["scripts/CopySummaryGuardian.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*/arms2/calsetup.php", "https://*/arms2/calibration/calsensor.php*", "https://*/arms2/calsensor.php*", "https://*/arms/calsensor.php*", "https://*/arms/calreport.php?*", "https://*/arms/admin/index.php?*", "https://*/guardian/calibration/calsensor.php*"],
+      "js": ["compatibility.js", "scripts/LastCalibrationsTable.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*/arms2/calibration/calreport.php", "https://*/arms/iserep1.php", "https://*/arms2/iserep1.php", "https://*/arms/debug/debug_query.php", "https://*/guardian/iserep1.php"],
+      "js": ["scripts/LatestCalibrationTimes.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://app.paylocity.com/Expense/dashboardV2/reports*", "https://webtime2.paylocity.com/webtime/Employee/Timesheet"],
+      "js": ["scripts/PaylocityTools.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*/guardian/calibration/calsensor.php*", "https://*.isensix.com/guardian/calibration/calsensor.php*", "https://*.isensix.com/arms2/calibration/calsensor.php*", "https://*.isensix.com/arms/calibration/calsensor.php*", "https://*.isensix.com/guardian/calibration/calreport.php*", "https://*.isensix.com/arms2/calibration/calreport.php*", "https://*.isensix.com/arms2/calsetup.php*", "https://*.isensix.com/arms/calsetup.php*", "https://*.isensix.com/guardian/iserep1.php*", "https://*.isensix.com/arms2/iserep1.php*", "https://*.isensix.com/arms/iserep1.php*", "https://*/arms2/calibration/calsensor.php*", "https://*.isensix.com/arms/admin/sensorcal.php", "https://*.isensix.com/arms/debug/debug_query.php*"],
+      "js": ["compatibility.js", "scripts/sendToDatabase.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*/arms2/calibration/calsensor.php*", "https://*/arms/calsensor.php*", "https://*/guardian/calibration/calsensor.php*", "https://*/arms2/calsensor.php*", "https://*/arms/admin/index.php?mode=11&id=*", "https://*/arms2/index.php*", "https://*/arms2/iserep1.php"],
+      "js": ["compatibility.js", "scripts/TimeoutWarning.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "Leighton's Isensix Tools"
+  }
+}
