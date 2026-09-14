@@ -1,4 +1,6 @@
 (async function () {
+  const scriptSettings = await chrome.storage.local.get('isensix-script:TimeoutWarning');
+  if (scriptSettings['isensix-script:TimeoutWarning'] === false) return;
   chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'TimeoutWarning' }).catch(() => {});
 // ==UserScript==
 // @name         Warning on Unconfirmed Calibration and Timezone Mismatch (ARMS, G2.0, G2.1, G3.0)

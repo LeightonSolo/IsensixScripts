@@ -1,4 +1,6 @@
 (async function () {
+  const scriptSettings = await chrome.storage.local.get('isensix-script:LastCalibrationsTable');
+  if (scriptSettings['isensix-script:LastCalibrationsTable'] === false) return;
   chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'LastCalibrationsTable' }).catch(() => {});
 // ==UserScript==
 // @name         Last 5 Calibrations Table and Meter Overlap Prevention (ARMS, G2.0, G2.1, G3.0)

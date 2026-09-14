@@ -1,4 +1,6 @@
 (async function () {
+  const scriptSettings = await chrome.storage.local.get('isensix-script:CalibrationCatcherARMS');
+  if (scriptSettings['isensix-script:CalibrationCatcherARMS'] === false) return;
   chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'CalibrationCatcherARMS' }).catch(() => {});
 // ==UserScript==
 // @name         Isensix Calibration Catcher (ARMS)

@@ -1,4 +1,6 @@
 (async function () {
+  const scriptSettings = await chrome.storage.local.get('isensix-script:PaylocityTools');
+  if (scriptSettings['isensix-script:PaylocityTools'] === false) return;
   chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'PaylocityTools' }).catch(() => {});
 // ==UserScript==
 // @name         Paylocity QOL Scripts

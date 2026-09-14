@@ -1,4 +1,6 @@
 (async function () {
+  const scriptSettings = await chrome.storage.local.get('isensix-script:CalibrateButtonsOnLiveView');
+  if (scriptSettings['isensix-script:CalibrateButtonsOnLiveView'] === false) return;
   chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'CalibrateButtonsOnLiveView' }).catch(() => {});
 // ==UserScript==
 // @name         Calibrate Buttons for Live View (ARMS, G2.0, G2.1, G3.0)

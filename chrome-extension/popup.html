@@ -17,9 +17,22 @@
     </header>
 
     <p id="page" class="page">Checking current page...</p>
-    <section aria-labelledby="scripts-heading">
-      <h2 id="scripts-heading">Running scripts</h2>
-      <ul id="scripts" class="scripts" aria-live="polite">
+    <section aria-labelledby="running-heading">
+      <div class="section-heading">
+        <h2 id="running-heading">Running on this page</h2>
+        <span class="hint">Toggle to disable</span>
+      </div>
+      <ul id="running-scripts" class="scripts" aria-live="polite">
+        <li class="muted">Checking...</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="other-heading">
+      <div class="section-heading">
+        <h2 id="other-heading">Other scripts</h2>
+        <span class="hint">Available to enable</span>
+      </div>
+      <ul id="other-scripts" class="scripts" aria-live="polite">
         <li class="muted">Checking...</li>
       </ul>
     </section>

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Leighton's Isensix Tools",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Calibration workflow tools for Isensix.",
   "permissions": [
     "storage"

@@ -1,4 +1,6 @@
 (async function () {
+  const scriptSettings = await chrome.storage.local.get('isensix-script:ARMSDebugQuery');
+  if (scriptSettings['isensix-script:ARMSDebugQuery'] === false) return;
   chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'ARMSDebugQuery' }).catch(() => {});
 // ==UserScript==
 // @name         ARMS Debug Query

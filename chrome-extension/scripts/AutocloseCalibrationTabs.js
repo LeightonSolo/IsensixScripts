@@ -1,4 +1,6 @@
 (async function () {
+  const scriptSettings = await chrome.storage.local.get('isensix-script:AutocloseCalibrationTabs');
+  if (scriptSettings['isensix-script:AutocloseCalibrationTabs'] === false) return;
   chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'AutocloseCalibrationTabs' }).catch(() => {});
 // ==UserScript==
 // @name         Autoclose Calibration Tabs (ARMS, G2.0, G2.1, G3.0)

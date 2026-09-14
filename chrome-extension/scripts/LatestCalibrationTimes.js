@@ -1,4 +1,6 @@
 (async function () {
+  const scriptSettings = await chrome.storage.local.get('isensix-script:LatestCalibrationTimes');
+  if (scriptSettings['isensix-script:LatestCalibrationTimes'] === false) return;
   chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'LatestCalibrationTimes' }).catch(() => {});
 // ==UserScript==
 // @name         Latest Calibration Times (ARMS, G2.0, G2.1, G3.0)

@@ -1,4 +1,6 @@
 (async function () {
+  const scriptSettings = await chrome.storage.local.get('isensix-script:CalibratedCheckmarks');
+  if (scriptSettings['isensix-script:CalibratedCheckmarks'] === false) return;
   chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'CalibratedCheckmarks' }).catch(() => {});
 // ==UserScript==
 // @name         Calibrated Checkmarks and Autocollapse Zones (ARMS, G2.0, G2.1, G3.0)

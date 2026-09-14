@@ -1,4 +1,6 @@
 (async function () {
+  const scriptSettings = await chrome.storage.local.get('isensix-script:calReportChecking');
+  if (scriptSettings['isensix-script:calReportChecking'] === false) return;
   chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'calReportChecking' }).catch(() => {});
 // ==UserScript==
 // @name         Calibration Report Error Checking (ARMS, G2.0, G2.1, G3.0)

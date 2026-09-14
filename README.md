@@ -29,6 +29,19 @@ Other scripts not on this repository due to being very simple or unlikely to be 
 - Automatically go back after Guardian 2.0 servers redirect you to the "Portal" page
 - Debugging and testing scripts
 
+**Chrome extension deployment:**
+------------------------
+
+The Chrome extension is distributed through an unlisted Chrome Web Store item. To prepare an upload after changing scripts, run this from the repository root:
+
+```powershell
+.\release-extension.ps1
+```
+
+The command rebuilds the extension, increments its patch version, and creates an `isensix-tools-<version>.zip` package. Upload each package to the existing Web Store item; technicians who installed the item will receive future updates through Chrome.
+
+The draft privacy policy is in [PRIVACY-POLICY.md](PRIVACY-POLICY.md). Replace its bracketed retention and contact details, publish it at a public HTTPS URL, and enter that URL in the Chrome Web Store privacy settings before submission.
+
 
 **Download here:**
 ------------------------

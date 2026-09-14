@@ -1,4 +1,6 @@
 (async function () {
+  const scriptSettings = await chrome.storage.local.get('isensix-script:sendToDatabase');
+  if (scriptSettings['isensix-script:sendToDatabase'] === false) return;
   chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'sendToDatabase' }).catch(() => {});
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database
