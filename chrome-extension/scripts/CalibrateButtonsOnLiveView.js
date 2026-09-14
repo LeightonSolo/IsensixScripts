@@ -1,4 +1,5 @@
 (async function () {
+  chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'CalibrateButtonsOnLiveView' }).catch(() => {});
 // ==UserScript==
 // @name         Calibrate Buttons for Live View (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts

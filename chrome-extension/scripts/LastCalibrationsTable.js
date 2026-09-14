@@ -1,4 +1,5 @@
 (async function () {
+  chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'LastCalibrationsTable' }).catch(() => {});
 // ==UserScript==
 // @name         Last 5 Calibrations Table and Meter Overlap Prevention (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts

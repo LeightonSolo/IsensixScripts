@@ -1,4 +1,5 @@
 (async function () {
+  chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'TimeoutWarning' }).catch(() => {});
 // ==UserScript==
 // @name         Warning on Unconfirmed Calibration and Timezone Mismatch (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
@@ -86,7 +87,6 @@ function alertWarning() {
 
         else{
             serverTime = document.querySelector("#primary_nav_wrap > ul > li:nth-child(11) > a");
-            if(!serverTime){ serverTime = document.querySelector("#primary_nav_wrap > ul > li:nth-child(10) > a"); }
             if(serverTime){
                 serverTime = serverTime.text.replace(/\.$/, ""); //Guardian 2.1
             }

@@ -8,7 +8,9 @@ New-Item -ItemType Directory -Path $destination -Force | Out-Null
 
 foreach ($sourceFile in $sourceFiles) {
     $content = [System.IO.File]::ReadAllText($sourceFile.FullName, [System.Text.Encoding]::UTF8)
-    $wrapped = "(async function () {`r`n$content`r`n})();`r`n"
+    $scriptName = $sourceFile.BaseName.Replace("'", "\\'")
+    $statusReporter = "  chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: '$scriptName' }).catch(() => {});"
+    $wrapped = "(async function () {`r`n$statusReporter`r`n$content`r`n})();`r`n"
     [System.IO.File]::WriteAllText((Join-Path $destination $sourceFile.Name), $wrapped, (New-Object System.Text.UTF8Encoding($false)))
 }
 

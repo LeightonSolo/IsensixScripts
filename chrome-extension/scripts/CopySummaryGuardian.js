@@ -1,4 +1,5 @@
 (async function () {
+  chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'CopySummaryGuardian' }).catch(() => {});
 // ==UserScript==
 // @name         Copy Isensix Calibration Summary (G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts

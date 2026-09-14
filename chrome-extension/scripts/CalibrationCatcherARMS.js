@@ -1,4 +1,5 @@
 (async function () {
+  chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'CalibrationCatcherARMS' }).catch(() => {});
 // ==UserScript==
 // @name         Isensix Calibration Catcher (ARMS)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts

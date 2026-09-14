@@ -1,4 +1,5 @@
 (async function () {
+  chrome.runtime.sendMessage({ type: 'SCRIPT_STARTED', name: 'PaylocityTools' }).catch(() => {});
 // ==UserScript==
 // @name         Paylocity QOL Scripts
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
