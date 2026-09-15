@@ -43,5 +43,5 @@ The original userscripts remain at the repository root while this migration is t
 - Publish the extension as **Unlisted** so technicians can install it from the direct Web Store link.
 - Keep the same Web Store item for future releases. Upload each new version to that item so Chrome can update existing installations.
 - Before publishing, test the ZIP as a clean installation and confirm the Web Store privacy and data-use declarations are accurate.
-- The draft privacy policy is at [../PRIVACY-POLICY.md](../PRIVACY-POLICY.md). Publish it at a public HTTPS URL and add that URL in the Web Store privacy settings.
+- Privacy policy: [view the policy online](https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/PRIVACY-POLICY.md). Add this URL in the Web Store privacy settings.
 - The API key in the extension is visible to installed users. Use a low-privilege, rate-limited key and rotate it if it is exposed.

@@ -40,7 +40,7 @@ The Chrome extension is distributed through an unlisted Chrome Web Store item. T
 
 The command rebuilds the extension, increments its patch version, and creates an `isensix-tools-<version>.zip` package. Upload each package to the existing Web Store item; technicians who installed the item will receive future updates through Chrome.
 
-The draft privacy policy is in [PRIVACY-POLICY.md](PRIVACY-POLICY.md). Replace its bracketed retention and contact details, publish it at a public HTTPS URL, and enter that URL in the Chrome Web Store privacy settings before submission.
+Privacy policy: [view the policy online](https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/PRIVACY-POLICY.md)
 
 
 **Download here:**

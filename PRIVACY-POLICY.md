@@ -33,7 +33,7 @@ The calibration synchronization feature sends the calibration data needed by the
 
 This may include sensor and calibration information listed above, including the technician name when available. The server is operated for this project and is used to receive and store dashboard data.
 
-**Data retention:** The project retains synchronized data for **[insert retention period or state "as long as needed for the calibration dashboard"]**. Update this statement to match the actual Worker/database retention behavior before publishing.
+**Data retention:** The project retains synchronized data for a maximum of 2 years. Calibration data is usually overwritten after 1 year but the absolute upper bound is 2 years of data stored from the Isensix webpages.
 
 The extension does not send page data to the project server when the relevant synchronization feature is disabled. Other helper scripts primarily use page data locally in the browser.
 
