@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.31
+// @version      3.4
 // @description  Capture Calibration data and send to isensix visualizer database in realtime.
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
@@ -10,6 +10,7 @@
 // @match        https://*.isensix.com:*/arms/calsensor.php*
 // @match        https://*.isensix.com:*/guardian/calibration/calreport.php*
 // @match        https://*.isensix.com:*/arms2/calibration/calreport.php*
+// @match        https://*.isensix.com:*/arms2/calibration//calreport.php*
 // @match        https://*.isensix.com:*/arms2/calsetup.php*
 // @match        https://*.isensix.com:*/arms/calsetup.php*
 // @match        https://*.isensix.com:*/guardian/iserep1.php*
@@ -115,13 +116,13 @@ function normalizeType(raw) {
       data: JSON.stringify(data),
       onload: (res) => {
         if (res.status === 200) {
-          showBanner('\u2713 Calibration synced to dashboard', '#1a6e2e');
+          showBanner('✓ Calibration synced to dashboard', '#1a6e2e');
         } else {
-          showBanner(`\u26a0 Capture failed (${res.status})`, '#8b1a1a');
+          showBanner(`⚠ Capture failed (${res.status})`, '#8b1a1a');
           console.error('Single post failed:', res.responseText);
         }
       },
-      onerror: () => showBanner('\u26a0 Network error', '#8b1a1a'),
+      onerror: () => showBanner('⚠ Network error', '#8b1a1a'),
     });
   }
 
@@ -135,11 +136,11 @@ function normalizeType(raw) {
         if (res.status === 200) {
           onSuccess(sensors.length);
         } else {
-          showBanner(`\u26a0 Sync failed (${res.status})`, '#8b1a1a');
+          showBanner(`⚠ Sync failed (${res.status})`, '#8b1a1a');
           console.error(' Batch post failed:', res.responseText);
         }
       },
-      onerror: () => showBanner(`\u26a0 Network error \u2014 sync failed`, '#8b1a1a'),
+      onerror: () => showBanner('⚠ Network error — sync failed', '#8b1a1a'),
     });
   }
 
