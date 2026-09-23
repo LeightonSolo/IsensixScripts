@@ -283,7 +283,9 @@ function normalizeType(raw) {
   const sensor_name = getRow('Sensor Name')?.textContent?.trim() || null;
 
 
-  const calibrated_by = document.querySelector("#primary_nav_wrap > ul > li:nth-child(12) > a > span").textContent.trim();
+  const calibrated_by = document
+    .querySelector('#primary_nav_wrap > ul > li.ise-ui-menu-item > a > span.isensix')
+    ?.textContent?.trim() || null;
 
   // Hidden inputs — same as original
   const getHidden = (name) =>
