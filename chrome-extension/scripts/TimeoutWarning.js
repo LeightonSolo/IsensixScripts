@@ -5,7 +5,7 @@
 // ==UserScript==
 // @name         Warning on Unconfirmed Calibration and Timezone Mismatch (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      1.7
+// @version      1.73
 // @description  Will warn if you have sat on the calibration confirmation page for too long without confirming, will warn if server Timezone does not match system time, will prevent idle logout (WIP)
 // @author       Leighton Solomon
 // @match        https://*/arms2/calibration/calsensor.php*
@@ -127,10 +127,13 @@ function alertWarning() {
                 // Compare timezones
                 if (fullServerTimezone != userTimezone) {
                     console.log("The user is NOT in the same timezone as the server.");
-                    const warningText = `Warning: This server timezone is ${fullServerTimezone}, but your system timezone is ${userTimezone}`;
+                    const warningText = `Warning! This server timezone is ${fullServerTimezone}, but your system timezone is ${userTimezone}.  All readings should be entered based on server time.`;
                     const warningSpan = document.createElement("span");
                     warningSpan.textContent = warningText;
                     warningSpan.style.color = "red";
+                    warningSpan.style.fontWeight = "bold";
+                    warningSpan.style.padding = "5px";
+                    warningSpan.style.display = "inline-block";
                     if(arms){
                         var table = document.querySelector("#sensor_menu_start_1 > tbody > tr > td:nth-child(2) > form > table:nth-child(2)");
                         var newRow = table.insertRow();
@@ -170,5 +173,6 @@ function alertWarning() {
     }
 
 })();
+
 
 })();
