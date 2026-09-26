@@ -22,7 +22,7 @@ To create a Web Store upload package, run this from the repository root:
 .\release-extension.ps1
 ```
 
-This rebuilds the generated scripts, increments the patch version in `manifest.json`, validates the manifest, and creates `isensix-tools-<version>.zip` in the repository root. Upload that ZIP as an update to the existing Chrome Web Store item. To package without changing the version, use `-NoVersionBump`; to choose a specific version, use `-Version 1.2.0`.
+This rebuilds the generated scripts, increments the patch version in `manifest.json`, validates the manifest, and creates `isensix-tools-<version>.zip` in the repository root. Use this ZIP as an update to the existing Chrome Web Store item. To package without changing the version, use `-NoVersionBump`; to choose a specific version, use `-Version 1.2.0`.
 
 ## Local testing
 
@@ -43,5 +43,4 @@ The original userscripts remain at the repository root while this migration is t
 - Publish the extension as **Unlisted** so technicians can install it from the direct Web Store link.
 - Keep the same Web Store item for future releases. Upload each new version to that item so Chrome can update existing installations.
 - Before publishing, test the ZIP as a clean installation and confirm the Web Store privacy and data-use declarations are accurate.
-- Privacy policy: [view the policy online](https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/PRIVACY-POLICY.md). Add this URL in the Web Store privacy settings.
-- The API key in the extension is visible to installed users. Use a low-privilege, rate-limited key and rotate it if it is exposed.
+- Privacy policy: [view the policy online](https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/PRIVACY-POLICY.md).
