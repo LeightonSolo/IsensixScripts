@@ -1,6 +1,6 @@
 # Leighton's Isensix Tools Chrome extension
 
-This is the first Chrome extension conversion of the Tampermonkey scripts in the repository.
+This Chrome extension converts the traditional Tampermonkey javascript files so that they will run in one package and be easily installed and managed via the Chrome Web Store
 
 ## Build and release
 
@@ -29,7 +29,7 @@ This rebuilds the generated scripts, increments the patch version in `manifest.j
 1. Open `chrome://extensions` in Chrome.
 2. Enable **Developer mode**.
 3. Choose **Load unpacked** and select this `chrome-extension` folder.
-4. Open a matching Isensix or Paylocity page.
+4. Open a matching Isensix page.
 5. After editing code, return to `chrome://extensions`, click the extension reload button, and refresh the page.
 
 The original userscripts remain at the repository root while this migration is tested.
