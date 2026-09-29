@@ -5,7 +5,7 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.4
+// @version      3.45
 // @description  Capture Calibration data and send to isensix visualizer database in realtime.
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
@@ -120,13 +120,13 @@ function normalizeType(raw) {
       data: JSON.stringify(data),
       onload: (res) => {
         if (res.status === 200) {
-          showBanner('\u2713 Calibration synced to dashboard', '#1a6e2e');
+          showBanner('✓ Calibration synced to dashboard', '#1a6e2e');
         } else {
-          showBanner(`\u26a0 Capture failed (${res.status})`, '#8b1a1a');
+          showBanner(`⚠ Capture failed (${res.status})`, '#8b1a1a');
           console.error('Single post failed:', res.responseText);
         }
       },
-      onerror: () => showBanner('\u26a0 Network error', '#8b1a1a'),
+      onerror: () => showBanner('⚠ Network error', '#8b1a1a'),
     });
   }
 
@@ -140,11 +140,11 @@ function normalizeType(raw) {
         if (res.status === 200) {
           onSuccess(sensors.length);
         } else {
-          showBanner(`\u26a0 Sync failed (${res.status})`, '#8b1a1a');
+          showBanner(`⚠ Sync failed (${res.status})`, '#8b1a1a');
           console.error(' Batch post failed:', res.responseText);
         }
       },
-      onerror: () => showBanner(`\u26a0 Network error \u2014 sync failed`, '#8b1a1a'),
+      onerror: () => showBanner('⚠ Network error — sync failed', '#8b1a1a'),
     });
   }
 
@@ -171,10 +171,16 @@ function normalizeType(raw) {
     const confirmBtn = document.getElementById('BTN_SAVE');
     if (!confirmBtn) return;
 
+    const scrape = () => twoPointOne ? scrapeCalSensor_v21() : scrapeCalSensor();
+    const previewData = scrape();
+    if (previewData) {
+      console.info('[sendToDatabase] Calibration scrape preview (not submitted):', previewData);
+    } else {
+      console.warn('[sendToDatabase] Calibration scrape preview could not read sensor data.');
+    }
+
     confirmBtn.addEventListener('click', () => {
-    const data = (twoPointOne)
-      ? scrapeCalSensor_v21()
-      : scrapeCalSensor();
+    const data = scrape();
       if (!data) {
         showBanner('⚠ Could not read sensor data', '#8b1a1a');
         return;
@@ -236,7 +242,10 @@ function normalizeType(raw) {
     const calAtRaw = document.querySelector('td[name="ts[]"]')?.textContent?.trim() ?? null;
       console.log("calAtRaw: ", calAtRaw);
     //const calibrated_at = calAtRaw ? new Date(calAtRaw).toISOString() : null; before timezone fix
-    const calibrated_at = calAtRaw ? parseToISO(calAtRaw) : null;
+    const parsedCalibratedAt = calAtRaw ? parseToISO(calAtRaw) : null;
+    const serverTimeText = document.querySelector('#uinfo')?.textContent ?? '';
+    const serverTimeRaw = serverTimeText.match(/Server Time:\s*(\d{1,2}\/\d{1,2}\/\d{4}\s+\d{1,2}:\d{2}(?::\d{2})?)/i)?.[1] ?? null;
+    const calibrated_at = parsedCalibratedAt ?? (serverTimeRaw ? parseToISO(serverTimeRaw) : null);
 
       console.log("calibrated_at: ", calibrated_at);
 

@@ -167,10 +167,16 @@ function normalizeType(raw) {
     const confirmBtn = document.getElementById('BTN_SAVE');
     if (!confirmBtn) return;
 
+    const scrape = () => twoPointOne ? scrapeCalSensor_v21() : scrapeCalSensor();
+    const previewData = scrape();
+    if (previewData) {
+      console.info('[sendToDatabase] Calibration scrape preview (not submitted):', previewData);
+    } else {
+      console.warn('[sendToDatabase] Calibration scrape preview could not read sensor data.');
+    }
+
     confirmBtn.addEventListener('click', () => {
-    const data = (twoPointOne)
-      ? scrapeCalSensor_v21()
-      : scrapeCalSensor();
+    const data = scrape();
       if (!data) {
         showBanner('⚠ Could not read sensor data', '#8b1a1a');
         return;
@@ -232,7 +238,10 @@ function normalizeType(raw) {
     const calAtRaw = document.querySelector('td[name="ts[]"]')?.textContent?.trim() ?? null;
       console.log("calAtRaw: ", calAtRaw);
     //const calibrated_at = calAtRaw ? new Date(calAtRaw).toISOString() : null; before timezone fix
-    const calibrated_at = calAtRaw ? parseToISO(calAtRaw) : null;
+    const parsedCalibratedAt = calAtRaw ? parseToISO(calAtRaw) : null;
+    const serverTimeText = document.querySelector('#uinfo')?.textContent ?? '';
+    const serverTimeRaw = serverTimeText.match(/Server Time:\s*(\d{1,2}\/\d{1,2}\/\d{4}\s+\d{1,2}:\d{2}(?::\d{2})?)/i)?.[1] ?? null;
+    const calibrated_at = parsedCalibratedAt ?? (serverTimeRaw ? parseToISO(serverTimeRaw) : null);
 
       console.log("calibrated_at: ", calibrated_at);
 
