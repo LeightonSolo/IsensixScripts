@@ -1,0 +1,2046 @@
+/* the current, default color-scheme is 
+   LifeVine colors (arms.css)
+	This may change in the future to sonny's colors (arms3.css)
+*/
+
+a:link		{
+	color : #0000FF;
+}
+
+a:visited	{
+	color : #0000FF;
+}
+
+a:hover		{
+	color : #00FFFF;
+}
+
+a:active	{
+	color : #0000ff;
+}
+
+/* links used in horizontal menu bars */
+a.mlink:link	{
+	color : white;
+	text-decoration : none;
+	font-weight : bold;
+}
+
+a.mlink:visited {
+	color : white;
+	text-decoration : none;
+	font-weight : bold;
+}
+
+a.mlink:hover	{
+	color : #00FFFF;
+	text-decoration : underline;
+	font-weight : bold;
+	background-color: transparent;
+}
+
+a.mlink:active	{
+	color : white;
+	text-decoration : none;
+	font-weight : bold;
+}
+
+/* links used in vertical menu bars */
+a.mlinkv:link,a.mlinkv:visited,a.mlinkv:active
+{
+	color : white;
+	text-decoration : none;
+	font-weight : normal;
+}
+
+a.mlinkv:hover	{
+	color : #00FFFF;
+	text-decoration : underline;
+	font-weight : normal;
+	background-color: yellow;
+}
+
+/* links used in vertical menu bars */
+a.mlinkvz:link,a.mlinkvz:visited,a.mlinkvz:active
+{
+	color : black;
+	text-decoration : none;
+	font-weight : bold;
+}
+
+a.mlinkvz:hover	{
+	color : black;
+	text-decoration : underline;
+	font-weight : bold;
+	background-color: yellow;
+}
+
+/* links used in vertical menu bars which are selected */
+a.mlinkvsel:link	{
+	color : black;
+	text-decoration : none;
+	font-weight : normal;
+}
+
+a.mlinkvsel:visited {
+	color : black;
+	text-decoration : none;
+	font-weight : normal;
+}
+
+a.mlinkvsel:hover	{
+	color : red;
+	text-decoration : underline;
+	font-weight : normal;
+	background-color: transparent;
+}
+
+a.mlinkvsel:active	{
+	color : black;
+	text-decoration : none;
+	font-weight : normal;
+}
+
+/* mlink2 is used by links in selected menu buttons */
+/* some color schemes need to alter the colors */
+a.mlink2:link	{
+	color : #FFFFFF;
+	text-decoration : none;
+	font-weight : bold;
+}
+
+a.mlink2:visited {
+	color : #FFFFFF;
+	text-decoration : none;
+	font-weight : bold;
+}
+
+a.mlink2:hover	{
+	color : #00FFFF;
+	text-decoration : underline;
+	font-weight : bold;
+	background-color: transparent;
+}
+
+a.mlink2:active	{
+	color : #FFFFFF;
+	text-decoration : none;
+	font-weight : bold;
+}
+
+/* mlink3 is used by links in colored area (e.g. hdbg )*/
+/* some color schemes need to alter the colors */
+a.mlink3:link	{
+	color : blue;
+	text-decoration : underline;
+	font-weight : normal;
+}
+
+a.mlink3:visited {
+	color : blue;
+	text-decoration : underline;
+	font-weight : normal;
+}
+
+a.mlink3:hover	{
+	color : red;
+	text-decoration : underline;
+	font-weight : normal;
+	background-color: transparent;
+}
+
+a.mlink3:active	{
+	color : blue;
+	text-decoration : underline;
+	font-weight : normal;
+}
+
+
+a.noul:link {
+	text-decoration: none;
+	color: blue;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+a.noul:visited {
+	text-decoration: none;
+	color: blue;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+a.noul:active {
+	text-decoration: none;
+	color: blue;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+a.noul:hover {
+	text-decoration: underline;
+	color: blue;
+	background-color: transparent;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+
+a.highlightable_row_link:link {
+	text-decoration : none ;
+	color : blue ;
+/*	font-size : 9px; */
+/*	font-weight : bold ; */
+/*	vertical-align : bottom ; */
+	background-color : transparent ;
+}
+a.highlightable_row_link:visited {
+	text-decoration : none ;
+	color : blue ;
+/*	font-size : 9px; */
+/*	font-weight : bold ; */
+/*	vertical-align : bottom ; */
+	background-color : transparent ;
+}
+a.highlightable_row_link:active {
+	text-decoration : none ;
+	color : blue ;
+/*	font-size : 9px; */
+/*	font-weight : bold ; */
+/*	vertical-align : bottom ; */
+	background-color : transparent ;
+}
+a.highlightable_row_link:hover {
+	text-decoration : underline ;
+	color : blue ;
+/*	font-size : 9px; */
+/*	font-weight : bold ; */
+/*	vertical-align : bottom ; */
+	background-color : transparent ;
+}
+
+a.nouldisa:link {
+	text-decoration: none;
+	color: Silver;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+a.nouldisa:visited {
+	text-decoration: none;
+	color: silver;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+a.nouldisa:active {
+	text-decoration: none;
+	color: #CCCCCC;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+a.nouldisa:hover {
+	text-decoration: underline;
+	color: blue;
+	background-color: transparent;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+
+a.thighlink:link,a.thighlink:visited,a.thighlink:active 
+{
+	text-decoration: none;
+	color: yellow;
+}
+a.thighlink:hover {
+	text-decoration: underline;
+	color: yellow;
+	background-color: red;
+}
+a.tlowlink:link,a.tlowlink:visited,a.tlowlink:active 
+{
+	text-decoration: none;
+	color: aqua;
+}
+a.tlowlink:hover {
+	text-decoration: underline;
+	color: Aqua;
+	background-color: blue;
+}
+
+/*
+ * For Mantis ID 236: Wrong color used for background of Event numbers
+ * on Graph page
+ * New classes for the event links.
+ */
+a.ehighlink:link,a.ehighlink:visited,a.ehighlink:active 
+{
+	text-decoration: none ;
+	color: yellow ;
+	background-color: red ;
+}
+a.ehighlink:hover {
+	text-decoration: underline ;
+	color: yellow ;
+	background-color: red ;
+}
+
+a.elowlink:link,a.elowlink:visited,a.elowlink:active 
+{
+	text-decoration: none ;
+	color: aqua ;
+	background-color: blue ;
+}
+a.elowlink:hover {
+	text-decoration: underline ;
+	color: aqua ;
+	background-color: blue ;
+}
+
+a.enetlink:link,a.enetlink:visited,a.enetlink:active 
+{
+	text-decoration: none ;
+	color: aqua ;
+	background-color: black ;
+}
+a.enetlink:hover {
+	text-decoration: underline ;
+	color: aqua ;
+	background-color: black ;
+}
+
+a.esenlink:link,a.esenlink:visited,a.esenlink:active 
+{
+	text-decoration: none ;
+	color: aqua ;
+	background-color: black ;
+}
+a.esenlink:hover {
+	text-decoration: underline ;
+	color: aqua ;
+	background-color: black ;
+}
+
+a.navlink:link,a.navlink:visited,a.navlink:active 
+{
+	color: blue;
+	font-weight: bold;
+	text-decoration: underline;
+	background-color: transparent;
+}
+a.navlink:hover
+{
+	color: Black;
+	font-weight: bold;
+	background-color: yellow;
+	text-decoration: underline;
+}
+
+a.verttext:link {
+	text-decoration: none;
+	color: blue;
+	background-color: transparent;
+}
+a.verttext:visited {
+	text-decoration: none;
+	color: blue;
+	background-color: transparent;
+}
+a.verttext:active {
+	text-decoration: none;
+	color: blue;
+	background-color: transparent;
+}
+a.verttext:hover {
+	text-decoration: none;
+	color: red;
+	background-color: transparent;
+}
+
+.disanav 
+{
+	color: silver;
+}
+
+a.zonelink:link,a.zonelink:visited,a.zonelink:active 
+{
+	color: black;
+	font-weight: bold;
+	text-decoration: none;
+	background-color: transparent;
+}
+a.zonelink:hover
+{
+	color: blue;
+	font-weight: bold;
+	background-color: yellow;
+	text-decoration: underline;
+}
+a.zonelink2:link,a.zonelink2:visited,a.zonelink2:active 
+{
+	color: black;
+	font-weight: normal;
+	text-decoration: none;
+	background-color: transparent;
+}
+a.zonelink2:hover
+{
+	color: blue;
+	font-weight: normal;
+	background-color: yellow;
+	text-decoration: underline;
+}
+
+
+
+.btn {
+	cursor: pointer ;
+/*cursor:hand;*/
+	font-family:Verdana,"MS Sans Serif",Charcoal,Chicago,Arial;
+	font-weight:normal;
+	font-size:9px;
+	height: 16px;
+	background-color:#4E85C8;
+	color: white;
+}
+
+.btn-on {
+	cursor: pointer ;
+/*cursor:hand;*/
+	font-family:Verdana,"MS Sans Serif",Charcoal,Chicago,Arial;
+	font-weight:normal;
+	font-size:9px;
+	height : 16px;
+	background-color:#4E85C8;
+	color: white;
+	border : 1px outset #4E85C8;
+}
+.btn-off {
+	cursor: pointer ;
+/*cursor:hand;*/
+	font-family:Verdana,"MS Sans Serif",Charcoal,Chicago,Arial;
+	font-weight:normal;
+	font-size:9px;
+	height : 16px;
+	background-color:#4E85C8;
+	color: white;
+	border : 1px outset  #4E85C8;
+}
+/* btn-disable - used when time is in a range and a checkpoint has been entered */
+.btn-disable {
+	cursor: auto;
+	font-family:Verdana,"MS Sans Serif",Charcoal,Chicago,Arial;
+	font-weight:normal;
+	font-size:9px;
+	height : 16px;
+	background-color:#cccccc;
+	color: black;
+	border : 1px outset  silver;
+}
+/* btn-disable2 - used when time is not in a range */
+.btn-disable2 {
+	cursor: auto;
+	font-family:Verdana,"MS Sans Serif",Charcoal,Chicago,Arial;
+	font-weight:normal;
+	font-size:9px;
+	height : 16px;
+	background-color:#cccccc;
+	color: black;
+	border : 1px solid silver;
+}
+
+body {
+	font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+.copyr {
+	font-size : xx-small;
+	font-family : 'Arial Narrow',Helvetica, sans-serif;
+}
+
+.footer {
+	border-top : thin solid Black;
+	font-size : 10px;
+	font-family: Arial, Helvetica, sans-serif;
+	}
+
+sup {
+	font-size : 10px;
+	font-weight : bold;
+	vertical-align : super;
+}
+
+td {
+	font-size : 12px;
+}
+
+td.detailheader {
+	background : silver;
+	font-weight : bolder;
+	text-align : right;
+	empty-cells : show;
+	width: 15%;
+	padding-left : 10px;
+	padding-right: 5px;
+	border : 1px solid Gray;
+}
+td.detailheader2 {
+	background : silver;
+	font-weight : bolder;
+	text-align : center;
+	empty-cells : show;
+	border : 1px solid Gray;
+}
+td.detailcell {
+	empty-cells : show;
+	border : 1px solid Silver;
+}
+
+td.detailcellbold {
+	font-weight : bolder;
+	empty-cells : show;
+	border : 1px solid Silver;
+}
+
+
+/* 
+ * at some point change theise to the default selectors 
+ * for table cells
+ */
+th.header {
+	background : silver;
+	font-weight : bolder;
+	text-align : center;
+	empty-cells : show;
+	border : 1px solid Gray;
+}
+td.cell {
+	empty-cells : show;
+	border : 1px solid Silver;
+}
+
+th {
+	background-color : silver;
+	font-size : 12px;
+	font-weight : bold;
+}
+th.small {
+	font-size: 9px;
+	font-weight: normal;
+}
+
+.cul {
+	border-bottom : 1px solid black;
+	padding-bottom: 2px;
+}
+.cul-check {
+	border-bottom : 1px solid black;
+	padding-bottom: 2px;
+	color: aqua ;
+	background-color : black ;
+}
+.cul-nors232 {
+	border-bottom : 1px solid black;
+	padding-bottom: 2px;
+	color: black ;
+	background-color : yellow ;
+}
+.cul-hi {
+	border-bottom : 1px solid black;
+	padding-bottom: 2px;
+	color: yellow ;
+	background-color : red ;
+}
+.cul-lo {
+	border-bottom : 1px solid black;
+	padding-bottom: 2px;
+	color: #00FFFF ;
+	background-color : blue ;
+}
+.cul-offline {
+	border-bottom : 1px solid black;
+	padding-bottom: 2px;
+	background-color:#CCCCCC;
+	color: #666666;
+}
+.cul2 {
+	border-bottom: 1px solid black;
+	border-left: 1px solid black;
+	padding-bottom: 2px;
+}
+
+.culdis {
+	border-bottom : 1px solid #000000;
+	color: silver;
+	font-style : italic;
+	padding-bottom: 2px; 
+}
+
+/* used in temp_table.php to denote first sample */
+.g1bg {
+	background-color : silver;
+}
+
+.aphdr {
+	font-size: 9px;
+	border-bottom : 1px solid #000000;
+	border-top : 1px solid #000000;
+}
+
+/* use for table headers that are the top-most row */
+/* the color should match the selected button color */
+.hdbg {
+	background-color : silver;
+	color : #000000;
+}
+
+.headerbutton {
+	font-size : 10px;
+}
+
+.headerbuttondisabled {
+	color : silver;
+	font-size : 10px;
+}
+
+.headline1 {
+	color : #000000;
+	font-family : Arial, Helvetica, sans-serif;
+	font-size : 14px;
+	font-weight : bold;
+}
+
+.headline2 {
+	font-family : Arial, Helvetica, sans-serif;
+	font-size : 14px;
+	font-weight : bold;
+}
+
+.headline3 {
+	font-family : Arial, Helvetica, sans-serif;
+	font-size : 14px;
+	font-weight : bold;
+}
+
+.help {
+	color : #FF0000;
+	font-family : "Courier New", Courier, monospace;
+	font-size : 12px;
+}
+
+.indhead {
+	padding-bottom: 1px;
+}
+
+.lid {
+	font-size : 10px;
+	font-weight : normal;
+	text-align : right;
+	vertical-align : top;
+}
+
+.lname {
+	font-size : 12px;
+	font-weight : normal;
+	text-align : left;
+	vertical-align : middle;
+}
+
+.mbutton1 {
+	background-color : #A2100A;
+/*	border-left : 2px solid #FFFFFF; */
+
+/*	border-right : 2px solid #FFFFFF; */ /* xxxx */
+/*	border-top : 2px solid #FFFFFF; */ /* xxxx */
+	border: 1px solid Black; /* xxxx */
+	
+	
+	color : #FFFFFF;
+	padding : 1px 3px 1px 1px;
+	font-size : x-small;
+	font-weight :  bold;
+	text-align : center;
+}
+
+.mbutton1act {
+	background-color : #4E85C8;
+	border-left : 2px solid #FFFFFF; /* xxxx */
+	border-right : 2px solid #FFFFFF;
+	border-top : 2px solid #FFFFFF;
+	color : #FFFFFF;
+	font-size : x-small;
+	padding : 1px 3px 1px 1px;
+	text-align : center;
+}
+
+.submbutton1 {
+	background-color : #A2100A;
+	border: 1px solid Black; /* xxxx */
+	color : #FFFFFF;
+	padding : 1px 8px 1px 8px;
+	font-size : x-small;
+	font-weight :  bold;
+	text-align : center;
+}
+
+.submbutton1act {
+	background-color : #4E85C8;
+	border-left : 2px solid #FFFFFF; /* xxxx */
+	border-right : 2px solid #FFFFFF;
+	border-top : 2px solid #FFFFFF;
+	color : #FFFFFF;
+	font-size : x-small;
+	padding : 1px 8px 1px 8px;
+	text-align : center;
+}
+
+
+
+.mbuttonside {
+	background-color : #A2100A;
+	border: 1px solid Black; /* xxxx */
+	color : #FFFFFF;
+/*	padding : 1px 3px 1px 1px; */
+	font-size : xx-small;
+	font-weight :  bold;
+	text-align : center;
+}
+
+.mbuttonsideact {
+/*	background-color : #4E85C8; */
+	background-color : white;
+/*	border-right : 2px solid #FFFFFF; */
+/*	border-top : 2px solid #FFFFFF; */
+	color : #FFFFFF;
+	font-weight: normal;
+	font-size :xx-small;
+/*	padding : 1px 3px 1px 1px; */
+	text-align : center;
+}
+
+/************************
+ * vertical Menu stules
+ * new as of 8/1/2004
+ ************************/
+.vmenu-sel {
+	background-color: silver;
+	color: black;
+	font-weight: bold;
+	text-align: left;
+	padding-left: .5em;
+	padding-right: .5em;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	border-left: 1px solid black;
+}
+
+.vmenu {
+	background-color: white;
+	color: black;
+	font-weight: bold;
+	text-align: left;
+	padding-left: .5em;
+	padding-right: .5em;
+	border-top: 2px solid white;
+	border-bottom: 2px solid white;
+}
+
+.vmenu-disa {
+	background-color: white;
+	color: black;
+	font-weight: normal;
+	text-align: left;
+	padding-left: .5em;
+	padding-right: .5em;
+	border-top: 2px solid white;
+	border-bottom: 2px solid white;
+}
+
+.vmenu-header {
+	background-color: black;
+	color: white;
+	font-weight: bold;
+	text-align: left;
+	padding-left: .2em;
+	padding-right: .5em;
+	border-bottom: 2px solid white;
+}
+
+.vmenu-link:link,.vmenu-link:active,.vmenu-link:visited	{
+	font-weight: bold;
+	text-decoration: none;
+}
+.vmenu-link:hover {
+	background-color: yellow;
+	text-decoration: underline;
+}
+/************************************/
+
+
+.menubar {
+	background-color : #4E85C8;
+	color : #FFFFFF;
+	font-size : xx-small;
+/*	font-weight : bold; */
+}
+
+.mfill {
+	background-color : #A20000;
+}
+
+.mspace {
+}
+
+.norm {
+	color : #000000;
+	background : transparent;
+}
+
+.tbord {
+	border : 1px solid #000000;
+}
+
+.tbord2 {
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+}
+
+th.tbord {
+	border-bottom-color: Black;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-left-style: none;
+	border-right-style: none;
+	border-top-style: none;
+}
+
+.thigh {
+	background-color : #FF0000;
+	color : #FFFF00;
+	font-size : 12px;
+	font-weight : bold;
+	text-align : center;
+	vertical-align : middle;
+}
+
+.t2high {
+	background-color : #FF0000;
+	color : #FFFF00;
+	font-size : 9px;
+	font-weight : normal;
+/*	text-align : right; */
+	vertical-align : bottom;
+}
+.t2highoff {
+	background-color : white;
+	color : black;
+	font-size : 9px;
+	font-weight : normal;
+/*	text-align : right; */
+	vertical-align : bottom;
+}
+
+.toff {
+	background-color : white;
+	color : black;
+	font-size : 12px;
+	font-weight : bold;
+	text-align : center;
+	vertical-align : middle;
+}
+.thighoff {
+	background-color : white;
+	color : red;
+	font-size : 12px;
+	font-weight : bold;
+	text-align : center;
+	vertical-align : middle;
+}
+.tlowoff {
+	background-color : white;
+	color : blue;
+	font-size : 12px;
+	font-weight : bold;
+	text-align : center;
+	vertical-align : middle;
+}
+
+
+
+.timestamp {
+	font-size : xx-small;
+	text-align : left;
+	width : 100%;
+}
+
+.tlow {
+	background-color : #0000FF;
+	color : #00FFFF;
+	font-size : 12px;
+	font-weight : bold;
+	text-align : center;
+	vertical-align : middle;
+}
+.t2low {
+	background-color : blue;
+	color : white;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+.t2lowoff {
+	background-color : white;
+	color : black;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+
+
+.tnorm {
+	background-color : #00FF00;
+	color : #000000;
+	font-size : 12px;
+	font-weight : bold;
+	text-align : center;
+	vertical-align : middle;
+}
+.t2norm {
+	background-color : lime;
+	color : black;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+
+.bactwarn {
+	background-color : yellow ;
+	color : black ;
+	font-size : 12px;
+	font-weight : bold;
+	text-align : center;
+	vertical-align : middle;
+}
+.bactwarnoff {
+	background-color : #FFFFFF;
+	color : #000000;
+	font-size : 12px;
+	font-weight : bold;
+	text-align : center;
+	vertical-align : middle;
+}
+.bact2warn {
+	background-color : yellow ;
+	color : black ;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+.bact2warnoff {
+	background-color : #FFFFFF;
+	color : black;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+
+.bactpos {
+	background-color : #FF0000;
+	color : #FFFF00;
+	font-size : 12px;
+	font-weight : bold;
+	text-align : center;
+	vertical-align : middle;
+}
+.bactposoff {
+	background-color : #FFFFFF;
+	color : #000000;
+	font-size : 12px;
+	font-weight : bold;
+	text-align : center;
+	vertical-align : middle;
+}
+.bact2pos {
+	background-color : #FF0000;
+	color : #FFFF00;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+.bact2posoff {
+	background-color : #FFFFFF;
+	color : black;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+
+
+.tnos {
+	background-color : #cccccc;
+	color : #666666;
+	font-size : 12px;
+	font-weight : bold;
+	text-align : center;
+	vertical-align : middle;
+}
+.tnos2 {
+	background-color : #cccccc;
+	color : #666666;
+	font-size : 9px;
+	font-weight : normal;
+	text-align : center;
+	vertical-align : bottom;
+}
+
+
+.tnet {
+/*	background-color : yellow; */
+/*	color : #666666; */
+/*	background-color:  #FFCC66; */
+/*	color: white; */
+	color : aqua ;
+	background-color: black ;
+	font-size : 12px;
+	font-weight : bold;
+	text-align : center;
+	vertical-align : middle;
+}
+.tnet2 {
+/*	background-color : yellow; */
+/*	color : #666666; */
+/*	background-color:  #FFCC66; */
+	color : aqua ;
+	background-color: black ;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+.tsen {
+/*	background-color : yellow; */
+/*	color : #666666; */
+/*	background-color:  #FFCC66; */
+/*	color : white; */
+	color : aqua ;
+	background-color: black ;
+	font-size : 12px;
+	font-weight : bold;
+	text-align : center;
+	vertical-align : middle;
+}
+.tsen2 {
+/*	background-color : yellow; */
+/*	color : #666666; */
+/*	background-color:  #FFCC66; */
+/*	color : white; */
+	color : aqua ;
+	background-color: black ;
+	font-size : 9px;
+	font-weight : normal;
+	vertical-align : bottom;
+}
+
+.tsensorerr {
+/*	background-color : yellow; */
+/*	background-color:  #FFCC66; */
+/*	color : white; */
+	color : aqua ;
+	background-color: black ;
+	font-size : 12px;
+	font-weight : bold;
+	text-align : center;
+	vertical-align : middle;
+}
+
+.tunk {
+	background-color : #FFFFFF;
+	color : #000000;
+	font-size : 12px;
+	text-align : center;
+	vertical-align : middle;
+}
+
+.warnwarn {
+	background-color: yellow;
+}
+.warn {
+	background-color : #FFB6C1;
+}
+
+/*
+ * For Mantis ID 261: Debug rows for CHECK conditions use black color
+ * schemes that isn''t terribly readable
+ * Use this for qual=0 in temp_table.php.
+ */
+.warn-link {
+/*	background-color :  #FFCC66; */
+/*	color: black; */
+	color: aqua ;
+	background-color : black ;
+}
+.warn-net {
+/*	background-color :  #FFCC66; */
+/*	color: black; */
+	color: aqua ;
+	background-color : black ;
+}
+.warn-sen {
+/*	background-color :  #FFCC66; */
+/*	color: black; */
+	color: aqua ;
+	background-color : black ;
+}
+
+.warn-rptr {
+/*	background-color :  #FFCC66; */
+/*	color: black; */
+	color: aqua ;
+	background-color : black ;
+}
+
+.warn-bact {
+	background-color : #FF0000;
+	color : #FFFF00;
+}
+
+.warn-binary {
+	background-color : #FF0000;
+	color : #FFFF00;
+}
+
+.warn-nors232 {
+	background-color : yellow ;
+	color : black ;
+}
+
+
+.lvnote {
+	background-color: yellow;
+}
+.cpnote {
+	background-color: yellow;
+}
+
+
+.warnhi {
+/*	background-color : #FF6699; */
+/*	color: white; */
+/*	background-color : pink; */
+/*	color: black; */
+	color : yellow ; 
+	background-color : red ; 
+}
+
+.warnlo {
+/*	background-color : #87CEEB; */
+	color : aqua ; 
+	background-color : blue ; 
+}
+
+.warnerr {
+	/*background-color : #DC143C;*/
+	color : aqua ; 
+	background-color : black ; 
+}
+
+.warnoffline {
+	background-color:#CCCCCC;
+	color: #666666;
+}
+
+.warnnorm {
+	background-color : Lime;
+}
+
+.ybar {
+	background-color : #FFFFE0;
+}
+
+.disabled {
+	color : Silver;
+}
+
+/*
+ * For Mantis ID 29: New policy to lock-out accounts on __ failed
+ * login attempts:
+ * Background color for blacklisted users on Setup/Users page.
+ */
+.blacklisted {
+	background-color : #FF7070;
+}
+.detailhdrblklstd {
+	background-color : #FF7070;
+	font-weight : bolder;
+	text-align : center;
+	empty-cells : show;
+	border : 1px solid Gray;
+}
+
+.today {
+	background-color : #FFFFE0;
+}
+.todaynot {
+/*	background-color : #DDDDDD; */
+	background-color: transparent;
+}
+
+.tostitle {
+/*	font-family: "Times New Roman", Times, serif; */
+	font-family: Arial, Helvetica, sans-serif;
+	font-size : small;
+	font-weight: bold;
+	text-decoration: underline;	
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+.toshead {
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size : x-small;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+.tosbody {
+	font-family : "Times New Roman", Times, serif;
+/*	font-size: 10px; */
+	font-size: xx-small;
+	margin-bottom: 8px;
+}
+.toslist {
+	font-family: "Times New Roman", Times, serif;
+	font-size: 10px;
+	float : none;
+	list-style : none;
+	list-style-type : lower-alpha;
+}
+
+.hilite {
+	background-color : #98FB98;
+}
+
+.lvhilite {
+	background-color: #FFFF99;
+}
+
+.gwhilite {
+/*	background-color: #FF66FF; */
+	background-color: #FFCC33;
+}
+
+/* The following styles are for the Reports */
+th.report {
+	font-size: 10px;
+	background-color: Silver;
+	font-weight : bolder;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+}
+th.reportleft {
+	font-size: 10px;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	color: black;
+	padding-left : 2px;
+	padding-right : 2px;
+	padding-top:2px;
+	padding-bottom:2px;
+	text-align: left;
+	background-color: silver;
+}
+
+td.report {
+	font-size: 10px;
+	vertical-align: top;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	color: blue;
+/*	padding-left : 2px; */
+/*	padding-right : 2px; */
+}
+td.report-colorless {
+	font-size: 10px;
+	vertical-align: top;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+/*	color: blue; */
+/*	padding-left : 2px; */
+/*	padding-right : 2px; */
+}
+td.report-italic {
+	font-size: 10px;
+	vertical-align: top;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	color: blue;
+/*	padding-left : 2px; */
+/*	padding-right : 2px; */
+	font-style : italic ;
+}
+td.report2 {
+	font-size: 10px;
+	vertical-align: top;
+	border-bottom: 1px solid black;
+	color: blue;
+/*	padding-left : 2px; */
+/*	padding-right : 2px; */
+}
+th.report2 {
+	font-size: 10px;
+	vertical-align: top;
+	border-bottom: 1px solid black;
+	color: black;
+/*	padding-left : 2px; */
+/*	padding-right : 2px; */
+}
+td.report-norm {
+	font-size: 10px;
+	vertical-align: top;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	padding-left : 2px;
+	padding-right : 2px;
+	color: black;
+	background-color: lime;
+}
+td.report-high {
+	font-size: 10px;
+	vertical-align: top;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	padding-left : 2px;
+	padding-right : 2px;
+	color: yellow;
+	background-color: red;
+}
+td.report-low {
+	font-size: 10px;
+	vertical-align: top;
+	border-left: 1px solid black; 
+	border-bottom: 1px solid black; 
+	padding-left : 2px;
+	padding-right : 2px; 
+	color: white;
+	background-color: blue;
+}
+
+td.report-bact-event {
+	font-size: 10px;
+	vertical-align: top;
+	border-left: 1px solid black; 
+	border-bottom: 1px solid black; 
+	padding-left : 2px;
+	padding-right : 2px; 
+	color: black;
+	background-color: yellow;
+}
+
+td.report-norm-nb {
+	font-size: 10px;
+	vertical-align: top;
+/*	border-left: 1px solid black; */
+/*	border-bottom: 1px solid black; */
+/*	padding-left : 2px; */
+/*	padding-right : 2px; */
+	color: black;
+	background-color: lime;
+}
+td.report-high-nb {
+	font-size: 10px;
+	vertical-align: top;
+/*	border-left: 1px solid black; */
+/*	border-bottom: 1px solid black; */
+/*	padding-left : 2px; */
+/*	padding-right : 2px; */
+	color: yellow;
+	background-color: red;
+}
+td.report-low-nb {
+	font-size: 10px;
+	vertical-align: top;
+/*	border-left: 1px solid black; */
+/*	border-bottom: 1px solid black; */
+/*	padding-left : 2px; */
+/*	padding-right : 2px; */
+	color: white;
+	background-color: blue;
+}
+
+td.report-bact-event-nb {
+	font-size: 10px;
+	vertical-align: top;
+/*	border-left: 1px solid black; */
+/*	border-bottom: 1px solid black; */
+/*	padding-left : 2px; */
+/*	padding-right : 2px; */
+	color: black;
+	background-color: yellow;
+}
+
+td.report-inactive {
+	font-size: 10px;
+	vertical-align: top;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	padding-left : 2px;
+	padding-right : 2px;
+	color : silver ;
+}
+td.report-inactive-italic {
+	font-size: 10px;
+	vertical-align: top;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	padding-left : 2px;
+	padding-right : 2px;
+	color : silver ;
+	font-style : italic ;
+}
+td.report-poorlink {
+	font-size: 10px;
+	vertical-align: top;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	padding-left : 2px;
+	padding-right : 2px;
+	color: black;
+	background-color: #FFB6C1; /* lightpink*/
+}
+td.report-check {
+	font-size: 10px;
+	vertical-align: top;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	padding-left : 2px;
+	padding-right : 2px;
+	color: aqua ;
+	background-color : black ;
+}
+td.report-nors232 {
+	font-size: 10px;
+	vertical-align: top;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	padding-left : 2px;
+	padding-right : 2px;
+	background-color : yellow ;
+	color : black ;
+}
+
+td.report-disable {
+	font-size: 10px;
+	vertical-align: top;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	color: blue;
+	background-color: silver;
+	padding-left : 2px;
+	padding-right : 2px;
+}
+
+td.reporthilite {
+	background-color : #FFFFE0;
+	font-size: 10px;
+	vertical-align: top;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	color: blue;
+	padding-left : 2px;
+	padding-right : 2px;
+}
+
+td.reportw {
+	font-size: 10px;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	color: blue;
+	padding-left : 2px;
+	padding-right : 2px;
+}
+td.reporthdr {
+	font-size: 10px;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	color: black;
+	padding-left: 2px;
+	padding-right: 2px;
+	background-color: #FFE566;
+}
+th.reporthdr {
+	font-size: 10px;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	color: black;
+	background-color: #FFE566;
+}
+
+table.report {
+	font-size: 10px;
+/*	margin : 0px 0px 0px 0px; */
+/*	padding : 0px 0px 0px 0px; */
+	width : 100%;
+	border-right-color : Black;
+	border-right-style : solid;
+	border-right-width : 1px;
+	border-top-color : Black;
+	border-top-style : solid;
+	border-top-width : 1px;
+	padding: 0px;
+	
+}
+/* use this for embedded tables */
+table.report2 {
+	font-size: 10px;
+/*	margin : 0px 0px 0px 0px; */
+/*	padding : 0px 0px 0px 0px; */
+	width : 100%;
+}
+table.report3 {
+	font-size: 10px;
+	border-right-color : Black;
+	border-right-style : solid;
+	border-right-width : 1px;
+	border-top-color : Black;
+	border-top-style : solid;
+	border-top-width : 1px;
+}
+
+
+.message {
+	text-align: center;
+	vertical-align : middle;
+	font-size : 16px;
+	font-weight: bold;
+}
+
+/* The following styles are for the Reports */
+th.nice {
+	font-size: 12px;
+	background-color: Silver;
+	font-weight : bolder;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+}
+/* took these out, as I don't think that they are used anymore
+ * not to mention that they have the same name, and some errors
+td.nice {
+	font-size: 12px;
+	vertical-align: top;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	color: blue;
+	padding-left : 2px;
+	padding-right : 2px;
+}
+td.nice {
+	font-size: 12px;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	color: blacl;
+	padding-left : 2px;
+	padding-right : 2px;
+}
+*****************************/
+table.nice {
+	font-size: 10px;
+/*	margin : 0px 0px 0px 0px; */
+/*	padding : 0px 0px 0px 0px; */
+	width : 100%;
+	border-right-color : Black;
+	border-right-style : solid;
+	border-right-width : 1px;
+	border-top-color : Black;
+	border-top-style : solid;
+	border-top-width : 1px;
+}
+
+.error {
+	color: red;
+	font-weight : bold;
+	background-color : #FFFFE0;
+}
+
+.zone {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+.zonedis {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	padding-left: 5px;
+	padding-right: 5px;
+	color: silver;
+}
+.zonesel {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	background-color: #316AC5;
+	color: white;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+.zoneseldis {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	background-color: silver;
+	color: white;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.zonemenu-side {
+	background-color: silver;
+	color: black;
+	font-weight: bold;
+	font-size: 9px;
+	border-bottom: 1px solid black;
+}
+
+.smallfont {
+	font-family: "Arial", Helvetica, sans-serif;
+	font-size: x-small;
+}
+
+.zonename {
+	background-color: silver;
+	font-size: 11px;
+	color: black;
+	text-align: left;
+	font-weight: bold;	
+}
+
+.zonestatus {
+	background-color: silver;
+	font-size: 11px;
+	color: black;
+	font-weight: normal;
+	padding-right:10px;
+}
+.zonestatus-run {
+	background-color: lime;
+	font-size: 11px;
+	color: black;
+	font-weight: normal;
+	padding-right:10px;
+}
+
+.zonestatus-runoff {
+	background-color: white;
+	font-size: 11px;
+	color: black;
+	font-weight: normal;
+	padding-right:10px;
+}
+
+
+/* The following styles are for the Setup pages */
+table.setup {
+	font-size: 10px;
+	width : 100%;
+	border-right-color : Black;
+	border-right-style : solid;
+	border-right-width : 1px;
+	border-top-color : Black;
+	border-top-style : solid;
+	border-top-width : 1px;
+	margin-top: 1px;
+}
+th.setup {
+	font-size: 10px;
+	background-color: Silver;
+	font-weight : bolder;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+}
+/* this is the same as th.setup except that the background-color
+ * is the same as the hdbg class */
+th.setuphdr {
+	font-size: 10px;
+	background-color : #4473AD;
+	color : white;
+	font-weight : bolder;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+}
+th.setupleft {
+	font-size: 10px;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	color: black;
+	padding-left : 2px;
+	padding-right : 2px;
+	padding-top:2px;
+	padding-bottom:2px;
+	text-align: left;
+	background-color: silver;
+}
+
+td.setup {
+	font-size: 10px;
+	vertical-align: middle;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	color: black;
+	padding-left : 2px;
+	padding-right : 2px;
+}
+
+/* same as setup with nowrap added */
+td.setup_nw {
+	font-size: 10px;
+	vertical-align: middle;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	color: black;
+	padding-left : 2px;
+	padding-right : 2px;
+	white-space : nowrap;
+}
+
+
+td.setup-gap {
+	font-size: 10px;
+	vertical-align: top;
+	border-left: 1px solid black;
+	border-bottom: 3px double black;
+	color: black;
+	padding-left : 2px;
+	padding-right : 2px;
+}
+
+.buttonstop {
+	background-color: #FF3333;
+	color: yellow;
+	font-size: 1em;
+	cursor: pointer ;
+/*cursor: hand;*/
+}
+.buttonstopoff {
+	background-color: silver;
+	color: black;
+	font-size: 1em;
+	cursor: pointer ;
+/*cursor: hand;*/
+}
+
+.buttonstart {
+	background-color: #00CC00;
+	color: white;
+	font-size: 1em;
+	cursor: pointer ;
+/*cursor: hand;*/
+}
+.buttonstartoff {
+	background-color: silver;
+	color: white;
+	font-size: 1em;
+	cursor: pointer ;
+/*cursor: hand;*/
+}
+.buttonnorm {
+	background-color: silver;
+	color: black;
+	font-size: 1em;
+	cursor: pointer ;
+/*cursor: hand;*/
+}
+
+.sessribnorm {
+	background-color: silver;
+	color: black;	
+	font-weight: bold;
+}
+.sessrib {
+	background-color: lime;
+	font-weight: bold;
+	color: black;
+}
+.sessriboff {
+	background-color: white;
+	font-weight: bold;
+	color: black;
+}
+
+a.actionlink:link,a.actionlink:visited,a.actionlink:active {
+	color: red;
+}
+a.actionlinkoff:link,a.actionlinkoff:visited,a.actionlinkoff:active {
+	color: #FFC0CB; /* pink */
+}
+
+.hlrow {
+	background-color: aqua;
+}
+
+th.evtlog1 {
+	background-color: silver;
+	color: black;
+	font-size:  xx-small;
+	font-weight: bold;
+}
+th.evtlog2 {
+	background-color: silver;
+	color: black;
+	font-size: xx-small;
+	font-weight: bold;
+}
+
+.errormsg {
+	color: red;
+	font-weight: bold;
+	background-color: yellow;
+}
+
+input {
+	margin:0; 
+	padding:0; 
+}
+form {
+	margin:0; 
+	padding: 0; 
+}
+
+.door-inactive {
+	background-color: silver;
+	color: black;
+}
+.door-armed {
+	background-color: lime;
+	color: black;
+}
+.door-grace1 {
+	background-color: yellow;
+	color: red;
+}
+.door-ready {
+	background-color: aqua;
+	color: blue;
+}
+.door-open {
+	background-color: yellow;
+	color: black;
+}
+.door-grace2 {
+	background-color: yellow;
+	color: red;
+}
+.door-breach {
+	background-color: red;
+	color: yellow;
+}
+a.doorlink:link,a.doorlink:visited,a.doorlink:active {
+	color: blue;
+	font-size: xx-small;
+}
+a.doorlink:hover {
+	color: blue;
+	font-size: 9px;
+	font-weight: normal;
+	background-color: yellow;
+}
+
+.loginerror {
+	background-color: red;
+	color: yellow;
+	font-weight: bold;
+}
+
+.small {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+}
+select.small {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+}
+input.small {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+}
+
+.warn-bat {
+/*	background-color: #FFBBFF; */
+/*	background-color: #FFCC66; */
+	color : aqua ; 
+	background-color : black ; 
+}
+
+/*
+ * menu styles
+ * used in new menu functions that can be
+ * found near the bottom of menu.inc
+ * 27-Dec-2004 dmayer
+ */
+ .menu_selected {
+ 	background-color: #66CCFF;
+	color: black;
+	font-weight: bold;
+	border-right : 4px solid #FFFFFF; 
+	border-left : 4px solid #FFFFFF; 
+	text-align : center;
+	border: 1px solid black;
+	white-space: nowrap;
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 2px;
+	padding-bottom: 0;
+ }
+ .menu_unsel {
+ 	background-color: silver;
+	color: black;
+	font-weight: normal;
+	border-right : 4px solid #FFFFFF;
+	border-left : 4px solid #FFFFFF; 
+	text-align : center;
+	white-space: nowrap;
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 2px;
+	padding-bottom: 0;
+ }
+ .menu_disable {
+ 	background-color: silver;
+	color: white;
+	font-weight: normal;
+	border-right : 4px solid #FFFFFF;
+	border-left : 4px solid #FFFFFF; 
+	border-bottom: 0px;
+	text-align : center;
+	white-space: nowrap;
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 2px;
+	padding-bottom: 0;
+ }
+.menu_link:link,
+.menu_link:active,
+.menu_link:visited{
+	color: black;
+	font-weight: bold;
+	text-decoration: none;
+}
+.menu_link:hover {
+	color: red;
+	font-weight: bold;
+	text-decoration: underline;
+}
+td.menu_bar {
+	background-color:#66CCFF;
+	color: black;
+	padding: 0px 0px 0px 0px;
+}
+
+/* styles for sensor instrucrionts */
+.sinsthdr {
+	background-color: blue;
+	color: white;
+}
+
+.sinstbody {
+	background-color: yellow;
+	color: black;
+}
+
+A.sinsthdrlink:link,a.sinsthdrlink:active,a.sinsthdrlink:visited {
+	background-color: blue;
+	color: white;
+	font-weight: normal;
+}
+A.sinsthdrlink:hover {
+	background-color: yellow;
+	color: black;
+}
+
+/* zone view links */
+.zview {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: blue;
+	padding-bottom: 2px;
+	padding-top: 2px;
+}
+.zview-select {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	background-color: blue;
+	color: white;
+	font-weight: bold;
+	padding-bottom: 2px;
+	padding-top: 2px;
+	text-decoration: none;
+}
+
+A.zview:link,A.zview:active,A.zview:visited {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: blue;
+	text-decoration: none;
+}
+A.zview:hover {
+	background-color: yellow;
+	text-decoration: underline;
+}
+
+.headerframe {
+	
+/*	background-color: #A59C84; */
+}
+
+.pfflink {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: .8em;
+}
+
+table.nice {
+	font-family: 'Verdana', 'Geneva', 'Arial', 'Helvetica', 'sans-serif';
+	font-size: .8em;
+	border-right:1px solid #c0c0c0;	
+	border-top:1px solid #c0c0c0;	
+}
+
+th.nicehdr {
+	background-color: #FFCC66;
+	border-left: 1px solid #c0c0c0;
+	border-bottom: 1px solid #c0c0c0;
+}
+th.nice {
+	background-color: silver;
+	border-left: 1px solid #c0c0c0;
+	border-bottom: 1px solid #c0c0c0;
+}
+td.nice {
+	border-left: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
+}
+
+
+.qotd1 {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: .9em;
+}
+.qotd2 {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: .8em;
+	font-style: italic;
+	font-weight: normal;
+	
+}
+.qotd3 {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: .7em;
+	font-style: italic;
+}
+
+.qotdcb {
+	
+}
+select.important {
+	background-color:orange;
+}
+	select.important option.norm {
+	background-color:white;
+}
