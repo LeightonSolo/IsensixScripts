@@ -947,7 +947,7 @@ function scrapeArmsIseRep(server, table) {
     };
 
     if (sensorName?.trim()) record.sensor_name = sensorName.trim();
-    if (zone?.trim()) record.zone = zone.trim();
+    if (zone?.trim()) record.zone = normalizeLiveViewZoneName(zone);
     if (typeCode) record.sensor_type = normalizeType(typeCode);
     if (accessPointTitle) record.access_point = accessPointTitle.replace(/^AP\s+/i, '').trim();
     record.quality = getLiveViewQuality(reading, statusContainer);
@@ -964,6 +964,12 @@ function scrapeArmsIseRep(server, table) {
 
   function getCleanText(element) {
     return element?.textContent?.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim() || null;
+  }
+
+  function normalizeLiveViewZoneName(zone) {
+    return zone
+      .replace(/\s*(?:[-–]\s*)?\d+\s*\/\s*\d+\s+calibrated(?:\s*[✅✓]*)?\s*$/i, '')
+      .trim();
   }
 
   function getLiveViewStatus(reading, statusContainer) {
