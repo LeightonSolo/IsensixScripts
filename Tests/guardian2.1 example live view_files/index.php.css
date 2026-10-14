@@ -1,0 +1,72 @@
+/* live view CSS
+ * <?php header('Content-Type: text/css'); ?>
+ * */
+table tbody tr.zonetop td img.x16 {
+  border: 1px dotted white;
+}
+table tbody tr.zonetop td,
+table.mon tr td {
+  white-space: nowrap;
+  vertical-align: middle;
+}
+table.zonebar {
+  border-radius: 0 3px 0 0 ;
+  border: 1px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+table.zonebar td {
+  vertical-align: middle;
+}
+table tr td.senbox {
+  background-image: none !important;
+}
+nav.infonav {
+  padding: 1ex;
+  width: 80%;
+  margin: 1ex auto;
+}
+nav.infonav span {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  margin: 2px;
+}
+#oainfo {
+  margin: 1ex auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+/**
+ * This is for searching
+ */
+body.insearch .senbox {
+  opacity: 0.4;
+  zoom: 0.5;
+  -moz-transform: scale(0.5);
+}
+body.insearch .senbox.found {
+  opacity: 1;
+  font-size: 100%;
+  zoom: normal;
+  -moz-transform: scale(1);
+}
+body.insearch .found {
+  box-shadow: 0 2px 2px rgba(0, 190, 250, 0.15), 0 4px 4px rgba(0, 190, 250, 0.05), 0 8px 8px rgba(0, 190, 250, 0.05), 0 16px 16px rgba(0, 190, 250, 0.05);
+}
+input[data-searchcount] {
+  background-color: greenyellow;
+}
+input[data-searchcount="0"] {
+  background-color: #ff6a42;
+}
+label.search:after {
+  content: " (" attr(data-searchcount) ") ";
+  background-color: yellow;
+  color: darkseagreen;
+}
+label[data-searchcount="0"]:after {
+  display: none;
+}
+mark {
+  background: orange;
+  color: black;
+}
+/*# sourceMappingURL=index.php.css.map */

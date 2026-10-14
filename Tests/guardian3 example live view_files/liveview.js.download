@@ -1,0 +1,55 @@
+function mt(cn) {
+    document.querySelectorAll('.' + cn + 'off,.' + cn).forEach((el) => {
+        el.classList.toggle(cn + 'off');
+        el.classList.toggle(cn);
+    });
+}
+function fflash() {
+    ['th', 'tnet', 'bactpos', 'tlow', 'tnorm', 'door', 'bactwarn', 'bactpos', 'tnos', 'thigh', 'tsen'].forEach(mt);
+}
+function fflash2() {
+    mt('chkbtn');
+}
+function addTitle(selectore, title) {
+    document.querySelectorAll(selectore).forEach((el) => {
+        el.setAttribute('title', title);
+    });
+}
+;
+function addTitleArray(mylist) {
+    mylist.forEach((one) => {
+        one.selector.forEach(sel => {
+            addTitle(sel, one.text);
+        });
+    });
+}
+function initLiveViewPage() {
+    const tabsSpinner = {
+        beforeLoad: function (event, ui) {
+            ui.panel.html(`<div class="spinner c" style="width:80%;margin:0 auto">
+    <svg style="width:10vw" viewBox="0 0 400 400"
+      xmlns="http://www.w3.org/2000/svg">
+      <circle class="spin" cx="200" cy="200" fill="none" r="75" stroke-width="34" stroke="#6e8dd3" stroke-dasharray="371 700" stroke-linecap="round" />
+    </svg> Loading...</div>`);
+        },
+        load: function (event, ui) {
+            ui.panel.find('div.spinner').remove();
+        }
+    };
+    $("#liveviewtab").tabs(tabsSpinner);
+}
+document.addEventListener('DOMContentLoaded', () => {
+    initLiveViewPage();
+});
+let i = 0;
+let thetimerforliveview = setInterval(_ => {
+    document.querySelectorAll(".ise-main").forEach((el) => {
+        el.classList.toggle("flash");
+    });
+    if (i++ > 5) {
+        clearInterval(thetimerforliveview);
+        document.querySelectorAll(".ise-main").forEach((el) => {
+            el.classList.remove("flash");
+        });
+    }
+}, 2000);

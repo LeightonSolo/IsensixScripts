@@ -1,6 +1,6 @@
 # Privacy Policy for Leighton's Isensix Tools
 
-**Effective date:** September 14, 2026
+**Effective date:** October 14, 2026
 
 Leighton's Isensix Tools is a Chrome extension that adds workflow, validation, calibration, and reporting helpers to Isensix pages. It may also provide limited tools for Paylocity pages.
 
@@ -8,7 +8,7 @@ Leighton's Isensix Tools is a Chrome extension that adds workflow, validation, c
 
 Depending on which features are enabled and which supported page is open, the extension may access information displayed in the current page, including:
 
-- Isensix sensor IDs, names, serial numbers, zones, CP addresses, sensor types, offsets, calibration certificates, calibration comments, calibration times, calibration status, and related page information.
+- Isensix sensor IDs, names, serial numbers, zones, CP addresses, sensor types, offsets, calibration certificates, calibration comments, calibration times, Live View sensor status, radio quality, and related page information.
 - The logged-in technician name when it is displayed on an Isensix page.
 - Information displayed on supported Paylocity pages when a Paylocity helper is enabled.
 - The page URL and hostname needed to determine whether a supported feature should run.
@@ -21,13 +21,13 @@ Information accessed from supported pages is used to:
 
 - Add calibration workflow assistance and validation to supported pages.
 - Remember extension preferences, such as which scripts are enabled and user-selected workflow settings.
-- Synchronize calibration information with the project's dashboard database when the calibration synchronization feature is enabled.
+- Synchronize calibration information and current Live View sensor status and radio quality with the project's dashboard database when the database synchronization feature is enabled. Live View temperature readings are not synchronized.
 
 The extension does not use information for advertising, profiling, or sale to data brokers.
 
 ## Information sent to a server
 
-The calibration synchronization feature sends the calibration data needed by the dashboard to:
+The database synchronization feature sends calibration data and Live View sensor status and radio quality needed by the dashboard to:
 
 `https://flat-tree-380f.leightonsolo.workers.dev`
 

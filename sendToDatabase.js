@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.45
-// @description  Capture Calibration data and send to isensix visualizer database in realtime.
+// @version      3.50
+// @description  Capture Isensix calibration and Live View data for the dashboard database.
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
 // @match        https://*.isensix.com:*/guardian/calibration/calsensor.php*
@@ -19,6 +19,12 @@
 // @match        https://*/arms2/calibration/calsensor.php*
 // @match        https://*.isensix.com:*/arms/admin/sensorcal.php
 // @match        https://*.isensix.com:*/arms/debug/debug_query.php*
+// @match        https://*/arms2/
+// @match        https://*/arms2/index.php*
+// @match        https://*/arms/
+// @match        https://*/arms/index.php*
+// @match        https://*/guardian/
+// @match        https://*/guardian/index.php*
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/sendToDatabase.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/sendToDatabase.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
@@ -27,6 +33,8 @@
 // @grant        GM_getValue
 // @connect      flat-tree-380f.leightonsolo.workers.dev
 // ==/UserScript==
+
+  const arms = document.querySelector(".headline2")?.textContent.trim() === "(Advanced Remote Monitoring System)";
 
   let twoPointOne = false;
     try {//determine if the server is Guardian 3.0
@@ -43,6 +51,15 @@
 
             twoPointZero = true;
             console.log("2.0 Detected");
+        }
+    }
+    catch(err){}
+
+  let threePoint0 = false;
+    try {
+        if (document.querySelector("#isemainmenu > li:nth-child(1) > a")?.title === "Guardian 3.0") {
+            threePoint0 = true;
+            console.log("3.0 Detected");
         }
     }
     catch(err){}
@@ -147,10 +164,15 @@ function normalizeType(raw) {
   /* ─── Page dispatcher ─────────────────────────────────── */
   const path = window.location.pathname;
 
-  if (path.includes('calsensor.php') || path.includes('sensorcal.php')) handleCalSensor();
+  if (isLiveViewPath(path)) handleLiveView();
+  else if (path.includes('calsensor.php') || path.includes('sensorcal.php')) handleCalSensor();
   else if (path.includes('calreport.php') || path.includes('calsetup.php')) handleCalReport();
   else if (path.includes('iserep1.php')) handleIseRep();
   else if (path.includes('debug_query.php')) handleArmsIseRep();
+
+  function isLiveViewPath(pathname) {
+    return /\/(?:arms2|arms|guardian)(?:\/+index\.php)?\/?$/i.test(pathname);
+  }
 
   /* ═══════════════════════════════════════════════════════
      HANDLER 1 — calsensor.php (calibration confirmation)
@@ -806,6 +828,200 @@ function scrapeArmsIseRep(server, table) {
 
   return sensors;
 }
+
+  /* ═══════════════════════════════════════════════════════
+     HANDLER 4 — Live View
+     Captures the latest visible sensor health/status and radio
+     quality without submitting temperature readings.
+  ════════════════════════════════════════════════════════ */
+  function handleLiveView() {
+    const server = getServer();
+    if (!server) return;
+
+    const cooldownKey = `liveview_sync_${server}`;
+    if (isCoolingDown(cooldownKey)) {
+      console.log(`Live View cooldown active for server ${server}`);
+      return;
+    }
+
+    const sensors = scrapeLiveView(server);
+    if (!sensors.length) return;
+
+    postBatch(sensors, (count) => {
+      setCooldown(cooldownKey);
+      showBanner(`✓ Synced ${count} Live View sensor statuses to dashboard`, '#1a6e2e');
+    });
+  }
+
+  function scrapeLiveView(server) {
+    if (threePoint0) return scrapeLiveViewGuardian3(server);
+    if (arms) return scrapeLiveViewArms(server);
+    return scrapeLiveViewGuardian2(server);
+  }
+
+  function scrapeLiveViewGuardian3(server) {
+    const sensors = [];
+    for (const sensorCard of document.querySelectorAll('.sensordata .lvsensor')) {
+      const nameElement = sensorCard.querySelector('.slnk, .slnk-title');
+      const sensorId = getLiveViewSensorId(nameElement);
+      if (!sensorId) continue;
+
+      const box = sensorCard.closest('.senbox') || sensorCard;
+      const zone = findPreviousZoneName(box);
+      sensors.push(buildLiveViewRecord({
+        sensorId,
+        sensorName: nameElement?.textContent,
+        sensorCard,
+        reading: sensorCard.querySelector('.u'),
+        statusContainer: box,
+        zone,
+        server,
+      }));
+    }
+    return sensors;
+  }
+
+  function scrapeLiveViewGuardian2(server) {
+    const sensors = [];
+    for (const sensorCard of document.querySelectorAll('td.senbox')) {
+      const nameElement = sensorCard.querySelector('.slnk');
+      const sensorId = getLiveViewSensorId(nameElement);
+      if (!sensorId) continue;
+
+      const zoneTable = sensorCard.closest('table.zone');
+      const zone = zoneTable?.querySelector('.zonename a')?.textContent
+        || zoneTable?.querySelector('a[title*="show only"]')?.textContent
+        || zoneTable?.querySelector('.zonename')?.textContent;
+      const readCell = sensorCard.querySelector('.sencell');
+      sensors.push(buildLiveViewRecord({
+        sensorId,
+        sensorName: nameElement?.textContent,
+        sensorCard,
+        reading: readCell?.querySelector('.read, .val'),
+        statusContainer: readCell || sensorCard,
+        zone,
+        server,
+      }));
+    }
+    return sensors;
+  }
+
+  function scrapeLiveViewArms(server) {
+    const sensors = [];
+    for (const nameElement of document.querySelectorAll('a.noul[href*="sensordetail.php"]')) {
+      const sensorId = nameElement.href.match(/[?&]id=(\d+)/i)?.[1];
+      if (!sensorId) continue;
+
+      const sensorRow = nameElement.closest('tr');
+      const readingCell = document.getElementById(`o_${sensorId}`);
+      if (!sensorRow || !readingCell) continue;
+      sensors.push(buildLiveViewRecord({
+        sensorId,
+        sensorName: nameElement.textContent,
+        sensorCard: sensorRow,
+        reading: readingCell,
+        statusContainer: readingCell,
+        server,
+      }));
+    }
+    return sensors;
+  }
+
+  function buildLiveViewRecord({
+    sensorId,
+    sensorName,
+    sensorCard,
+    reading,
+    statusContainer,
+    zone,
+    server,
+  }) {
+    const lid = sensorCard.querySelector('.lid');
+    const lidText = getCleanText(lid);
+    const typeCode = lidText?.match(/\b(RE|RM|SC|TC|HU|DP(?:\.25)?|BIN|O2)\s*$/i)?.[1];
+    const accessPointTitle = sensorCard.querySelector('.lid [title^="AP "]')?.title;
+    const status = getLiveViewStatus(reading, statusContainer);
+    const record = {
+      sensor_id: sensorId,
+      server,
+    };
+
+    if (sensorName?.trim()) record.sensor_name = sensorName.trim();
+    if (zone?.trim()) record.zone = zone.trim();
+    if (typeCode) record.sensor_type = normalizeType(typeCode);
+    if (accessPointTitle) record.access_point = accessPointTitle.replace(/^AP\s+/i, '').trim();
+    record.quality = getLiveViewQuality(reading, statusContainer);
+    if (status) record.status = status;
+    return record;
+  }
+
+  function getLiveViewSensorId(element) {
+    if (!element) return null;
+    const onclickId = element.getAttribute('onclick')?.match(/pop_sd\(\s*(\d+)\s*\)/i)?.[1];
+    if (onclickId) return onclickId;
+    return element.href?.match(/[?&]id=(\d+)/i)?.[1] || null;
+  }
+
+  function getCleanText(element) {
+    return element?.textContent?.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim() || null;
+  }
+
+  function getLiveViewStatus(reading, statusContainer) {
+    const readingText = getCleanText(reading);
+    if (readingText && /\b(check|disabled|offline|error|fault|high|low|normal|in range|out of range|sensor|network|link|probe|wire|initializ\w*|initialis\w*)\b/i.test(readingText)) {
+      return readingText;
+    }
+
+    const rangeText = getCleanText(statusContainer.querySelector('.r'));
+    if (rangeText) return rangeText;
+
+    const classes = `${statusContainer.className || ''} ${reading?.className || ''}`
+      .toLowerCase()
+      .split(/\s+/);
+    const statusClasses = [
+      ['tnet', 'Check Network'],
+      ['tlink', 'Check Link'],
+      ['tsen', 'Check Sensor'],
+      ['tdis', 'Disabled'],
+      ['thigh', 'High'],
+      ['tlow', 'Low'],
+      ['tnorm', 'in range'],
+    ];
+    for (const [classPrefix, status] of statusClasses) {
+      if (classes.some((className) => className.startsWith(classPrefix))) return status;
+    }
+    return null;
+  }
+
+  function getLiveViewQuality(reading, statusContainer) {
+    const readingText = getCleanText(reading) || '';
+    if (/\binit(?:ializ\w*|ialis\w*)?\b/i.test(readingText)) return 'INIT';
+    if (/\bcheck\s*link\b/i.test(readingText)) return 'LINK';
+    if (/\bcheck\s*network\b/i.test(readingText)) return 'NETWORK';
+    if (/\bcheck\s*(?:sensor|probe(?:\s+wire)?)\b/i.test(readingText)) return 'SENSOR';
+    if (/\b(?:disabled|offline|error|fault)\b/i.test(readingText)) return 'SENSOR';
+
+    const classNames = `${statusContainer.className || ''} ${reading?.className || ''}`
+      .toLowerCase()
+      .split(/\s+/);
+    if (classNames.some((name) => name.startsWith('tlink'))) return 'LINK';
+    if (classNames.some((name) => name.startsWith('tnet'))) return 'NETWORK';
+    if (classNames.some((name) => name.startsWith('tsen') || name.startsWith('tdis'))) return 'SENSOR';
+    return 'GOOD';
+  }
+
+  function findPreviousZoneName(element) {
+    let sibling = element.previousElementSibling;
+    while (sibling) {
+      if (sibling.matches('.zonetop')) {
+        return sibling.querySelector('a[title="show only this zone"]')?.textContent
+          || sibling.querySelector('a')?.textContent
+          || null;
+      }
+      sibling = sibling.previousElementSibling;
+    }
+    return null;
+  }
 
 
 })();

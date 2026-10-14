@@ -11,6 +11,7 @@ Leighton’s Tools is a collection of scripts that run via the Tampermonkey brow
 
 
 - [CalibrateButtonsOnLiveView.js](/CalibrateButtonsOnLiveView.js) - Adds a calibration button to every sensor on the Isensix Live view page, will work on all ARMS and Guardian servers.
+- [sendToDatabase.js](/sendToDatabase.js) - Synchronizes calibration data and current Live View sensor status and radio quality with the dashboard database.
 - [LastCalibrationsTable.js](/LastCalibrationsTable.js) - Shows the last 5 calibrations you've done, useful to prevent meter time overlap and keep track of what you've done.
 - [CalibrationCatcherGuardian.js](/CalibrationCatcherGuardian.js) - For Isensix Guardian servers, the user is notified for out of range or empty offsets, no canned message selection or improper canned message, and if the sensor was already calibrated in the past week.
 - [CalibrationCatcherARMS.js](/CalibrationCatcherARMS.js) - For Isensix ARMS servers, the user is notified for out of range or empty offsets, if no canned message was selected, or for improper canned messages.
@@ -55,4 +56,3 @@ https://docs.google.com/spreadsheets/d/1u8KL70Zb6Rlg5_0BtO7IaNFMsbqpPpa7IraYfb1G
 
 Repository with old script versions:
 https://gist.github.com/LeightonSolo
-

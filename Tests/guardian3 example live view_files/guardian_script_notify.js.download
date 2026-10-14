@@ -1,0 +1,96 @@
+class IsxScriptNotifier {
+    static DEBUG_NOTIFY = false;
+    loaded_scripts = [];
+    aliases = new Map();
+    waiting_for_resolve = new Map();
+    waiting_promises = new Map();
+    constructor() {
+        let scripts = document.getElementsByTagName("script");
+        Array.from(scripts).forEach(script => {
+            if (script.src) {
+                script.addEventListener("load", evt => this.addLoaded(script.src));
+            }
+        });
+    }
+    rsolveAndCall(scriptname) {
+        if (this.waiting_for_resolve[scriptname]) {
+            for (let callback of this.waiting_for_resolve[scriptname]) {
+                callback(scriptname);
+            }
+            delete this.waiting_for_resolve[scriptname];
+        }
+        if (this.waiting_promises.has(scriptname)) {
+            if (IsxScriptNotifier.DEBUG_NOTIFY)
+                console.log(this.waiting_promises.get(scriptname));
+            this.waiting_for_resolve.get(scriptname).forEach(promise => {
+                if (IsxScriptNotifier.DEBUG_NOTIFY)
+                    console.log(promise, scriptname);
+                promise.call(this, scriptname);
+            });
+            delete this.waiting_promises[scriptname];
+        }
+    }
+    isx_onload(scriptname, callback) {
+        let name = scriptname.replace(/\.min\.js|\.js/g, "");
+        name = name.replace(/.*\//g, "");
+        if (this.loaded_scripts.indexOf(name) >= 0) {
+            if (callback) {
+                callback(name);
+            }
+            return Promise.resolve(name);
+        }
+        if (this.aliases[name]) {
+            name = this.aliases[name];
+            if (this.loaded_scripts.indexOf(name) >= 0) {
+                if (callback) {
+                    callback(name);
+                }
+                return Promise.resolve(name);
+            }
+        }
+        if (callback) {
+            if (!this.waiting_for_resolve[name]) {
+                this.waiting_for_resolve[name] = [];
+            }
+            this.waiting_for_resolve[name].push(callback);
+        }
+        let promise = Promise.resolve(name);
+        if (!this.waiting_promises[name]) {
+            this.waiting_promises[name] = [];
+        }
+        this.waiting_promises[name].push(promise);
+        return promise;
+    }
+    addLoaded(scriptname) {
+        scriptname = scriptname.replace(/\.min\.js|\.js/g, "");
+        scriptname = scriptname.replace(/.*\//g, "");
+        if (IsxScriptNotifier.DEBUG_NOTIFY)
+            console.debug("loaded ", scriptname, " from ", scriptname.replace(/.*\//g, ""));
+        let scriptname_without_version = scriptname.replace(/-\d+\.\d+\.\d+/g, "");
+        if (IsxScriptNotifier.DEBUG_NOTIFY)
+            console.debug("loaded (no version) ", scriptname_without_version);
+        this.loaded_scripts.push(scriptname);
+        if (scriptname_without_version != scriptname) {
+            this.aliases[scriptname_without_version] = scriptname;
+            this.loaded_scripts.push(scriptname_without_version);
+            this.rsolveAndCall(scriptname_without_version);
+        }
+        this.rsolveAndCall(scriptname);
+        if (IsxScriptNotifier.DEBUG_NOTIFY)
+            console.log(scriptname, scriptname_without_version);
+    }
+}
+var isxScriptHandler = new IsxScriptNotifier();
+function isxOnLoad(name, callback) {
+    return isxScriptHandler.isx_onload(name, callback);
+}
+function myOnLoadHandler(uri) {
+    if (IsxScriptNotifier.DEBUG_NOTIFY)
+        console.log(arguments);
+    isxScriptHandler.addLoaded(uri);
+}
+isxOnLoad("guardian", function () {
+    if (IsxScriptNotifier.DEBUG_NOTIFY)
+        console.debug("Guardian.js loaded");
+});
+//# sourceMappingURL=guardian_script_notify.js.map

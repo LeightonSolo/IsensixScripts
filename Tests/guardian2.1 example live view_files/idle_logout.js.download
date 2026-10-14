@@ -1,0 +1,57 @@
+// Handling for idle timeout
+// Basically this does intercept mouse move/click etc
+// and on first activity, it will stop intercepting..
+// and call ajax/idle_logout.php which will refresh the session time 
+// if no mouse move accours, the session timeout will
+// log out the user by removing the session
+//
+//
+function idleHandlerCallback(event) {
+	$(document).off("mousedown",idleHandlerCallback );
+	$(document).off("mouseup",idleHandlerCallback );
+	$(document).off("scroll",idleHandlerCallback );
+    $.post(rootdir()+"/ajax/idle_logout.php?check=0", function(data) {
+		var d = new  Date(1000*parseInt(data,10));
+		console.log(d);
+		console.log("Idle handler deinstalled");
+		// in case users has stopped page refresh, make sure to call the logout
+		// at the given time
+		//
+		var now = new Date();
+		var millis=d.getTime()-now.getTime();
+			console.log("Idle Timeout in "+~~(millis/1000/60)+"min")
+		setTimeout(function() { 
+			alert("Idle timout reached - Forced Logout");
+			document.location.href=rootdir()+"/logout.php";
+		},millis);
+		$('#counter').css('border','1px solid white !important');
+		$(".mnulogout").attr('title',"Idle Timeout in "+~~(millis/1000/60)+"min")
+
+	}
+	);
+}
+function installIdleHandler() {
+	$(document).mousedown ( idleHandlerCallback );
+	$(document).mouseup ( idleHandlerCallback );
+	$(document).scroll ( idleHandlerCallback );
+	console.log("Idle handler installed");
+		$('#counter').css('color','orange !important');
+}
+$(function() {
+
+	// first we check if we should logout user
+    $.post(rootdir()+"/ajax/idle_logout.php?check=1", function(data) {
+		if (data == "logout") {
+			alert("Idle timout reached - please log in again");
+			document.location.href=rootdir()+"/logout.php";
+		} else {
+		var d = new  Date(1000*parseInt(data,10));
+		var now = new Date();
+		var millis=d.getTime()-now.getTime();
+			$(".mnulogout").attr('title',"Idle Timeout in "+~~(millis/1000/60)+"min")
+			installIdleHandler();
+		}
+	});
+	
+
+});

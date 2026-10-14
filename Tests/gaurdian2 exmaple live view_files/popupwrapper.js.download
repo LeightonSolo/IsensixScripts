@@ -1,0 +1,289 @@
+// Popupwrapper
+// $Id: popupwrapper.js,v 3.2 2014/02/16 21:46:24 mlc Exp $
+// mlc 6/2013
+var popupdiv=null;
+
+function closePopup() {
+	$('#popit').dialog('close');
+	$('#popit').remove();
+
+}
+
+// var dpopupdiv=null;
+var divid='';
+function loadPagePartPopup(url,thedivid,title,width,height) {
+	resetCountDown();
+	hideTips();
+	divid=thedivid;
+	var id='ipop';
+	
+	if (typeof width == 'undefined') width = Math.round($(window).width()/2); //retrieve current window width
+	if (typeof height == 'undefined') height = Math.round($(window).height()/2); //retrieve current window width
+	if (width ==0) {
+		width='auto';
+		height='auto';
+	} else {
+	height=height+48; //  header+border
+	width=width+12; //  header+border
+	if (width<400 || width>950)
+		width=400;
+	if (height<400 || height>800) height='auto';
+	if(typeof height == 'undefined') height=width;
+	}
+
+	if(!(/\?/.test(url))) { url+="?"; } else url+=";"
+		url+='embedded=1;ajax='+divid;
+	var pop=$('<div id="popit"></div>').load(url, function(response,status,xhr) {
+			// Change Cancel Button
+			var cbtn=$('#popit').find('.cancel'); // .find('input[value="Cancel"]');
+			$(cbtn).click( function(event) { 
+				event.preventDefault();
+				$('#popit').dialog('close');
+				$('#popit').remove();
+
+				});
+
+			// Make sure we style our buttons for jquery-ui:
+			$('#popit a.ckpd,#popit  a.chkbtn,#popit  a.button,#popit a.fb,#popit input.fb,#popit button ').button();
+			} )
+	var dlg=pop.dialog( {
+title: title,
+resizable: true,
+width: width,
+//maxHeight: height,
+// height: 'auto', // height,
+height: height,
+autoResize: true,
+// height: width,
+show: 'slow',
+modal:true,
+autoOpen:true,
+close: function(event,ui) { $('#popit').remove(); /* check */ },
+open: function(event,ui) {
+}
+});
+return;
+}
+function debugPopup(a) {
+	var w=$('#'+divid);
+	alert(w.innerHeight());
+}
+$(document).ready(function()
+		{
+		$(this).ajaxStart(function()
+			{
+			$("#counter").append("<img id=\"overlay\" src='./images/ajax-loading.gif' /></div>");
+			});
+
+
+		$(this).ajaxStop(function()
+			{
+			$("#overlay").remove();
+			});
+
+		});
+// Shortcuts
+// ~sensor Details
+if (!window.location.origin)
+	window.location.origin = window.location.protocol+"//"+window.location.host;
+	var pref= window.location.origin+'/'+window.location.href.split('/')[3]+'/';
+	// Sensor Detail Popup
+function pop_calinfo_sensor(sid) {
+	
+		return lppp(pref+'calreport.php?cid=1;sid='+sid, 'calrep','Calibration Detail',600,400);
+	}
+function pop_calinfo(sid) {
+	
+		return lppp(pref+'calreport.php?cid='+sid, 'calrep','Calibration Detail',900,500);
+	}
+function pop_sd(id) {
+	
+		return lppp(pref+'sensor_details.php?id='+id, 'sdp','Sensor #'+id+' Detail',800,500);
+	}
+function pop_toplogy(id) {
+		
+		var retval= lppp(pref+'viewhierarchy.php?id='+id, 'toplogoy','Sensor #'+id+' Mesh Toplogoy',500,500);
+		return retval;
+	}
+function pop_audit(id) {
+	
+		return lppp(pref+'auditdetail.php?dhtml=1;id='+id, 'audit','Audit  #'+id+' Detail',600,500);
+	}
+
+// AP Detail Popup
+function pop_ad(id) {
+	return lppp(pref+'apdetail2.php?dhtml=1;id='+id, 'apdetail','Access Point #'+id+' Detail',500,500);
+}
+// Contact Detail Popup (id=user)
+function pop_ci(id) {
+	return lppp(pref+'contactdetail.php?dhtml=1;id='+id, 'cif','Contact Detail',500,500);
+}
+function pop_cilist(id) {
+	return lppp(pref+'contactlist.php?dhtml=1;sid='+id, 'cif','Contact List',700,500);
+}
+function pop_evtdtl(eid) {
+	return lppp(pref+'evtdetail.php?dhtml=1;eid='+eid, 'evtd','Event ('+eid+') Detail',700,500);
+}
+function pop_action_sid(sid) {
+	return lppp(pref+'logaction.php?dhtml=1;autoid='+sid,'ca','Log Action', 850,600);
+}
+function pop_action(monitoring,id,eid,z) {
+	return lppp(pref+'logaction.php?monitoring='+monitoring+';z='+z+';eid='+eid+';id='+id, 'ca','Log Action for Event #'+eid,750,500);
+}
+function pop_eventidx(sid) {
+	return lppp(pref+'eventindex.php?id='+sid, 'evttable','Event List for  Sensor #'+sid,550,300);
+}
+function pop_addevt(sid) {
+	return lppp(pref+'ajax/add_event.php?id='+sid, 'frm','Add User-Event for Sensor #'+sid,450,300);
+}
+function pop_zonenote(zone) {
+	var txt="Zone Note";
+	if (zone ==0) txt="Master Zone Note"; 
+	return lppp(pref+'zonenote.php?pu=1;z='+zone, 'newnote',txt,650,400);
+}
+function pop_map(mapid,sid) {
+	return lppp(pref+'maps/mapimg.php?hid='+mapid+';sid='+sid, ',ap','Map #'+mapid+' Sensor #'+sid,0,0);
+}
+function pop_photo_id(id) {
+	// return lppp(pref+'viewphoto.php?id='+id+';dim=400x400', 'img','Photo #'+id,450,450);
+	return lppp(pref+'viewphoto.php?id='+id, 'map','Photo #'+id+' Photo',450,450);
+}
+function pop_photo(sid) {
+	//return lppp(pref+'thumb.php?hid='+sid+';dim=400x400', 'img','Sensor #'+sid+' Photo',450,450);
+	return lppp(pref+'viewphoto.php?sid='+sid, 'map','Sensor #'+sid+' Photo',450,450);
+}
+function pop_security(sid) {
+	return lppp(pref+'security.php?id='+sid, 'sec','Sensor #'+sid+' Security Log',750,500);
+}
+function pop_graph_edi_signal(sid) {
+	return lppp(pref+'viewsensor_popup.php?id='+sid+';signal=2', 'ca','Sensor #'+sid+' Signal Graph',750,500);
+}
+function pop_graph_edi(sid,eid) {
+	return lppp(pref+'viewsensor_popup.php?id='+sid+';eid='+eid, 'ca','Graph Sensor #'+sid+' Event #'+eid,750,500);
+}
+function pop_select_photo(sid,pid) {
+	return lppp(pref+'imagedb.php?select='+sid+';pid='+pid, 'imgdb','Assign Photo',600,600);
+}
+function pop_del_user(uid) {
+	return lppp(pref+'users.php?m=d;id='+uid,'delUser','Delete this User ?',600,450);
+}
+function pop_view_user(uid) {
+	return pop_ci(uid);
+	// return lppp(pref+'contactdetail.php?id='+uid,'ci','Contact Details',600,300);
+}
+function pop_view_profile(id) {
+	return lppp(pref+'tpdetail.php?id='+id,'tprofile','Profile #'+id+' Details',800,600);
+}
+function pop_version() {
+	return lppp(pref+'version.php','cpy','About',400,400);
+}
+function	updateLazyImages() {
+$("img.photo").lazyload({
+                effect: "fadeIn"
+        });
+$(document).ajaxStop(function(){
+    $("img.photo").lazyload({ 
+        effect: "fadeIn" 
+    });
+});
+
+        $("img.photo").css('cursor','pointer');
+        $("img.photo").bind('click', function(event) {
+                var id=event.target.id.substr(1);
+                alert(id);
+                // gotourl('${rootdir}/PhotoOverview.php?id='+id);
+        });
+}
+
+jQuery.fn.progressreport = function (total, amount, label, barclass) {
+
+	if (isNaN(total)) total = 0;
+	if (isNaN(amount)) amount = 0;
+	if (typeof barclass == 'undefined') {
+		var barclass = '';
+	} else {
+		barclass = ' ' + barclass;
+	}
+	var percent = Math.round(((amount / total) * 100), 2);
+	if (isNaN(percent)) percent = 0;
+	var percentlabel = percent;
+	if (percentlabel < 1) {
+		percentlabel = 'less than 1'
+	}
+	var displaytotal = total;
+	if (displaytotal > 1000000000) {
+		displaytotal = (Math.round((displaytotal / 1000000000) * Math.pow(10, 2)) / Math.pow(10, 2)).toFixed(2) + ' billion';
+	} else {
+		if (displaytotal > 1000000) {
+			displaytotal = (Math.round((displaytotal / 1000000) * Math.pow(10, 2)) / Math.pow(10, 2)).toFixed(2) + ' million';
+		} else {
+			displaytotal = format_number(displaytotal, 2, '.', ',');
+		}
+	}
+	var displayamount = amount;
+	if (displayamount > 1000000000) {
+		displayamount = (Math.round((displayamount / 1000000000) * Math.pow(10, 2)) / Math.pow(10, 2)).toFixed(2) + ' billion';
+	} else {
+		if (displayamount > 1000000) {
+			displayamount = (Math.round((displayamount / 1000000) * Math.pow(10, 2)) / Math.pow(10, 2)).toFixed(2) + ' million';
+		} else {
+			// displayamount = format_number(displayamount, 2, '.', ',');
+		}
+	}
+	label = label.replace('%1', displaytotal);
+	label = label.replace('%2', displayamount);
+	label = label.replace('%3', percentlabel);
+	return this.each(function () {
+			$(this).html(' ' + label + ' ');
+			if (percent > 100) {
+			percent = 100;
+			} else {
+			if (percent < 1) {
+			percent = 1;
+			}
+			}
+			$(this).children('.barwrap').children('.bar').animate({ width: percent + '%' }, 3000);
+			});
+};
+
+function  confirmDelete(txt,url) {
+$('<div></div>').appendTo('#body')
+                        .html('<div><span class="ui-icon ui-icon-alert" style="float:left; margin:5px 7px 20px 0;"></span><h2>Delete&#160;' + txt+' ? </h2></div>')
+                        .dialog({
+                            modal: true, title: 'Are you sure ?', zIndex: 100, autoOpen: true,
+                            width: 'auto', resizable: false,
+                            buttons: {
+                                No: function () {
+                                    $(this).dialog("close");
+                                },
+                                Yes: function () {
+                                    gotourl(url); 
+                                    $(this).dialog("close");
+                                }
+                            },
+                            close: function (event, ui) {
+                                $(this).remove();
+                            }
+                        });
+}
+function  confirmSubmit(txt,form) {
+$('<div></div>').appendTo('#body')
+                        .html('<div class="l"><hr style="width:300px" style="margin:0 auto"/><em>' + txt+' </em></div>')
+                        .dialog({
+                            modal: true, title: 'Confirm?', zIndex: 100, autoOpen: true,
+                            width: 'auto', resizable: false,
+                            buttons: {
+                                No: function () {
+                                    $(this).dialog("close");
+                                },
+                                Yes: function () {
+                                    $(this).dialog("close");
+                           		 form.submit(); 
+                           		// works!         $("form:first").submit(); 
+                                }
+                            },
+                            close: function (event, ui) {
+                                $(this).remove();
+                            }
+                        });
+}

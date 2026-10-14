@@ -1,0 +1,243 @@
+/* sonnys colors
+ * selected color: #66CCFF
+ * unselect color: #CCCCCC
+ *  $Id: arms3.css,v 1.1.1.1 2008/06/09 15:50:06 kpaulsen Exp $
+ */
+
+a:link		{
+	color : #0000FF;
+}
+
+a:visited	{
+	color : #0000FF;
+}
+
+a:hover		{
+	color : Black;
+	background-color: Yellow;
+}
+
+a:active	{
+	color : #0000FF;
+}
+
+a.mlink:link	{
+	color : #000000;
+}
+
+a.mlink:visited {
+	color : #000000;
+}
+
+a.mlink:hover	{
+	color : #FF0000;
+	background-color: transparent;
+}
+
+a.mlink:active	{
+	color : #000000;
+}
+
+/* links used in vertical menu bars */
+a.mlinkv:link,a.mlinkv:visited,a.mlinkv:active
+{
+	color: black;
+}
+
+a.mlinkv:hover	{
+	color: red;
+	background-color: yellow;
+}
+/* links used in vertical menu bars */
+a.mlinkvz:link,a.mlinkvz:visited,a.mlinkvz:active
+{
+	color: black;
+}
+
+a.mlinkvz:hover	{
+	color: red;
+	background-color: yellow;
+}
+
+
+/* links used in vertical menu bars that are selected */
+a.mlinkvsel:link	{
+	color: black;
+}
+
+a.mlinkvsel:visited {
+	color: black;
+}
+
+a.mlinkvsel:hover	{
+	color: red;
+	background-color: transparent;
+}
+
+a.mlinkvsel:active	{
+	color: black;
+}
+
+/* */
+a.mlink2:link	{
+	color : #000000;
+}
+
+a.mlink2:visited {
+	color : #000000;
+}
+
+a.mlink2:hover	{
+	color : #FF0000;
+	background-color: transparent;
+}
+
+a.mlink2:active	{
+	color : #000000;
+}
+
+/* mlink3 is used by links in colored area (e.g. hdbg )*/
+a.mlink3:link	{
+	color : black;
+}
+
+a.mlink3:visited {
+	color : black;
+}
+
+a.mlink3:hover	{
+	color : red;
+	background-color: transparent;
+}
+
+a.mlink3:active	{
+	color : black;
+}
+
+.btn {
+	background-color: #66CCFF;
+	color: black;
+}
+.btn-on {
+	background-color: #66CCFF;
+	color: black;
+	border : 1px outset #66CCFF; /* #26B6FF */
+}
+.btn-off {
+	background-color: #FFB6C1;
+	color: black;
+	border : 1px outset #FFB6C1;
+}
+
+th {
+	background-color : silver;
+}
+
+.g1bg {
+	background-color : silver;
+}
+
+.hdbg {
+	background-color : #66CCFF;
+	color : #000000;
+}
+.hdbg2 {
+	background-color: #ffe566;
+	color: Black;
+}
+
+
+.mbutton1 {
+	background-color : #66CCFF;
+	color : #000000;
+}
+
+.mbutton1act {
+	background-color : silver;
+	color : #000000;
+}
+
+.submbutton1 {
+	background-color : #66CCFF;
+	color : #000000;
+}
+
+.submbutton1act {
+	background-color : silver;
+	color : #000000;
+}
+
+.mbuttonside {
+	background-color : #66CCFF;
+	color : #000000;
+}
+
+.mbuttonsideact {
+	background-color : white;
+	color : black;
+}
+
+.menubar {
+	background-color : #66CCFF;
+	color : #000000;
+}
+
+.mfill {
+	background-color : #A20000;
+}
+
+.ybar {
+	background-color : #E0E0E0;
+}
+
+th.setuphdr {
+	background-color : #66CCFF;
+	color : black;
+}
+.sessribnorm {
+	background-color: #66CCFF;
+	color: black;	
+	font-weight: bold;
+}
+
+th.evtlog1 {
+	background-color: silver;
+	color: black;
+}
+th.evtlog2 {
+	background-color: #ffe566;
+	color: black;
+}
+
+/************************
+ * vertical Menu stules
+ * new as of 8/1/2004
+ ************************/
+.vmenu-sel {
+	background-color: #66CCFF;
+	color: black;
+}
+
+.vmenu {
+	background-color: #cccccc;
+	color: black;
+}
+
+.vmenu-disa {
+	background-color: #cccccc;
+	color: silver;
+}
+
+.vmenu-header {
+	background-color: #ffe566;
+	color: black;
+}
+
+.vmenu-link:link,.vmenu-link:active,.vmenu-link:visited	{
+	font-weight: bold;
+	color: black;
+}
+.vmenu-link:hover {
+}
+
+/************************************/

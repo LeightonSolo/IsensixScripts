@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<!-- saved from url=(0042)https://ics1.ca.isensix.com:7735/guardian/ -->
+<html lang="en" class="unk"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    
+    <meta name="description" content="Live View">
+    <link rel="apple-touch-icon" href="https://ics1.ca.isensix.com:7735/guardian/images/GM_Logo_72.png">
+    
+      <link rel="alternate" type="application/rss+xml" title="RSS Feed two" href="https://ics1.ca.isensix.com:7735/guardian/api/alerts.rss.php">
+    
+    <script src="./guardian3 example live view_files/guardian_script_notify.js.download"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="icon" sizes="any" href="https://ics1.ca.isensix.com:7735/guardian/images/moblogo_alert.svg" type="image/svg+xml">
+    <title>Live View(2)</title>
+    
+
+    
+    
+      <link rel="stylesheet" type="text/css" id="css_core" href="./guardian3 example live view_files/isxroot.css.php">
+    
+      <link rel="stylesheet" type="text/css" id="css_theme" href="./guardian3 example live view_files/jquery-ui.min.css">
+    
+      <link rel="stylesheet" type="text/css" id="css_ise" href="./guardian3 example live view_files/guardian_all.min.css">
+    
+      <link rel="stylesheet" type="text/css" id="css_fonta" href="./guardian3 example live view_files/guardian_matfont.min.css">
+    
+      <link rel="stylesheet" type="text/css" id="css_icol" href="./guardian3 example live view_files/icolors.css.php">
+    
+      <link rel="stylesheet" type="text/css" id="css_extra0" href="./guardian3 example live view_files/liveview.min.css">
+    
+    <style type="text/css">
+      
+        
+      
+    </style>
+    
+      <link rel="prefetch" as="script" type="text/javascript" id="0" href="https://ics1.ca.isensix.com:7735/guardian/isxapi/js/apexchart.js">
+    
+ 
+    
+
+      <script onload="myOnLoadHandler(this.src)" type="text/javascript" src="./guardian3 example live view_files/jquery-3.7.1.min.js.download">
+<![CDATA[ ]]>
+      </script>
+    
+
+      <script onload="myOnLoadHandler(this.src)" type="text/javascript" src="./guardian3 example live view_files/leader-line.min.js.download">
+<![CDATA[ ]]>
+      </script>
+    
+
+      <script onload="myOnLoadHandler(this.src)" type="text/javascript" src="./guardian3 example live view_files/jquery-ui.min.js.download">
+<![CDATA[ ]]>
+      </script>
+    
+
+      <script onload="myOnLoadHandler(this.src)" type="text/javascript" src="./guardian3 example live view_files/canvas2svg.js.download">
+<![CDATA[ ]]>
+      </script>
+    
+
+      <script onload="myOnLoadHandler(this.src)" type="text/javascript" src="./guardian3 example live view_files/pdfviewer.js.download">
+<![CDATA[ ]]>
+      </script>
+    
+
+      <script onload="myOnLoadHandler(this.src)" type="text/javascript" src="./guardian3 example live view_files/jquery.flot.js.download">
+<![CDATA[ ]]>
+      </script>
+    
+
+      <script onload="myOnLoadHandler(this.src)" type="text/javascript" src="./guardian3 example live view_files/jquery.flot.time.js.download">
+<![CDATA[ ]]>
+      </script>
+    
+
+      <script onload="myOnLoadHandler(this.src)" type="text/javascript" src="./guardian3 example live view_files/jquery.validate.js.download">
+<![CDATA[ ]]>
+      </script>
+    
+
+      <script onload="myOnLoadHandler(this.src)" type="text/javascript" src="./guardian3 example live view_files/base64.js.download">
+<![CDATA[ ]]>
+      </script>
+    
+
+      <script onload="myOnLoadHandler(this.src)" type="text/javascript" src="./guardian3 example live view_files/jquery.mark.js.download">
+<![CDATA[ ]]>
+      </script>
+    
+
+      <script onload="myOnLoadHandler(this.src)" type="text/javascript" src="./guardian3 example live view_files/allguardians.min.js.download">
+<![CDATA[ ]]>
+      </script>
+    
+
+      <script onload="myOnLoadHandler(this.src)" type="text/javascript" src="./guardian3 example live view_files/guardian_idle_logout.js.download">
+<![CDATA[ ]]>
+      </script>
+    
+
+      <script onload="myOnLoadHandler(this.src)" type="text/javascript" src="./guardian3 example live view_files/liveview.js.download">
+<![CDATA[ ]]>
+      </script>
+    
+    <script>
+      
+        /* no extra script */
+      
+    </script>
+  
+    
+    
+    
+      
+    
+    
+    
+    <style>
+    /* only with dark mode enabled and isensix theme */ 
+    body.theme-isensix[data-bs-theme="dark"] .ise-container {
+      background: linear-gradient(180deg,#020024,#246c9b 13%,#429acd 22%,#2b556b 42%,#0c2435 61%,#060606);
+      color:white;
+    }
+    ul.bc {
+    padding: 1px;
+    list-style: none;
+    margin: 1px
+}
+
+
+    .ise-right {
+      background: linear-gradient(180deg,#020024,#246c9b 13%,#429acd 22%,#2b556b 42%,#0c2435 61%,#060606);
+      border:none;
+      color:white;
+    }
+    </style>
+    
+  </head>
+  <body data-ise="Tsp5os9396npss82q" class="noadm isxusr leftstatus monitor theme-cupertino dark-mode" data-refreshtime="300" data-refreshurl="/guardian/index.php?GUARD=Tp9o4s23r6npss4r5" data-pageid="index" data-pinlen="3" data-svol="0" data-flashrate="1000" data-showhelp="1" data-dlgid="2941780440" data-isx-rights="ABCDEFGHIJKLMNOPQRSTUVWXYZ" data-bs-theme="dark">
+    
+    
+    <div class="ise-container">
+      <section class="ise-header noprint" style="grid-column: 1 / -1;">
+        
+    <nav id="primary_nav_wrap" class=" noprint horimenu ">
+      <menu id="isemainmenu" class="ui-widget-header">
+        <li class="hidden-sm">
+          <a href="https://ics1.ca.isensix.com:7735/guardian/#" title="Guardian 3.0" onclick="pop_version();return false;"><i class="mi  align-middle"></i> About</a>
+          <ul class=" ui-widget-header">
+            <li>
+              <a href="https://ics1.ca.isensix.com:7735/guardian/feedback.php?thisurl=%2Fguardian%2Findex.php%3F"><i class="mi"></i> Feedback</a>
+            </li>
+            <li>
+              <a href="https://ics1.ca.isensix.com:7735/guardian/#" onclick="pop_TOS();return false"><i class="mi"> crop_square </i> Terms of Service</a>
+            </li>
+            <li>
+              <a href="https://ics1.ca.isensix.com:7735/guardian/#" onclick="pop_version();return false;"><i class="mi"></i> About..</a>
+            </li>
+            <li>
+              <a href="https://ics1.ca.isensix.com:7735/guardian/documents/showAll.php"><i class="mi"></i> Documentation</a>
+            </li>
+            
+              
+                <li>
+                  <a target="_blank" title="Opens in new Window" href="http://www.isensix.com/"><i class="mi"></i> www.isensix.com</a>
+                </li>
+              
+            
+          </ul>
+        </li>
+        <li class="hidden-sm">
+          <a href="https://ics1.ca.isensix.com:7735/guardian/hello.php?GUARD=Tsp5os9396npss82q"><i class="mi  align-middle"></i> Home</a>
+        </li>
+        <li>
+          <a id="menu_20" href="https://ics1.ca.isensix.com:7735/guardian/home.php?GUARD=Tsp5os9396npss82q" accesskey="M"><i class="mi align-middle"></i> Monitoring</a>
+          <ul class="ui-widget-header">
+            <li>
+              <a href="https://ics1.ca.isensix.com:7735/guardian/index.php?GUARD=Tsp5os9396npss82q" class="ICO_LIVEVIEW" accesskey="L"><i class="mi"></i> Live View</a>
+            </li>
+            
+        
+            <li>
+              <a href="https://ics1.ca.isensix.com:7735/guardian/eventmonitor.php?GUARD=Tsp5os9396npss82q;active=1" class="nw"><i class="mi"></i> Event View</a>
+            </li>
+            <li class="isensix">
+              <a href="https://ics1.ca.isensix.com:7735/guardian/evtreport/SystemSensorEventReport.class.php" class="nw"><i class="mi"></i> System Sensors Event View</a>
+
+            </li>
+
+          </ul>
+        </li>
+        <li>
+          <a id="menu_30" href="https://ics1.ca.isensix.com:7735/guardian/reportindex.php?GUARD=Tsp5os9396npss82q"><i class="mi align-middle"></i> Reporting</a>
+          <ul class="ui-widget-header ">
+
+            <li>
+              <a href="https://ics1.ca.isensix.com:7735/guardian/plotindex.php?GUARD=Tsp5os9396npss82q" accesskey="G"><i class="mi"></i> Graphs</a>
+            </li>
+            <li>
+              <a href="https://ics1.ca.isensix.com:7735/guardian/tableindex.php?GUARD=Tsp5os9396npss82q"><i class="mi"></i> Table</a>
+            </li>
+            <li>
+              <a href="https://ics1.ca.isensix.com:7735/guardian/eventindex.php?GUARD=Tsp5os9396npss82q" accesskey="E"><i class="mi"></i> Events</a>
+            </li>
+            <li>
+              <a href="https://ics1.ca.isensix.com:7735/guardian/apevent_report.php?GUARD=Tsp5os9396npss82q" class="nw"><i class="mi"></i> AP Report</a>
+            </li>
+            
+              
+            
+            <li>
+              <a href="https://ics1.ca.isensix.com:7735/guardian/zonenote_report.php?GUARD=Tsp5os9396npss82q" class="nw"><i class="mi"></i> Zone Notes</a>
+            </li>
+            <li>
+              <hr>
+            </li>
+            <li>
+              <a href="https://ics1.ca.isensix.com:7735/guardian/checkpointing/auto_checkpoint_report.php?GUARD=Tsp5os9396npss82q" class="nw"><i class="mi"></i> Auto Checkpoints</a>
+            </li>
+            
+            
+              <li>
+                <hr>
+              </li>
+              <li class="">
+                <a class="nw show_chart  " isx="0" href="https://ics1.ca.isensix.com:7735/guardian/isxapi/reports/php/intervalreport" title="Interval Report">
+                  <i class="mi">show_chart</i>
+                  Interval Report
+                </a>
+              </li><li class="">
+                <a class="nw email  " isx="0" href="https://ics1.ca.isensix.com:7735/guardian/isxapi/reports/php/notifyreport" title="Sensor Notification Report">
+                  <i class="mi">email</i>
+                  Sensor Notification Report
+                </a>
+              </li><li class="">
+                <a class="nw api  " isx="0" href="https://ics1.ca.isensix.com:7735/guardian/isxapi/reports/php/sensorgraph" title="Sensor Graph Report">
+                  <i class="mi">api</i>
+                  Sensor Graph Report
+                </a>
+              </li>
+            
+            
+          </ul>
+        </li>
+        <li>
+          
+          
+            <a href="https://ics1.ca.isensix.com:7735/guardian/setup.php" rel="admin" data-adminlink="1"><i class="mi align-middle">manufacturing</i> Setup</a>
+            <ul class="ui-widget-header">
+              
+              <li>
+                <a rel="admin" href="https://ics1.ca.isensix.com:7735/guardian/sensoroverview.php?GUARD=Tsp5os9396npss82q" data-adminlink="1"><i class="mi"></i> Sensors</a>
+              </li>
+              <li>
+                <a rel="admin" href="https://ics1.ca.isensix.com:7735/guardian/viewap.php?GUARD=Tsp5os9396npss82q" data-adminlink="1"><i class="mi"></i> Access Points</a>
+              </li>
+              <li>
+                <a rel="admin" href="https://ics1.ca.isensix.com:7735/guardian/viewprofile.php?GUARD=Tsp5os9396npss82q" data-adminlink="1"><i class="mi"></i> Profiles</a>
+              </li>
+
+
+              <li>
+              <hr>
+              </li>
+                 <li>
+
+                <a rel="admin" href="https://ics1.ca.isensix.com:7735/guardian/media/photo_manager.php?GUARD=Tsp5os9396npss82q" data-adminlink="1"><i class="mi"></i> Media</a>
+              </li>
+
+
+              <li>
+                <a rel="admin" href="https://ics1.ca.isensix.com:7735/guardian/users.php?GUARD=Tsp5os9396npss82q" data-adminlink="1"><i class="mi"></i> User</a>
+              </li>
+                <li>
+
+                <a rel="admin" href="https://ics1.ca.isensix.com:7735/guardian/zonemanager.php" data-adminlink="1"><i class="mi">account_tree</i> Zones</a>
+              </li>
+           
+               <li>
+
+                <a rel="admin" href="https://ics1.ca.isensix.com:7735/guardian/setup_policy.php" data-adminlink="1"><i class="mi"></i> Site Policies</a>
+              </li>
+
+
+            </ul>
+          
+        </li>
+        
+          
+        
+        <li class="isensix noselect">
+          <span class="nb isensix"><i class="mi  align-middle">stars</i> Isensix</span>
+          <ul class="ui-widget-header ">
+            <li class="isensix">
+           
+              <a href="https://ics1.ca.isensix.com:7735/guardian/statistic.php?GUARD=Tsp5os9396npss82q"><i class="mi"></i> System Statistic</a>
+            </li>
+ 
+            <li class="isensix">
+              <a href="https://ics1.ca.isensix.com:7735/guardian/calibration/fcr.php?GUARD=Tsp5os9396npss82q"><i class="mi"></i> Calibration Report</a>
+            </li>
+            <li>
+            </li>
+            <li class="isensix">
+              <a href="https://ics1.ca.isensix.com:7735/guardian/calibration/calreport.php?GUARD=Tsp5os9396npss82q"><i class="mi"></i> Calibration Overview</a>
+            </li>
+          </ul>
+        </li>
+    
+        <li style=" border-left:1px solid white" class="float-right hidden-sm alert-info ">
+          <a href="https://ics1.ca.isensix.com:7735/guardian/#" onclick="showPageHelp('index');return false" title="Page Help">
+            &nbsp;<i class="b mi" style="vertical-align:middle">help</i>&nbsp;&nbsp;</a>
+        </li>
+        <li style=" border-left:1px solid white" class="float-right hidden-sm">
+          <a title="Page Refresh" href="https://ics1.ca.isensix.com:7735/guardian/#" class="countdown">3:08</a>
+        </li>
+        <li style=" border-left:1px solid white" class="float-right hidden-sm">
+
+          <a href="https://ics1.ca.isensix.com:7735/guardian/#" title="2026-10-14 17:25:21 EDT| up 2 weeks, 1 day, 7 hours, 18 minutes
+">
+            <i class="mi align-middle">calendar_month</i>
+            <span id="servertime" title="America/New_York" data-time="1792013121" data-timeoffset="-14400" data-tzname="EDT">Oct 14, 2026 5:26 PM EDT</span>
+          </a>
+        </li>
+        
+        <li class="usrname" style="float:right;border-left:1px solid gray">
+
+          <a oldonclick="pop_userprefs();return false;" oldhref="#" href="https://ics1.ca.isensix.com:7735/guardian/v2prefs.php" class="nw   hidden-sm  " title="Leighton Solomon">
+            
+            <i class="mi align-middle"></i>
+
+          </a>
+          
+        </li>
+
+      </menu>
+    </nav>
+    
+    
+
+  
+      </section>
+      <aside class="ise-nav noprint ui-widget-header " style="padding:.5ex;grid-column: 1 / -1;">
+        
+    
+
+      <nav aria-label="breadcrumb">
+      
+<style>
+  ul.bc {
+    padding: 1px;
+    list-style: none;
+    margin: 1px;
+  }
+  ul.bc li {
+    display: inline;
+  }
+  ul.bc li+li:before {
+    padding: 8px;
+    color: black;
+    content: "/\00a0";
+  }
+  ul.bc li a {
+    text-decoration: none;
+  }
+  ul.bc li a:hover {
+    text-decoration: underline;
+  }
+</style>
+        <ul class="ucfirst bc">
+          <li>
+            <em>You are here: Guardian</em>
+          </li>
+          
+            <li>
+              <a href="https://ics1.ca.isensix.com:7735/guardian/home.php">
+                Monitoring
+              </a>
+              
+            </li>
+          
+            <li>
+              <a href="https://ics1.ca.isensix.com:7735/guardian/#">
+                Live View
+              </a>
+              
+            </li>
+          
+
+        </ul>
+      </nav>
+
+
+      
+    
+  
+      </aside>
+      <aside id="ise-right" class="ise-right  ui-widget-header noprint" style="min-width:3rem">
+        
+
+
+     
+  
+
+    <div id="toggleinfo" class="statinfo" href="#infoblock" data-microtip-position="left" ise-title="Toggle Info Messages" onclick="toggleInfo()" role="tooltip" aria-label="Toggle Info Messages" style="display: block;"> 
+         <i class="mi vertical-align:bottom"></i> 
+        </div>
+
+      <div class="cursor countdown  d-mg-none d-lg-none alert-info" style="font-family:monotype;margin:1ex;padding:1ex; transform: rotate(270deg);">3:08</div>
+
+  
+      <div class="d-sm-none cursor tzone nb c shadow statinfo" title="2026-10-14 17:25:24 - EDT (-04:00) " style="padding: 3px; margin: 5px;">EDT</div><div class="bgwhite fgblack cursor shadow nb c statinfo" title="Logout" style="padding: 3px; margin: 5px;"><span class="mi">logout</span></div><div class="cursor isensix nb c shadow statinfo" title="Preferences" style="padding: 3px; margin: 5px;"><span class="mi">person</span></div><div class="tnorm nb c shadow statinfo" title="53 Normal" style="padding: 3px; margin: 5px;">53</div><div class="tlow nb c shadow statinfo" title="0 Low" style="padding: 3px; margin: 5px;">0</div><div class="thigh nb c shadow statinfo" title="0 High" style="padding: 3px; margin: 5px;">0</div><div class="tnet pulse nb c shadow statinfo" title="2 Net / Link Status  " style="padding: 3px; margin: 5px;">2</div><div class="cursor alert-warn animate_slow pulse nb c shadow statinfo" title="2 Active Events" style="padding: 3px; margin: 5px;">2<span class="mi"></span></div><div class="alert-info nb c shadow statinfo" title="All Services Running" style="padding: 3px; margin: 5px;"><span class="mi">computer</span></div><div class="alert-danger pulse nb c shadow statinfo" title="Developer Mode" style="padding: 3px; margin: 5px;"><span class="mi">bug_report</span></div><div class="cursor alert-success nb c shadow statinfo" title="dduxisen5.ad.bhssf.org.
+CPU usage: 24%
+Uptime: up 2 weeks, 1 day, 7 hours, 18 minutes
+" style="padding: 3px; margin: 5px;"><span class="mi">dns</span></div><div class="bgwhite fgblack cursor shadow nb c statinfo" title="Toggle Fullscreen" style="padding: 3px; margin: 5px;"><span class="mi">tablet_mac</span></div></aside>
+      <div class="ise-info" aria-live="polite">
+        
+    
+ 
+      
+      
+        
+          <script> 
+         	var toastmsgs=[{"extra":"","type":1,"txt":"AP (#<a href=\"#\" onclick=\"pop_ap( 67 );return false\">67<\/a>) \"ASC-South Palm OR Fridge CH9\" is in Check NET mode. Last activity  6hours 19minutes ago (2026-10-14 11:06). ","age_in_seconds":22750}];
+       
+        
+				</script>
+        
+        <div id="infoblock">
+           
+        
+      <div class="alert-danger">AP (#<a href="https://ics1.ca.isensix.com:7735/guardian/#" onclick="pop_ap( 67 );return false">67</a>) "ASC-South Palm OR Fridge CH9" is in Check NET mode. Last activity  6hours 19minutes ago (2026-10-14 11:06). </div><div class="alert-danger">AP (#<a href="https://ics1.ca.isensix.com:7735/guardian/#" onclick="pop_ap( 67 );return false">67</a>) "ASC-South Palm OR Fridge CH9" is in Check NET mode. Last activity  6hours 19minutes ago (2026-10-14 11:06). </div></div>
+      
+    
+  
+      </div>
+     
+      <main id="isxmain" class="ise-main">
+        
+    <div id="body">
+      <style>
+   .senbox.tsleep, .senbox.tdis, .senbox.tretired {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(255,255,255,.2) 10px,
+    rgba(255,255,255,.1) 20px
+  ) !important;
+}
+      </style>
+      <style>
+.senbox.hasevent {
+    outline: solid 1px #FC5185;
+    transition: outline 0.6s linear;
+    border: 1px dotted rgba(255, 255, 255, 0.5);
+}
+
+.senbox.hasevent.thigh,
+.senbox.hasevent.tlow,
+.senbox.hasevent.tnet,
+.senbox.hasevent.tlink {
+    outline: solid 2px var(--isx-bg, #FC5185);
+}
+
+.senbox.hasevent.thigh {
+    --isx-bg: var(--isx-thigh-bg, #FC5185);
+}
+
+.senbox.hasevent.tlow {
+    --isx-bg: var(--isx-tlow-bg, #FC5185);
+}
+
+.senbox.hasevent.tnet {
+    --isx-bg: var(--isx-tnet-bg, #FC5185);
+}
+
+.senbox.hasevent.tlink {
+    --isx-bg: var(--isx-tlink-bg, #FC5185);
+}
+      </style>
+      <form action="https://ics1.ca.isensix.com:7735/guardian/index.php" id="myform">
+        <input type="hidden" name="ISTK" value="f5f3c13162239ed90c5a14b6789af8da" id="ISTK">
+        <div class="noprint flex_nav">
+          
+        </div>
+        <div class="navtab1 ui-tabs ui-corner-all ui-widget ui-widget-content" id="liveviewtab">
+          <ul class="noprint ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header" role="tablist">
+            <li class="noprint ui-tabs-tab ui-corner-top ui-state-default ui-tab ui-tabs-active ui-state-active" role="tab" tabindex="0" aria-controls="tab-liveview_1" aria-labelledby="ui-id-1" aria-selected="true" aria-expanded="true">
+              <a href="https://ics1.ca.isensix.com:7735/guardian/#tab-liveview_1" tabindex="-1" class="ui-tabs-anchor" id="ui-id-1"><i class="mi">visibility</i> Live View</a>
+            </li>
+            <li role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" aria-controls="ui-id-3" aria-labelledby="ui-id-2" aria-selected="false" aria-expanded="false">
+              <a href="https://ics1.ca.isensix.com:7735/guardian/evtreport/MonitoringEventReport.class.php?GUARD=Tsp5os9396npss82q;ajax=evttablediv;preference_timeframe=1;monitoring=1" tabindex="-1" class="ui-tabs-anchor" id="ui-id-2">
+                <i class="mi">view_list</i>
+                Recent (24h) and
+                <span>Active Event List</span>
+              </a>
+            </li>
+            <li role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" aria-controls="ui-id-5" aria-labelledby="ui-id-4" aria-selected="false" aria-expanded="false">
+              <a href="https://ics1.ca.isensix.com:7735/guardian/evtreport/MonitoringEventReport.class.php?GUARD=Tsp5os9396npss82q;ajax=plotevtgraph;preference_timeframe=1;monitoring=1" tabindex="-1" class="ui-tabs-anchor" id="ui-id-4">
+                <i class="mi">show_chart</i>
+                <span>Event Graph</span>
+              </a>
+            </li>
+            
+            <li class="noprint ui-tabs-tab ui-corner-top ui-state-default ui-tab" role="tab" tabindex="-1" aria-controls="tab-liveview_2" aria-labelledby="ui-id-6" aria-selected="false" aria-expanded="false">
+              <a href="https://ics1.ca.isensix.com:7735/guardian/#tab-liveview_2" onclick="createDialogPreferences();" tabindex="-1" class="ui-tabs-anchor" id="ui-id-6"><i class="mi">settings</i></a>
+            </li>
+            <li style="float:right!important">
+              <span class="ui-button ui-corner-all ui-widget" href="#" onclick="refreshContent(initLiveViewPage);return false" old-onclick="refreshSELF(false);return false" role="button">
+                <i class="mi">refresh</i>
+                <span>Reload</span>
+              </span>
+            </li>
+          </ul>
+          <div id="tab-liveview_1" aria-labelledby="ui-id-1" role="tabpanel" class="ui-tabs-panel ui-corner-bottom ui-widget-content" aria-hidden="false">
+            <nav class="noprint flex_nav" style="margin:0;padding:1ex">&nbsp;&nbsp;<button data-helpid_uu="button   show_alarms" onclick="gotourl(&quot;./index.php?vmode=1&quot;);return false" class="ui-button small ui-corner-all ui-widget">Show Alarms</button>&nbsp;&nbsp;<button data-helpid_uu="button   show_all_sensors" onclick="gotourl(&quot;./index.php?vmode=2;zva=1&quot;);return false" class="ui-button ui-state-active ui-corner-all ui-widget">Show All Sensors</button>&nbsp;&nbsp;<button data-helpid_uu="button   show_only_zones" onclick="gotourl(&quot;./index.php?vmode=3;zvn=1&quot;);return false" class="ui-button small ui-corner-all ui-widget">Show Only Zones</button>&nbsp;<small class="shadow corner pad  alert-info">hiding System, Retired, Hibernate Sensors</small><button class="ui-button small ui-corner-all ui-widget" style="margin-left: 12px;">Show Only Non Calibrated Zones</button></nav> <!-- eof -->
+            
+  
+
+            
+              <div class="auto c pad shadow border " style="padding:1ex;width:max-content" onclick="pop_zonenote(0);return false">
+                <span data-helpid_uu="master zone note icon">BOS Pharmacy</span>
+                <i class="mi alert-success shadow">description</i>
+              </div>
+            
+            <div class="liveview auto"><div class="ui-widget-header zonetop apad" id="Z3453"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3453#z3453&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3453#Z3453">BOS ML</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="4 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3453);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/4 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3479);">BOS ML Ref 1</span></div><small class="lid"><small>65.2C.28 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3479);"> <span class="u b fs120">5.09°C (41.16°F)</span></div></div>
+</div>
+</div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3480);">BOS ML Ref 2</span></div><small class="lid"><small>65.2C.65 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3480);"> <span class="u b fs120">4.98°C (40.96°F)</span></div></div>
+</div>
+</div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3482);">BOS ML RH</span></div><small class="lid"><small>65.2C.9B HU<span class="mi">water_drop</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3482);"> <span class="u b fs120">60.40%RH</span></div></div>
+</div>
+</div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3481);">BOS ML RT</span></div><small class="lid"><small>65.2C.98 RM<span class="mi">thermostat</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3481);"> <span class="u b fs120">19.95°C (67.90°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3432"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3432#z3432&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3432#Z3432">BOS-ASC/ASC Arts Surgery Centers at South Miami</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="3 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3432);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/3 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3364);">ASC SMMASC Med RM1 Fridge</span></div><small class="lid"><small>26.DC.5C RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3364);"> <span class="u b fs120">3.94°C (39.09°F)</span></div></div>
+</div>
+</div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3365);">ASC SMMASC Med RM2 Fridge</span></div><small class="lid"><small>26.E3.FB RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3365);"> <span class="u b fs120">3.33°C (38.00°F)</span></div></div>
+</div>
+</div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3366);">ASC SMMASC Med RM2 Frz</span></div><small class="lid"><small>26.DC.FF RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3366);"> <span class="u b fs120">-21.79°C (-7.21°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3434"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3434#z3434&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3434#Z3434">BOS-ASC/ASC-Bethesda West</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="2 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3434);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/2 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3339);">ASC-Bethesda West Medroom Fridge</span></div><small class="lid"><small>26.DA.94 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3339);"> <span class="u b fs120">3.90°C (39.01°F)</span></div></div>
+</div>
+</div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3340);">ASC-Bethesda West OR Hallway Fridge</span></div><small class="lid"><small>26.E5.3E RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3340);"> <span class="u b fs120">5.44°C (41.79°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3443"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3443#z3443&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3443#Z3443">BOS-ASC/ASC-BMMASC/Surgery Center at Kendall Level 2</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="3 In Range"></div><div class="gap  alert-warn  mi " onclick="pop_evt_with_no_actions(3443);return false;" title="1 Events to Log"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3443);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/3 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3369);">ASC BMMASC Med Fridge</span></div><small class="lid"><small>26.E5.B7 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3369);"> <span class="u b fs120">4.94°C (40.89°F)</span></div></div>
+</div>
+</div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3368);">ASC BMMASC OR Med Freezer</span></div><small class="lid"><small>26.E4.E1 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3368);"> <span class="u b fs120">-26.26°C (-15.27°F)</span></div></div>
+</div>
+</div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead"><div style="min-width:content"><div class="symbolbar" style=" "><div class="gap  alert-danger pulse mi " onclick="pop_eventidx( 3367 );return false;" title="1 Recent Events "></div><div class="mi gap pulse alert-error " onclick="pop_action_sid(3367);return false;" title="Recent Events Without Actions">counter_1</div></div></div>
+<div class="c lname"><span class="slnk" onclick="pop_sd(3367);">ASC BMMASC OR Med Fridge</span></div><small class="lid"><small>26.E4.35 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3367);"> <span class="u b fs120">2.96°C (37.32°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3444"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3444#z3444&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3444#Z3444">BOS-ASC/ASC-BMMASC/Surgery Center at Kendall Level 3</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="2 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3444);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/2 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3371);">ASC BMMASC Level Fridge 3 - 2</span></div><small class="lid"><small>26.DC.20 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3371);"> <span class="u b fs120">3.49°C (38.29°F)</span></div></div>
+</div>
+</div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3370);">ASC BMMASC Level Fridge 3 -1</span></div><small class="lid"><small>26.E5.47 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3370);"> <span class="u b fs120">3.82°C (38.87°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3445"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3445#z3445&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3445#Z3445">BOS-ASC/ASC-Coral Springs Endoscopy</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3445);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3372);">ASC-Coral Springs Endoscopy Med Fridge</span></div><small class="lid"><small>26.DB.B1 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3372);"> <span class="u b fs120">5.53°C (41.95°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3435"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3435#z3435&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3435#Z3435">BOS-ASC/ASC-Flagler</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3435);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3341);">ASC-Flagler Med Fridge</span></div><small class="lid"><small>26.BB.BC RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3341);"> <span class="u b fs120">5.07°C (41.12°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3436"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3436#z3436&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3436#Z3436">BOS-ASC/ASC-Galloway North</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3436);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3357);">ASC-Galloway North Fridge</span></div><small class="lid"><small>26.E5.9C RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3357);"> <span class="u b fs120">5.83°C (42.50°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3437"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3437#z3437&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3437#Z3437">BOS-ASC/ASC-Galloway South</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3437);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3356);">ASC-Galloway South Fridge</span></div><small class="lid"><small>26.C3.7A RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3356);"> <span class="u b fs120">4.91°C (40.84°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3438"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3438#z3438&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3438#Z3438">BOS-ASC/ASC-Miami Beach</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="2 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3438);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/2 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3359);">ASC-Miami Beach Med Freezer</span></div><small class="lid"><small>26.DC.50 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3359);"> <span class="u b fs120">-32.57°C (-26.63°F)</span></div></div>
+</div>
+</div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3358);">ASC-Miami Beach Med Fridge</span></div><small class="lid"><small>26.E6.33 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3358);"> <span class="u b fs120">4.18°C (39.53°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3439"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3439#z3439&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3439#Z3439">BOS-ASC/ASC-Palm Beach Gardens</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3439);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3360);">ASC-Palm Beach Gardens Fridge</span></div><small class="lid"><small>26.D6.FB RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3360);"> <span class="u b fs120">5.63°C (42.14°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3452"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3452#z3452&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3452#Z3452">BOS-ASC/ASC-Plantation</a></div>
+  <div class="symbolbar" style=" "><div class="gap tsen mi pulse" title="1 Sensor Error"></div><div class="gap tnorm mi " title="1 In Range"></div><div class="gap  alert-warn  mi " onclick="pop_evt_with_no_actions(3452);return false;" title="2 Events to Log"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3452);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/2 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead"><div style="min-width:content"><div class="symbolbar" style=" "><div class="gap  alert-danger pulse mi " onclick="pop_eventidx( 3475 );return false;" title="1 Recent Events "></div><div class="mi gap pulse alert-error " onclick="pop_action_sid(3475);return false;" title="Recent Events Without Actions">counter_1</div></div></div>
+<div class="c lname"><span class="slnk" onclick="pop_sd(3475);">220-15 Ref REF4P-KP-00</span></div><small class="lid"><small>63.C9.C1 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3475);"> <span class="u b fs120">3.99°C (39.19°F)</span></div></div>
+</div>
+</div>
+<div class="senbox tsen  animate_twice hasevent">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead"><div style="min-width:content"><div class="symbolbar" style=" "><div class="mi gap alert-warning" onclick="pop_eventidx(3476);return false;" title="Recent Events">counter_1</div></div></div>
+<div class="c lname"><span class="slnk" onclick="pop_sd(3476);">220-40 Ref REF4P-KP-00</span></div><small class="lid"><small>63.CD.00 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3476);"> <span class="u b fs120">CHECK PROBE WIRE<span class="isensix">(1 minute)</span></span></div></div>
+</div>
+</div>
+<div class="senbox tdis">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3477);">220-51 Ref REF4P-KP-00</span></div><small class="lid"><small>63.C8.97 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3477);"> <span class="u b fs120">Disabled Sensor</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3440"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3440#z3440&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3440#Z3440">BOS-ASC/ASC-Research Park</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3440);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3361);">ASC-Research Park Med Fridge</span></div><small class="lid"><small>26.DB.38 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3361);"> <span class="u b fs120">3.48°C (38.27°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3441"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3441#z3441&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3441#Z3441">BOS-ASC/ASC-South Palm</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap tlink mi " title="1 Link Errors"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3441);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/2 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3362);">ASC-South Palm Nurse Fridge</span></div><small class="lid"><small>26.DA.6E RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3362);"> <span class="u b fs120">5.39°C (41.70°F)</span></div></div>
+</div>
+</div>
+<div class="senbox tnet">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3363);">ASC-South Palm OR Fridge</span></div><small class="lid"><small>26.DA.7B RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3363);"> <span class="u b fs120">CHECK NETWORK<span class="isensix">( 6hours 19minutes)</span></span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3442"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3442#z3442&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3442#Z3442">BOS-ASC/ASC-Sunrise Eye Surgery</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="2 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3442);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/2 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3337);">ASC Eye Surgery Freezer</span></div><small class="lid"><small>26.DA.D5 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3337);"> <span class="u b fs120">-25.39°C (-13.70°F)</span></div></div>
+</div>
+</div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3338);">ASC Eye Surgery Fridge</span></div><small class="lid"><small>26.DA.84 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3338);"> <span class="u b fs120">5.30°C (41.54°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3403" style="background: rgb(136, 231, 136);"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3403#z3403&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3403#Z3403">BOS-EC/EC-Country Walk</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3403);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">1/1 Calibrated ✅</span></div>
+<div class="senbox tnorm" style="opacity: 0.35;">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead" style="font-size: 11px; font-weight: bold;"> ✓ Calibrated
+<div class="c lname"><span class="slnk" onclick="pop_sd(3324);">EC-Country Walk Medication Fridge</span></div><small class="lid"><small>26.E5.94 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3324);"> <span class="u b fs120">5.58°C (42.05°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3404" style="background: rgb(136, 231, 136);"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3404#z3404&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3404#Z3404">BOS-EC/EC-Key Biscayne</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3404);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">1/1 Calibrated ✅</span></div>
+<div class="senbox tnorm" style="opacity: 0.35;">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead" style="font-size: 11px; font-weight: bold;"> ✓ Calibrated
+<div class="c lname"><span class="slnk" onclick="pop_sd(3325);">EC-Key Biscayne Med Fridge</span></div><small class="lid"><small>26.E3.BD RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3325);"> <span class="u b fs120">4.37°C (39.87°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3405" style="background: rgb(136, 231, 136);"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3405#z3405&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3405#Z3405">BOS-EC/EC-Palmetto Bay</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3405);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">1/1 Calibrated ✅</span></div>
+<div class="senbox tnorm" style="opacity: 0.35;">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead" style="font-size: 11px; font-weight: bold;"> ✓ Calibrated
+<div class="c lname"><span class="slnk" onclick="pop_sd(3326);">EC-Palmetto Bay Med Fridge</span></div><small class="lid"><small>26.DB.76 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3326);"> <span class="u b fs120">5.02°C (41.04°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3406"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3406#z3406&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3406#Z3406">BOS-EC/EC-Wellington </a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3406);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3327);">EC-Bethesda Health Wellington Med Frdige</span></div><small class="lid"><small>26.E5.22 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3327);"> <span class="u b fs120">2.78°C (37.00°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3407"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3407#z3407&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3407#Z3407">BOS-EC/EC-West Boca</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3407);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3328);">EC-West Boca Med Fridge</span></div><small class="lid"><small>26.DC.54 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3328);"> <span class="u b fs120">3.71°C (38.67°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3408"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3408#z3408&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3408#Z3408">BOS-EC/EC-West Coral Springs</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3408);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3329);">EC-West Coral Springs Med Fridge</span></div><small class="lid"><small>26.DA.E4 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3329);"> <span class="u b fs120">3.94°C (39.10°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3410" style="background: rgb(136, 231, 136);"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3410#z3410&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3410#Z3410">BOS-UC/UC-Brickell</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3410);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">1/1 Calibrated ✅</span></div>
+<div class="senbox tnorm" style="opacity: 0.35;">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead" style="font-size: 11px; font-weight: bold;"> ✓ Calibrated
+<div class="c lname"><span class="slnk" onclick="pop_sd(3330);">UC-Brickell Urgent Med Fridge</span></div><small class="lid"><small>26.E5.8C RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3330);"> <span class="u b fs120">4.95°C (40.90°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3411" style="background: rgb(136, 231, 136);"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3411#z3411&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3411#Z3411">BOS-UC/UC-Coral Gables</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3411);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">1/1 Calibrated ✅</span></div>
+<div class="senbox tnorm" style="opacity: 0.35;">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead" style="font-size: 11px; font-weight: bold;"> ✓ Calibrated
+<div class="c lname"><span class="slnk" onclick="pop_sd(3331);">UC-Coral Gables Med Fridge</span></div><small class="lid"><small>26.DC.71 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3331);"> <span class="u b fs120">5.07°C (41.12°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3412"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3412#z3412&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3412#Z3412">BOS-UC/UC-Coral Springs</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3412);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3332);">UC-Coral Springs Med Fridge</span></div><small class="lid"><small>26.DC.6E RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3332);"> <span class="u b fs120">4.92°C (40.85°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3413" style="background: rgb(136, 231, 136);"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3413#z3413&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3413#Z3413">BOS-UC/UC-Country Walk</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3413);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">1/1 Calibrated ✅</span></div>
+<div class="senbox tnorm" style="opacity: 0.35;">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead" style="font-size: 11px; font-weight: bold;"> ✓ Calibrated
+<div class="c lname"><span class="slnk" onclick="pop_sd(3333);">UC-Country Walk Med Fridge</span></div><small class="lid"><small>26.DC.84 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3333);"> <span class="u b fs120">3.14°C (37.66°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3414" style="background: rgb(136, 231, 136);"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3414#z3414&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3414#Z3414">BOS-UC/UC-Cutler Bay</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3414);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">1/1 Calibrated ✅</span></div>
+<div class="senbox tnorm" style="opacity: 0.35;">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead" style="font-size: 11px; font-weight: bold;"> ✓ Calibrated
+<div class="c lname"><span class="slnk" onclick="pop_sd(3342);">UC-Cutler Bay Med Fridge</span></div><small class="lid"><small>26.DB.3B RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3342);"> <span class="u b fs120">3.83°C (38.90°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3415"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3415#z3415&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3415#Z3415">BOS-UC/UC-Davie</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3415);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3343);">UC-BMP Davie Med Fridge</span></div><small class="lid"><small>26.DB.80 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3343);"> <span class="u b fs120">5.28°C (41.50°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3416"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3416#z3416&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3416#Z3416">BOS-UC/UC-Doral </a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3416);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3344);">UC-Doral Med Fridge</span></div><small class="lid"><small>26.DC.12 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3344);"> <span class="u b fs120">6.11°C (43.00°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3417"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3417#z3417&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3417#Z3417">BOS-UC/UC-Downtown Doral</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3417);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3345);">UC-Downtown Doral Med Fridge</span></div><small class="lid"><small>26.E5.0C RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3345);"> <span class="u b fs120">3.74°C (38.73°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3418"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3418#z3418&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3418#Z3418">BOS-UC/UC-Kendale Lakes</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3418);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3346);">UC-Kendale Lakes Med Fridge</span></div><small class="lid"><small>26.DD.2A RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3346);"> <span class="u b fs120">5.72°C (42.29°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3419"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3419#z3419&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3419#Z3419">BOS-UC/UC-Miami Beach</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3419);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead"><div style="min-width:content"><div class="symbolbar" style=" "><div class="gap  alert-warn  pulse mi " onclick="pop_battery_sensor(3347)" title="Replace Battery (Load 10%)"> battery_2_bar</div></div></div>
+<div class="c lname"><span class="slnk" onclick="pop_sd(3347);">UC-Miami Beach Med Fridge</span></div><small class="lid"><small>26.C2.E3 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3347);"> <span class="u b fs120">7.24°C (45.03°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3420"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3420#z3420&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3420#Z3420">BOS-UC/UC-Miami Lakes</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3420);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead"><div style="min-width:content"><div class="symbolbar" style=" "><div class="gap  alert-warn  pulse mi " onclick="pop_battery_sensor(3348)" title="Replace Battery (Load 1%)"> battery_2_bar</div></div></div>
+<div class="c lname"><span class="slnk" onclick="pop_sd(3348);">UC-Miami Lakes Med Fridge</span></div><small class="lid"><small>26.D8.2C RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3348);"> <span class="u b fs120">2.42°C (36.35°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3421" style="background: rgb(136, 231, 136);"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3421#z3421&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3421#Z3421">BOS-UC/UC-Palmetto Bay</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3421);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">1/1 Calibrated ✅</span></div>
+<div class="senbox tnorm" style="opacity: 0.35;">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead" style="font-size: 11px; font-weight: bold;"> ✓ Calibrated
+<div class="c lname"><span class="slnk" onclick="pop_sd(3349);">UC-Palmetto Bay Med Fridge</span></div><small class="lid"><small>26.E5.CB RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3349);"> <span class="u b fs120">3.37°C (38.06°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3422"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3422#z3422&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3422#Z3422">BOS-UC/UC-Pembroke Pines</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3422);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3350);">UC-Pembroke Pines Med Fridge</span></div><small class="lid"><small>26.DD.4D RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3350);"> <span class="u b fs120">5.61°C (42.09°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3423" style="background: rgb(136, 231, 136);"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3423#z3423&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3423#Z3423">BOS-UC/UC-Pinecrest</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3423);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">1/1 Calibrated ✅</span></div>
+<div class="senbox tnorm" style="opacity: 0.35;">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead" style="font-size: 11px; font-weight: bold;"> ✓ Calibrated
+<div class="c lname"><span class="slnk" onclick="pop_sd(3351);">UC-Pinecrest Med Fridge</span></div><small class="lid"><small>26.DC.72 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3351);"> <span class="u b fs120">5.86°C (42.55°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3424"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3424#z3424&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3424#Z3424">BOS-UC/UC-Plantation </a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3424);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3352);">UC-Plantation Med Fridge</span></div><small class="lid"><small>26.DA.6A RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3352);"> <span class="u b fs120">7.09°C (44.77°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3425"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3425#z3425&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3425#Z3425">BOS-UC/UC-Sawgrass/Sunrise</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3425);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3353);">UC-Sawgrass/Sunrise Pyxis Fridge</span></div><small class="lid"><small>26.E5.4C RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3353);"> <span class="u b fs120">3.10°C (37.58°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3426"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3426#z3426&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3426#Z3426">BOS-UC/UC-South Miami</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3426);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3355);">UC-South Miami Fridge</span></div><small class="lid"><small>26.E5.83 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3355);"> <span class="u b fs120">3.13°C (37.64°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3427"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3427#z3427&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3427#Z3427">BOS-UC/UC-Tamiami</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3427);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3354);">UC-Tamiami Med Fridge</span></div><small class="lid"><small>26.DA.03 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3354);"> <span class="u b fs120">4.45°C (40.02°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3428"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3428#z3428&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3428#Z3428">BOS-UC/UC-West Kendall</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3428);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3334);">UC-West Kendall Med Fridge</span></div><small class="lid"><small>26.C4.A9 RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3334);"> <span class="u b fs120">3.41°C (38.14°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3429"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3429#z3429&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3429#Z3429">BOS-UC/UC-Westchester</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3429);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3335);">UC-Westchester</span></div><small class="lid"><small>26.C6.2E RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3335);"> <span class="u b fs120">5.44°C (41.80°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3430"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3430#z3430&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true"><a title="show only this zone" href="https://ics1.ca.isensix.com:7735/guardian/index.php?z=3430#Z3430">BOS-UC/UC-Weston</a></div>
+  <div class="symbolbar" style=" "><div class="gap tnorm mi " title="1 In Range"></div><div class="gap zn alert-success mi " onclick="pop_zonenote(3430);return false;" title="Add Zone Note"></div></div>  <span style="margin-left: 10px; font-weight: bold;">0/1 Calibrated</span></div>
+<div class="senbox tnorm">
+<div class="sensordata"><div class="lvsensor"><div class="lvhead">
+<div class="c lname"><span class="slnk" onclick="pop_sd(3336);">UC-Weston Pyxis Fridge</span></div><small class="lid"><small>26.C3.FC RE<span class="mi">ac_unit</span></small></small>
+<button title="Calibrate">⊕</button></div><div class="c" onclick="pop_sd(3336);"> <span class="u b fs120">3.24°C (37.84°F)</span></div></div>
+</div>
+</div><div class="ui-widget-header zonetop apad" id="Z3446"><div class="symbolbar" style=" "><div class="gap alert-info mi " onclick="gotourl(&quot;/guardian/index.php?zc=3446#z3446&quot;)" title="Hide this Zone"></div></div> <div aria-hidden="true">System◈</div>
+    <span style="margin-left: 10px; font-weight: bold;"> - 0 Active, or Hidden</span></div></div>
+          </div><div id="ui-id-3" aria-live="polite" aria-labelledby="ui-id-2" role="tabpanel" class="ui-tabs-panel ui-corner-bottom ui-widget-content" aria-hidden="true" style="display: none;"></div><div id="ui-id-5" aria-live="polite" aria-labelledby="ui-id-4" role="tabpanel" class="ui-tabs-panel ui-corner-bottom ui-widget-content" aria-hidden="true" style="display: none;"></div>
+          <div id="tab-liveview_2" class="noprint ui-tabs-panel ui-corner-bottom ui-widget-content" aria-labelledby="ui-id-6" role="tabpanel" aria-hidden="true" style="display: none;">
+            
+       
+        <div id="pref_2941780440" class=" pad shadow" style="width:fit-content;display: block  ">
+
+            <div id="pref_2941780440">
+            </div>
+        
+
+
+        <hr>
+        <input type="submit" name="BTN_APPLY" id="BTN_APPLY" value="Apply" class="ui-button ui-corner-all ui-widget" role="button">
+
+        <input type="submit" name="BTN_RESET" id="BTN_RESET" value="Reset To Defaults" class="ui-button ui-corner-all ui-widget" role="button">
+
+        <div>
+        </div>
+</div>
+ 
+          </div>
+        </div>
+       
+    </form>
+  <button title="This will make Leighton's Tools scripts forget which sensors have been calibrated across all servers. No data on the servers themselves will be affected.">Delete Stored Calibration Data from Leighton's Tools</button></div>
+
+      </main>
+      
+      
+        <section class="ise-footer" style="background-color:#ddf;color:#000;overflow:scroll;grid-column: 1 / -1;" title="Developer debug">
+          <pre>{
+    "session": {
+        "s_userid": 27,
+        "captcha": null,
+        "s_loggedin": 1,
+        "remote_ip": 2130706433,
+        "admin_errcount": 0,
+        "vz": [],
+        "info": null,
+        "warn": null,
+        "tokenerror": 0,
+        "admin_lastvisit": 1792006538,
+        "idle_logout": 1792010138
+    }
+}</pre>
+        </section>
+      
+      
+    
+    </div>
+  
+<div id="scrollToTopBtn" title="Scroll to top" class="noprint" style="transition: opacity 0.5s ease-in-out; display: block;"><i class="mi b">vertical_align_top</i></div><div id="tg-container"><div id="toast-1" class="tg-toast hover:pause tg-fadeOut"><div class="tg-error"><div class="tg-title b">AP (#<a href="https://ics1.ca.isensix.com:7735/guardian/#" onclick="pop_ap( 67 );return false">67</a>) "ASC-South Palm OR Fridge CH9" is in Check NET mode. Last activity  6hours 19minutes ago (2026-10-14 11:06). </div><div class="progress-bar striped" style="animation-name: animate-1; animation-duration: 3s; animation-timing-function: linear; animation-fill-mode: forwards;"></div></div></div></div></body></html>

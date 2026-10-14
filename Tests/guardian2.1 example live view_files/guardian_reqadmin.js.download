@@ -1,0 +1,12 @@
+/*
+* Should only be included when admin login expired or is < 300s
+*/
+$(function () {
+	// in case the administative login expired
+	//
+	//alert('add admin links');
+        $('body.noadm a[rel="admin"]').click(function () {
+			return 	handleAdminLink(this); 
+	})
+});
+

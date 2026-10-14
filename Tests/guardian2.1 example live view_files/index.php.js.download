@@ -1,0 +1,63 @@
+/** for live view only */
+var PageSearch = /** @class */ (function () {
+    /**
+     *
+     * @param {string} inputfield this can be # or . (id or class)
+     * @param {string} classname this MUST be classname without ./# prefix
+     */
+    function PageSearch(inputfield, classname) {
+        this.inputfield = inputfield;
+        this.classname = classname;
+        var SELF = this;
+        $(inputfield).on("keyup", function (x) {
+            var s = "" + $(this).val();
+            if (s.length > 1) {
+                SELF.searchFor(s);
+            }
+            else {
+                $('body').removeClass('insearch');
+                $(SELF.inputfield).removeAttr('data-searchcount');
+                $('label.search').attr('data-searchcount', 0);
+                $('.' + SELF.classname).unmark();
+            }
+        });
+    }
+    PageSearch.prototype.searchFor = function (text) {
+        $(this.inputfield).removeClass("not_found");
+        $('body').addClass('insearch');
+        // add found to all Aps/Cps as class
+        var seen = document.getElementsByClassName(this.classname);
+        var count = 0;
+        for (var i = 0; i < seen.length; i++) {
+            $(seen.item(i)).removeClass("found");
+            var t = seen.item(i).textContent;
+            if (t.includes(text)) {
+                count++;
+                $(seen.item(i)).addClass("found");
+                //break;
+            }
+        }
+        $(this.inputfield).attr('data-searchcount', count);
+        $('label.search').attr('data-searchcount', count);
+        $('.' + this.classname).unmark();
+        if (count == 0) {
+            $('body').removeClass('insearch');
+        }
+        else {
+            $('.' + this.classname).mark(text);
+        }
+    };
+    return PageSearch;
+}());
+$(function () {
+    $('.x16').attr('data-helpid_uu', 'toolbar');
+    $('.re').attr('data-helpid_uu', 'recent events');
+    // $('.senbox .tlink tr td').attr('data-helpid_uu','check link');
+    $('.sencell.tlink div.read').attr('data-helpid_uu', 'check link');
+    $('.sencell.tnos div.read').attr('data-helpid_uu', 'disabled sensor');
+    $('.sencell.tnet div.read').attr('data-helpid_uu', 'check net');
+    $('.chkbtn').attr('data-helpid_uu', 'Checkpoint Button');
+    var psearch = new PageSearch('#search', 'senbox');
+    // senbox is where we search
+});
+//# sourceMappingURL=index.php.js.map
