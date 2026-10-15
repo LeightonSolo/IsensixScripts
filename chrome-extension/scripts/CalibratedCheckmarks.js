@@ -80,9 +80,12 @@ let twoPointZero = 0;
 let toggleKey = `toggleState_${window.location.host}`;
 
 function getSensorId(element) {
-    const source = element.getAttribute('onclick') || element.getAttribute('href') || '';
-    const matches = source.match(/\d{3,}/g);
-    return matches ? matches[matches.length - 1] : null;
+    const onclick = element.getAttribute('onclick') || '';
+    const onclickId = onclick.match(/pop_sd\(\s*(\d+)\s*\)/i)?.[1];
+    if (onclickId) return onclickId;
+
+    const href = element.getAttribute('href') || '';
+    return href.match(/[?&]id=(\d+)(?:[&#]|$)/i)?.[1] || null;
 }
 
 async function toggleZones(){
@@ -230,7 +233,7 @@ async function toggleZones(){
         }
         else{ //live view on ARMS
 
-            const sensorList = document.getElementsByClassName("noul"); //gets list of all sensors on the live view page
+            const sensorList = document.querySelectorAll('a.noul[href*="sensordetail.php"]'); //gets list of all sensors on the live view page
             const zoneHideButton = document.getElementsByClassName("zview")[0];
 
             let butt=document.createElement("button");
@@ -249,7 +252,7 @@ async function toggleZones(){
 
             for (let i = 0; i < sensorList.length; i++) {
                 const href = sensorList[i].getAttribute("href") || "";
-                if(href.slice(0, 12) == "sensordetail"){
+                if (/(?:^|\/)sensordetail\.php(?:[?#]|$)/i.test(href)) {
                     let id = getSensorId(sensorList[i]);
                     if (!id) continue;
                     let storedName = server + "," + id;
@@ -796,6 +799,5 @@ async function deleteStoredData(){
     location.reload();
 
 }
-
 
 })();
