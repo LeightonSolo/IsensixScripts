@@ -113,9 +113,11 @@ if(arms == 1){ //ARMSSSSSS
         });
         // Add an event listener to first time
         time1box.addEventListener('input', function () {
-            time2box.value = convertTo4Digits(new Date(convertFrom4Digits(time1box.value).getTime() + 60000));
-            time3box.value = convertTo4Digits(new Date(convertFrom4Digits(time1box.value).getTime() + 120000));
+            const firstTime = convertFrom4Digits(time1box.value);
+            if (!firstTime) return;
 
+            time2box.value = convertTo4Digits(new Date(firstTime.getTime() + 60000));
+            time3box.value = convertTo4Digits(new Date(firstTime.getTime() + 120000));
         });
     }
 }
@@ -417,14 +419,17 @@ function convertTo4Digits(time){
 }
 
 function convertFrom4Digits(time) {
-  // Ensure the time string is in the correct format (e.g., "1230")
+  // Ignore incomplete or out-of-range values while the user is editing.
   if (!/^\d{4}$/.test(time)) {
-    throw new Error("Invalid time format. Use 'HHMM'");
+    return null;
   }
 
   // Extract hours and minutes from 4 digit string
   const hours = parseInt(time.slice(0, 2), 10);
   const minutes = parseInt(time.slice(2), 10);
+  if (hours > 23 || minutes > 59) {
+    return null;
+  }
 
   // Create a new Date object for today
   const today = new Date();
