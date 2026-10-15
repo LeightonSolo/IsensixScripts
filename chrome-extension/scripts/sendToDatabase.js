@@ -5,7 +5,7 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.51
+// @version      3.53
 // @description  Capture Isensix calibration and Live View data for the dashboard database.
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
@@ -17,6 +17,7 @@
 // @match        https://*.isensix.com:*/arms2/calibration//calreport.php*
 // @match        https://*.isensix.com:*/arms2/calsetup.php*
 // @match        https://*.isensix.com:*/arms/calsetup.php*
+// @match        https://*/arms/calreport.php?cid=*
 // @match        https://*.isensix.com:*/guardian/iserep1.php*
 // @match        https://*.isensix.com:*/arms2/iserep1.php*
 // @match        https://*.isensix.com:*/arms/iserep1.php*
@@ -169,6 +170,7 @@ function normalizeType(raw) {
   const path = window.location.pathname;
 
   if (isLiveViewPath(path)) handleLiveView();
+  else if (isArmsCalibrationReport()) handleArmsCalibrationReport();
   else if (path.includes('calsensor.php') || path.includes('sensorcal.php')) handleCalSensor();
   else if (path.includes('calreport.php') || path.includes('calsetup.php')) handleCalReport();
   else if (path.includes('iserep1.php')) handleIseRep();
@@ -176,6 +178,57 @@ function normalizeType(raw) {
 
   function isLiveViewPath(pathname) {
     return /\/(?:arms2|arms|guardian)(?:\/+index\.php)?\/?$/i.test(pathname);
+  }
+
+  function isArmsCalibrationReport() {
+    return /\/arms\/calreport\.php$/i.test(path) && new URLSearchParams(window.location.search).has('cid');
+  }
+
+  function handleArmsCalibrationReport() {
+    const data = scrapeArmsCalibrationReport();
+    if (!data) {
+      showBanner('⚠ Could not read calibration report data', '#8b1a1a');
+      console.error('[sendToDatabase] Could not read required sensor ID or calibration time from ARMS report.');
+      return;
+    }
+    postSingle(data);
+  }
+
+  function scrapeArmsCalibrationReport() {
+    const server = getServer();
+    if (!server) return null;
+
+    const values = new Map();
+    for (const row of document.querySelectorAll('tr')) {
+      const label = row.querySelector('td.detailheader');
+      const value = row.querySelector('td.detailcell');
+      if (label && value) {
+        values.set(label.textContent.trim().toLowerCase(), value.textContent.trim());
+      }
+    }
+
+    const getValue = (label) => values.get(label.toLowerCase()) || null;
+    const sensor_id = getValue('Sensor ID');
+    const calibrated_at = parseToISO(getValue('Date Calibrated'));
+    if (!sensor_id || !calibrated_at) return null;
+
+    const serial_number = getValue('Sensor Serial No.');
+    const rawCertificate = getValue('Nist Certificate');
+
+    return {
+      sensor_id,
+      sensor_name: getValue('Sensor Name'),
+      zone: getValue('Zone'),
+      cp_address: getValue('Address'),
+      serial_number,
+      calibrated_by: getValue('Calibrated By'),
+      calibrated_at,
+      old_offset: parseFloatOrNull(getValue('Old Offset')),
+      new_offset: parseFloatOrNull(getValue('New Offset')),
+      cal_cert: !rawCertificate || rawCertificate.toLowerCase() === 'n/a' ? null : rawCertificate,
+      canned_msg: getValue('Comment'),
+      server,
+    };
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -741,6 +794,20 @@ function scrapeCalSensor_ARMS() {
         // These are server local times — converting to UTC would shift them incorrectly
         if (/^\d{4}-\d{2}-\d{2}/.test(cleaned)) {
             return cleaned.replace('T', ' ').slice(0, 16); // "2026-02-26 13:25"
+        }
+
+        const longDate = cleaned.match(
+            /^(?:[A-Za-z]+,\s*)?([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})\s+(\d{1,2}):(\d{2})(?::\d{2})?\s*(am|pm)$/i
+        );
+        if (longDate) {
+            const months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+            const month = months.indexOf(longDate[1].toLowerCase());
+            if (month !== -1) {
+                let hour = parseInt(longDate[4], 10);
+                if (longDate[6].toLowerCase() === 'pm' && hour !== 12) hour += 12;
+                if (longDate[6].toLowerCase() === 'am' && hour === 12) hour = 0;
+                return `${longDate[3]}-${String(month + 1).padStart(2, '0')}-${String(parseInt(longDate[2], 10)).padStart(2, '0')} ${String(hour).padStart(2, '0')}:${longDate[5]}`;
+            }
         }
 
         // calreport format: "02/26/26 1:25 pm" or "04/03/26 11:33"
