@@ -93,9 +93,12 @@ function openCalUrl(id, butt){
 }
 
 function getSensorId(element) {
-    const source = element.getAttribute('onclick') || element.getAttribute('href') || '';
-    const matches = source.match(/\d{3,}/g);
-    return matches ? matches[matches.length - 1] : null;
+    const onclick = element.getAttribute('onclick') || '';
+    const onclickId = onclick.match(/pop_sd\(\s*(\d+)\s*\)/i)?.[1];
+    if (onclickId) return onclickId;
+
+    const href = element.getAttribute('href') || '';
+    return href.match(/[?&]id=(\d+)(?:[&#]|$)/i)?.[1] || null;
 }
 
 (function() {
@@ -180,11 +183,11 @@ function getSensorId(element) {
     }
     else if(arms == 1){ //if system is detected to be ARMS
 
-        const sensorList = document.getElementsByClassName("noul"); //gets list of all sensors on the live view page
+        const sensorList = document.querySelectorAll('a.noul[href*="sensordetail.php"]'); //gets list of all sensors on the live view page
 
         for (let i = 0; i < sensorList.length; i++) {
             const href = sensorList[i].getAttribute("href") || "";
-            if(href.slice(0, 12) == "sensordetail"){
+            if (/(?:^|\/)sensordetail\.php(?:[?#]|$)/i.test(href)) {
                 const id = getSensorId(sensorList[i]);
                 if (!id) continue;
                 let butt=document.createElement("button");
