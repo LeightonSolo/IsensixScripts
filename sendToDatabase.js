@@ -1041,6 +1041,7 @@ function scrapeArmsIseRep(server, table) {
 
   function getLiveViewStatus(reading, statusContainer) {
     const readingText = getCleanText(reading);
+    if (readingText && /\binactive\s+sensor\b/i.test(readingText)) return 'Disabled';
     if (readingText && /\b(check|disabled|offline|error|fault|high|low|normal|in range|out of range|sensor|network|link|probe|wire|initializ\w*|initialis\w*)\b/i.test(readingText)) {
       return readingText;
     }
@@ -1072,7 +1073,7 @@ function scrapeArmsIseRep(server, table) {
     if (/\bcheck\s*link\b/i.test(readingText)) return 'LINK';
     if (/\bcheck\s*network\b/i.test(readingText)) return 'NETWORK';
     if (/\bcheck\s*(?:sensor|probe(?:\s+wire)?)\b/i.test(readingText)) return 'SENSOR';
-    if (/\b(?:disabled|offline|error|fault)\b/i.test(readingText)) return 'SENSOR';
+    if (/\b(?:inactive\s+sensor|disabled|offline|error|fault)\b/i.test(readingText)) return 'SENSOR';
 
     const classNames = `${statusContainer.className || ''} ${reading?.className || ''}`
       .toLowerCase()
