@@ -1,0 +1,92 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const btnDuplicateCertificateRow = document.getElementById('btnDuplicateCertificateRow');
+    if (!btnDuplicateCertificateRow)
+        throw new Error("btnDuplicateCertificateRow not found");
+    btnDuplicateCertificateRow.addEventListener('click', () => {
+        const templateRow = document.getElementById('certificateDataRow');
+        if (!templateRow)
+            throw new Error("certificateDataRow not found");
+        const tableBody = document.querySelector('table#certificateDataTable tbody');
+        if (!tableBody)
+            throw new Error("tableBody not found");
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = templateRow.innerHTML;
+        tableBody.appendChild(newRow);
+        setupRemoveButtons();
+        setupUnitConversion();
+        const certValues = document.querySelectorAll(".certValue");
+        if (certValues.length > 0) {
+            certValues[certValues.length - 1].focus();
+        }
+    });
+    setupRemoveButtons();
+    setupUnitConversion();
+    document.querySelectorAll('.certValue').forEach((element) => {
+        setFahrenheit(element);
+    });
+});
+function setupRemoveButtons() {
+    document.querySelectorAll(".removeButton").forEach((element) => {
+        element.addEventListener('click', () => {
+            const row = element.closest('tr');
+            if (!row)
+                throw new Error("Row not found");
+            row.remove();
+            setupTabKey();
+        });
+    });
+    setupTabKey();
+}
+function setupTabKey() {
+    const certOffsets = document.querySelectorAll(".certOffset");
+    certOffsets.forEach((element) => {
+        element.removeEventListener("blur", addRowOnBlur);
+    });
+    if (certOffsets.length > 0) {
+        certOffsets[certOffsets.length - 1].addEventListener("blur", addRowOnBlur);
+    }
+}
+function addRowOnBlur() {
+    const btnDuplicateCertificateRow = document.getElementById('btnDuplicateCertificateRow');
+    if (!btnDuplicateCertificateRow)
+        throw new Error("btnDuplicateCertificateRow not found");
+    btnDuplicateCertificateRow.click();
+}
+function setupUnitConversion() {
+    document.querySelectorAll('.certValue').forEach((element) => {
+        element.addEventListener('keyup', () => {
+            setFahrenheit(element);
+        });
+    });
+    document.querySelectorAll('.certValueF').forEach((element) => {
+        element.addEventListener('keyup', () => {
+            setCelcius(element);
+        });
+    });
+}
+function setFahrenheit(celciusField) {
+    const celciusValue = parseFloat(celciusField.value);
+    if (isNaN(celciusValue))
+        throw new Error("Invalid celcius value");
+    const certValueF = celciusField.parentElement?.nextElementSibling?.querySelector('.certValueF');
+    if (!certValueF)
+        throw new Error("certValueF not found");
+    certValueF.value = convertCelciusToFahrenheit(celciusValue);
+}
+function setCelcius(fahrenheitField) {
+    const fahrenHeitValue = parseFloat(fahrenheitField.value);
+    if (isNaN(fahrenHeitValue))
+        throw new Error("Invalid fahrenheit value");
+    const certValue = fahrenheitField.parentElement?.previousElementSibling?.querySelector('.certValue');
+    if (!certValue)
+        throw new Error("certValue not found");
+    certValue.value = convertFahrenheitToCelcius(fahrenHeitValue);
+}
+function convertCelciusToFahrenheit(celcius) {
+    const fahrenheit = (celcius * 9 / 5) + 32;
+    return fahrenheit.toFixed(2);
+}
+function convertFahrenheitToCelcius(fahrenheit) {
+    const celcius = (fahrenheit - 32) * 5 / 9;
+    return celcius.toFixed(3);
+}

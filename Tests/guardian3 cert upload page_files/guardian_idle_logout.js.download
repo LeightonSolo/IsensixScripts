@@ -1,0 +1,111 @@
+if (true) {
+    function post(url, callback) {
+        fetch(url, { method: 'POST', signal: signal })
+            .then(response => response.text())
+            .then(data => callback(data));
+    }
+    function css(element, styles) {
+        if (element)
+            for (const property in styles) {
+                element.style[property] = styles[property];
+            }
+    }
+    function attr(element, attribute, value) {
+        if (element) {
+            element.setAttribute(attribute, value);
+        }
+    }
+    let isPingIdleRunning = false;
+    async function pingIdle() {
+        if (isPingIdleRunning) {
+            return;
+        }
+        isPingIdleRunning = true;
+        try {
+            let rootdir = window.location.origin + '/' + window.location.href.split('/')[3] + '/';
+            let response = await fetch(rootdir + "ajax/idle_logout.php?check=0", {
+                signal: signal
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        }
+        catch (error) {
+            if (error.name === 'AbortError') {
+                console.warn('pingIdle was aborted');
+            }
+            else {
+                console.error('Error in pingIdle:', error);
+            }
+        }
+        finally {
+            isPingIdleRunning = false;
+            isx_removeIdleHandler();
+        }
+    }
+    function isx_installIdleHandler() {
+        document.addEventListener("mousedown", pingIdle);
+        document.addEventListener("mouseup", pingIdle);
+        document.addEventListener("scroll", pingIdle);
+    }
+    function isx_removeIdleHandler() {
+        document.removeEventListener("mousedown", pingIdle);
+        document.removeEventListener("mouseup", pingIdle);
+        document.removeEventListener("scroll", pingIdle);
+    }
+    let isIdleHandlerRunning = false;
+    async function isx_idleHandlerCallback() {
+        if (isIdleHandlerRunning) {
+            return;
+        }
+        isIdleHandlerRunning = true;
+        try {
+            const rootdir = window.location.origin + '/' + window.location.href.split('/')[3] + '/';
+            const response = await fetch(rootdir + "/ajax/idle_logout.php?check=1", { method: 'POST', signal: signal });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            if (data.ok && data.remaining > 0) {
+                const millis = data.remaining * 1000;
+                setTimeout(async () => {
+                    try {
+                        await fetch(rootdir + "/logout.php?comment=idle+logout");
+                        await alertBox("Idle timeout reached - Forced Logout");
+                        document.location.href = rootdir + "/logout.php";
+                    }
+                    catch (err) {
+                        console.error("Error during forced logout", err);
+                    }
+                }, millis);
+                const countdownElement = document.getElementById('countdown');
+                if (countdownElement) {
+                    css(countdownElement, { 'border': '1px solid white !important' });
+                }
+            }
+            else {
+                try {
+                    await fetch(rootdir + "/logout.php?comment=idle+logout");
+                    await alertBox("Logged out (timeout reached)");
+                    document.location.href = rootdir + "/logout.php";
+                }
+                catch (err) {
+                    console.error("Error during logout", err);
+                }
+            }
+        }
+        catch (error) {
+            console.error('Error in idle handler:', error);
+        }
+        finally {
+            isIdleHandlerRunning = false;
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            isx_installIdleHandler();
+            isx_idleHandlerCallback();
+        }, 300 * 1000);
+    });
+}
+//# sourceMappingURL=guardian_idle_logout.js.map

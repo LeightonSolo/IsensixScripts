@@ -1,0 +1,149 @@
+function addPhoto(bid, width, height) {
+    let a = document.createElement('a');
+    a.href = rootdir() + "/media/photo_manager.php?id=" + bid;
+    let img = document.createElement('img');
+    img.width = width;
+    img.height = height;
+    img.classList.add('shadow');
+    img.src = rootdir() + "/media/imagedb.php?thumb=" + bid + ";w=" + width + ";h=" + height;
+    a.appendChild(img);
+    let uploader = document.getElementById('uploader');
+    let div = document.createElement('div');
+    div.classList.add('img');
+    div.classList.add('c');
+    div.appendChild(a);
+    let parent = uploader.parentNode;
+    parent.insertBefore(div, uploader.nextSibling);
+    document.querySelectorAll('div.dz-preview').forEach((elem) => {
+        elem.remove();
+    });
+}
+function delMedia(id) {
+    const ftElement = document.getElementById('ft');
+    if (!ftElement || !(ftElement instanceof HTMLInputElement)) {
+        console.error('Element with id "ft" not found or not an input element');
+        return false;
+    }
+    const ISTK = ftElement.value;
+    alertBoxYesNo("You want to remove this Media File?").then((ok) => {
+        if (ok) {
+            gotourl(rootdir() + "/photo_manager.php?ISTK=" + ISTK + ";delete=" + id);
+        }
+    });
+    return false;
+}
+document.addEventListener('DOMContentLoaded', (event) => {
+    let zmin = document.getElementById('btnZoomIn');
+    if (zmin) {
+        zmin.addEventListener('click', function () {
+            let image = document.getElementById('image');
+            image.style.maxHeight = '';
+            image.style.maxWidth = '';
+            return false;
+        });
+        document.getElementById('btnZoomOut').addEventListener('click', function (e) {
+            e.preventDefault();
+            let image = document.getElementById('image');
+            image.style.maxHeight = '100%';
+            image.style.maxWidth = '100%';
+            return false;
+        });
+        if (document.getElementById('btnEditImage')) {
+            document.getElementById('btnEditImage').addEventListener('click', function (e) {
+                e.preventDefault();
+                let idimg = document.getElementById('id').value;
+                let url = rootdir() + '/media/editphoto.php?id=' + idimg;
+                document.location.href = url;
+                return false;
+            });
+        }
+    }
+    function setScale(elem, val) {
+        let image = document.getElementById('image');
+        if (val == -1) {
+            val = "";
+        }
+        else {
+            val += "%";
+        }
+        image.style[elem] = val;
+    }
+    function getScale(elem) {
+        let image = document.getElementById('image');
+        return parseInt(image.style[elem].replace('%', ''));
+    }
+    function updateStypeCount() {
+        const selectElement = document.getElementById('calDeviceSensorType');
+        if (!selectElement) {
+            return;
+        }
+        const selectedOptions = selectElement.selectedOptions;
+        const count = selectedOptions.length;
+        const spanElement = document.getElementById('vstcnt');
+        if (!spanElement) {
+            return;
+        }
+        spanElement.textContent = count.toString();
+    }
+    updateStypeCount();
+    document.getElementById('calDeviceSensorType')?.addEventListener('change', function () {
+        updateStypeCount();
+    });
+    function updateUctypeCount() {
+        const selectElement = document.getElementById('calDeviceCalUsers');
+        if (!selectElement) {
+            return;
+        }
+        const selectedOptions = selectElement.selectedOptions;
+        const count = selectedOptions.length;
+        const spanElement = document.getElementById('acucnt');
+        if (!spanElement) {
+            return;
+        }
+        spanElement.textContent = count.toString();
+    }
+    updateUctypeCount();
+    document.getElementById('calDeviceCalUsers')?.addEventListener('change', function () {
+        updateUctypeCount();
+    });
+    function updateGuiForCat(cat) {
+        let val = parseInt(cat);
+        const sensorList = document.getElementById('sensor_list');
+        const dimensions = document.getElementById('dim');
+        const apList = document.getElementById('ap_list');
+        const certificateRow = document.querySelectorAll('.certificateRow');
+        const PHOTO = 0;
+        const MAP = 1;
+        const CERTIFICATE = 2;
+        const DOCUMENT = 3;
+        sensorList.style.display = 'none';
+        dimensions.style.display = 'none';
+        apList.style.display = 'none';
+        certificateRow.forEach((elem) => {
+            elem.style.display = 'none';
+        });
+        switch (val) {
+            case MAP:
+                dimensions.style.display = 'table-row';
+                break;
+            case CERTIFICATE:
+                certificateRow.forEach((elem) => {
+                    elem.style.display = 'table-row';
+                });
+                break;
+            case PHOTO:
+                dimensions.style.display = 'table-row';
+            case DOCUMENT:
+                sensorList.style.display = 'table-row';
+                apList.style.display = 'table-row';
+                break;
+        }
+    }
+    let selcat = document.getElementById("cat");
+    if (selcat) {
+        selcat.addEventListener('change', function (e) {
+            updateGuiForCat(selcat.value);
+        });
+        updateGuiForCat(selcat.value);
+    }
+});
