@@ -609,7 +609,9 @@ async function toggleZones(){
             butt.addEventListener("click", () => toggleZones());
 
             //if(!threePoint0){zoneHideButton.appendChild(butt);}
-            zoneHideButton.appendChild(butt);
+            if(zoneHideButton){
+                zoneHideButton.appendChild(butt);
+            }
 
             for (let i = 0; i < sensorList.length; i++) {
                 let id = getSensorId(sensorList[i]);
