@@ -930,6 +930,7 @@ function scrapeArmsIseRep(server, table) {
     const sensors = [];
     for (const sensorCard of document.querySelectorAll('.sensordata .lvsensor')) {
       const nameElement = sensorCard.querySelector('.slnk, .slnk-title');
+      if (isExcludedLiveViewSensor(nameElement?.textContent)) continue;
       const sensorId = getLiveViewSensorId(nameElement);
       if (!sensorId) continue;
 
@@ -952,6 +953,7 @@ function scrapeArmsIseRep(server, table) {
     const sensors = [];
     for (const sensorCard of document.querySelectorAll('td.senbox')) {
       const nameElement = sensorCard.querySelector('.slnk');
+      if (isExcludedLiveViewSensor(nameElement?.textContent)) continue;
       const sensorId = getLiveViewSensorId(nameElement);
       if (!sensorId) continue;
 
@@ -976,6 +978,7 @@ function scrapeArmsIseRep(server, table) {
   function scrapeLiveViewArms(server) {
     const sensors = [];
     for (const nameElement of document.querySelectorAll('a.noul[href*="sensordetail.php"]')) {
+      if (isExcludedLiveViewSensor(nameElement.textContent)) continue;
       const sensorId = nameElement.href.match(/[?&]id=(\d+)/i)?.[1];
       if (!sensorId) continue;
 
@@ -1027,6 +1030,11 @@ function scrapeArmsIseRep(server, table) {
     const onclickId = element.getAttribute('onclick')?.match(/pop_sd\(\s*(\d+)\s*\)/i)?.[1];
     if (onclickId) return onclickId;
     return element.href?.match(/[?&]id=(\d+)/i)?.[1] || null;
+  }
+
+  function isExcludedLiveViewSensor(sensorName) {
+    // Guardian 3.0 exposes system sensors with a diamond marker in their name.
+    return typeof sensorName === 'string' && sensorName.includes('\u25C8');
   }
 
   function getCleanText(element) {
