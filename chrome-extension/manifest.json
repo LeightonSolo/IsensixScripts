@@ -29,7 +29,7 @@
     },
     {
       "matches": ["https://*.isensix.com/arms2/index.php*", "https://*.isensix.com/arms2/", "https://*.isensix.com/arms/", "https://*.isensix.com/arms/index.php*", "https://*.isensix.com/guardian/index.php*", "https://*.isensix.com/guardian/", "https://*.isensix.com/guardian//index.php*"],
-      "js": ["scripts/CalibrateButtonsOnLiveView.js"],
+      "js": ["compatibility.js", "scripts/CalibrateButtonsOnLiveView.js"],
       "run_at": "document_idle"
     },
     {

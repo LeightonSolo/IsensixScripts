@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Calibrate Buttons for Live View (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      5.47
-// @description  Adds a Calibration button to every sensor on the Isensix Live view page, will work on all ARMS and Guardian servers, Exception buttons WIP
+// @version      5.51
+// @description  Adds Calibration and Exception controls to every sensor on the Isensix Live view page.
 // @author       Leighton Solomon
 // @match        https://*/arms2/index.php*
 // @match        https://*/arms2/
@@ -14,7 +14,8 @@
 // @downloadURL  https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrateButtonsOnLiveView.js
 // @updateURL    https://raw.githubusercontent.com/LeightonSolo/IsensixScripts/main/CalibrateButtonsOnLiveView.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
-// @grant        none
+// @grant        GM_xmlhttpRequest
+// @connect      flat-tree-380f.leightonsolo.workers.dev
 // ==/UserScript==
 
 //  .--.      .--.      .--.      .--.      .--.      .--.      .--.      .--.
@@ -101,8 +102,122 @@ function getSensorId(element) {
     return href.match(/[?&]id=(\d+)(?:[&#]|$)/i)?.[1] || null;
 }
 
-(function() {
+const WORKER_URL = 'https://flat-tree-380f.leightonsolo.workers.dev';
+const API_KEY = 'U87iy7VynFYLJUDnfUYBJHnRKbRiQO3Z';
+const currentServer = window.location.host.match(/:7(\d{3})/)?.[1] || null;
+let exceptionState = new Map();
+
+function getTechnicianName() {
+    const guardianThree = document.querySelector('a[title][href*="v2prefs.php"]')?.getAttribute('title');
+    if (guardianThree?.trim()) return guardianThree.trim();
+
+    const guardianTwoOne = document.querySelector('span.isensix.nw');
+    if (guardianTwoOne?.textContent?.trim()) return guardianTwoOne.textContent.replace(/\s+/g, ' ').trim();
+
+    const guardianTwo = document.querySelector('span.bgicon[style*="status_online"], span.isensix');
+    if (guardianTwo?.textContent?.trim()) return guardianTwo.textContent.replace(/\s+/g, ' ').trim();
+
+    const armsMenu = [...document.querySelectorAll('td.menubar')]
+        .find(cell => (cell.getAttribute('align') || '').toLowerCase() === 'left')
+        ?.textContent?.replace(/\s+/g, ' ').trim();
+    const armsTechnician = armsMenu?.match(
+        /\b(?:CST|CDT|EST|EDT|MST|MDT|PST|PDT)\b\s+(.+)$/i
+    )?.[1];
+    return armsTechnician?.trim() || 'Unknown technician';
+}
+
+const technicianName = getTechnicianName();
+
+function styleActionButton(button) {
+    button.style.width = '28px';
+    button.style.height = '24px';
+    button.style.padding = '0';
+    button.style.margin = '0 2px';
+    button.style.boxSizing = 'border-box';
+    button.style.lineHeight = '22px';
+    button.style.verticalAlign = 'middle';
+}
+
+function workerRequest(method, path, body) {
+    return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            method,
+            url: `${WORKER_URL}${path}`,
+            headers: { 'Content-Type': 'application/json', 'X-Api-Key': API_KEY },
+            data: body ? JSON.stringify(body) : undefined,
+            onload: response => response.status >= 200 && response.status < 300
+                ? resolve(response.responseText ? JSON.parse(response.responseText) : {})
+                : reject(new Error(`Worker returned ${response.status}`)),
+            onerror: () => reject(new Error('Worker request failed')),
+        });
+    });
+}
+
+async function loadExceptionState() {
+    if (!currentServer) return;
+    try {
+        const payload = await workerRequest('GET', `/live-view/state?server=${encodeURIComponent(currentServer)}`);
+        for (const sensor of payload.sensors || []) {
+            if (sensor.exception_id) exceptionState.set(String(sensor.sensor_id), sensor);
+        }
+    } catch (error) {
+        console.warn('[Isensix Tools] Could not load exception state:', error);
+    }
+}
+
+function markException(button, sensorLink, active, reason = '') {
+    button.textContent = active ? '\u2716' : '\u26a0';
+    button.title = active ? `Clear exception${reason ? `: ${reason}` : ''}` : 'Mark as exception';
+    button.style.backgroundColor = active ? '#f39c12' : '';
+    const container = sensorLink.closest('.senbox, .lvsensor, tr') || sensorLink.parentElement;
+    if (container) container.style.outline = active ? '2px solid #f39c12' : '';
+}
+
+function addExceptionButton(sensorLink, id) {
+    const button = document.createElement('button');
+    styleActionButton(button);
+    const state = exceptionState.get(String(id));
+    markException(button, sensorLink, Boolean(state), state?.exception_reason || '');
+    button.addEventListener('click', async () => {
+        button.disabled = true;
+        try {
+            if (exceptionState.has(String(id))) {
+                await workerRequest('DELETE', `/exceptions/${exceptionState.get(String(id)).exception_id}`);
+                exceptionState.delete(String(id));
+                markException(button, sensorLink, false);
+            } else {
+                const reason = window.prompt('Why could this sensor not be calibrated?');
+                if (!reason?.trim()) return;
+                const result = await workerRequest('POST', '/exceptions', {
+                    sensor_id: String(id),
+                    server: currentServer,
+                    sensor_name: sensorLink.textContent.trim(),
+                    reason: reason.trim(),
+                    year: new Date().getFullYear(),
+                    added_by: technicianName,
+                });
+                const state = {
+                    sensor_id: String(id),
+                    exception_id: result.exception?.id,
+                    exception_reason: reason.trim(),
+                };
+                exceptionState.set(String(id), state);
+                markException(button, sensorLink, true, state.exception_reason);
+            }
+        } catch (error) {
+            console.error('[Isensix Tools] Exception update failed:', error);
+            window.alert('Could not update the exception. Please try again.');
+        } finally {
+            button.disabled = false;
+        }
+    });
+    return button;
+}
+
+(async function() {
     'use strict';
+
+    await loadExceptionState();
 
     if(arms == 0){//if system is detected to be guardian
         if(threePoint0){ //G3.0
@@ -120,11 +235,15 @@ function getSensorId(element) {
                 //console.log(id);//gets the ID of the sensor from the html
                 let butt=document.createElement("button");
 
+                styleActionButton(butt);
+
                 butt.textContent="\u25c9";
                 butt.title = "Calibrate";
 
 
                 butt.addEventListener("click", () => openCalUrl(id, butt));
+
+                const exceptionButt = addExceptionButton(sensorList[i], id);
 
                 //sensorList2[i].appendChild(butt);
 
@@ -137,7 +256,8 @@ function getSensorId(element) {
                     sensorList2[i].appendChild(row);
                 }*/
                                     //sensorList2[i].appendChild(butt);
-                                                    sensorList[i].parentElement.parentElement.appendChild(butt);
+                sensorList[i].parentElement.parentElement.appendChild(exceptionButt);
+                sensorList[i].parentElement.parentElement.appendChild(butt);
 
 
                 // Add button to sensor table cell
@@ -160,10 +280,14 @@ function getSensorId(element) {
                 if (!id) continue;
                 let butt=document.createElement("button");
 
+                styleActionButton(butt);
+
                 butt.textContent="\u25c9";
                 butt.title = "Calibrate";
 
                 butt.addEventListener("click", () => openCalUrl(id, butt));
+
+                const exceptionButt = addExceptionButton(sensorList[i], id);
 
                 //sensorList2[i].appendChild(butt);
 
@@ -176,6 +300,7 @@ function getSensorId(element) {
                     sensorList2[i].appendChild(row);
                 }
                 // Add button to sensor table cell
+                cell.appendChild(exceptionButt);
                 cell.appendChild(butt);
                 row.prepend(cell);
             }
@@ -192,13 +317,18 @@ function getSensorId(element) {
                 if (!id) continue;
                 let butt=document.createElement("button");
 
+                styleActionButton(butt);
+
                 butt.textContent="\u25c9";
                 butt.title = "Calibrate";
 
 
                 butt.addEventListener("click", () => openCalUrl(id, butt));
 
+                const exceptionButt = addExceptionButton(sensorList[i], id);
+
                 sensorList[i].parentElement.parentElement.prepend(butt); //adds calibrate button to parent table
+                sensorList[i].parentElement.parentElement.prepend(exceptionButt);
 
             }
         }
