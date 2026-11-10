@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Calibrated Checkmarks and Autocollapse Zones (ARMS, G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      5.12
-// @description  Shows which sensors have been calibrated on the live view. This only updates whenever the calibration overview, calibration summary, or arms debug query is viewed. Zones can be automatically collapsed when calibrated.
+// @version      5.13
+// @description  Shows which sensors have been calibrated on the live view using dashboard state with local fallback. Zones can be automatically collapsed when calibrated.
 // @match        https://*/arms2/index.php*
 // @match        https://*/arms2/
 // @match        https://*/arms/
@@ -25,6 +25,8 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=isensix.com
 // @grant GM_getValue
 // @grant GM.setValue
+// @grant GM_xmlhttpRequest
+// @connect flat-tree-380f.leightonsolo.workers.dev
 // ==/UserScript==
 
 //  .--.      .--.      .--.      .--.      .--.      .--.      .--.      .--.
@@ -82,6 +84,91 @@ function getSensorId(element) {
 
     const href = element.getAttribute('href') || '';
     return href.match(/[?&]id=(\d+)(?:[&#]|$)/i)?.[1] || null;
+}
+
+const WORKER_URL = 'https://flat-tree-380f.leightonsolo.workers.dev';
+const API_KEY = 'U87iy7VynFYLJUDnfUYBJHnRKbRiQO3Z';
+const ROLLING_DAYS_KEY = 'calibrationWindowDays';
+const DEFAULT_ROLLING_DAYS = 7;
+
+async function getRollingDays() {
+    const saved = Number(await GM.getValue(ROLLING_DAYS_KEY, DEFAULT_ROLLING_DAYS));
+    return Number.isFinite(saved) ? Math.min(Math.max(Math.round(saved), 1), 60) : DEFAULT_ROLLING_DAYS;
+}
+
+function workerRequest(method, path) {
+    return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            method,
+            url: `${WORKER_URL}${path}`,
+            headers: { 'X-Api-Key': API_KEY },
+            onload: response => response.status >= 200 && response.status < 300
+                ? resolve(response.responseText ? JSON.parse(response.responseText) : {})
+                : reject(new Error(`Worker returned ${response.status}`)),
+            onerror: () => reject(new Error('Worker request failed')),
+        });
+    });
+}
+
+async function loadDashboardCalibrationState(server) {
+    if (!server) return null;
+    try {
+        const payload = await workerRequest('GET', `/live-view/state?server=${encodeURIComponent(server)}`);
+        const state = new Map();
+        for (const sensor of payload.sensors || []) state.set(String(sensor.sensor_id), sensor);
+        return state;
+    } catch (error) {
+        console.warn('[Isensix Tools] Dashboard calibration state unavailable; using local fallback.', error);
+        return null;
+    }
+}
+
+function isWithinRollingWindow(calibratedAt, rollingDays) {
+    if (!calibratedAt) return false;
+    const parsed = typeof calibratedAt === 'number'
+        ? calibratedAt
+        : new Date(String(calibratedAt).replace(' ', 'T')).getTime();
+    if (!Number.isFinite(parsed)) return false;
+    return Date.now() - parsed <= rollingDays * 24 * 60 * 60 * 1000;
+}
+
+async function isCalibratedSensor(sensorId, storedName, dashboardState, rollingDays) {
+    if (dashboardState) {
+        return isWithinRollingWindow(dashboardState.get(String(sensorId))?.calibrated_at, rollingDays);
+    }
+
+    const stored = await GM.getValue(storedName, false);
+    return stored === true || isWithinRollingWindow(stored, rollingDays);
+}
+
+async function addCalibrationWindowControl(container, rollingDays) {
+    if (!container) return;
+    const wrapper = document.createElement('span');
+    wrapper.style.cssText = 'display:inline-flex;align-items:center;gap:5px;margin:8px 8px 0 0;';
+
+    const label = document.createElement('label');
+    label.textContent = 'Calibration window (days):';
+    label.title = 'The number of days in the past to check if a sensor is calibrated.';
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.min = '1';
+    input.max = '60';
+    input.step = '1';
+    input.value = String(rollingDays);
+    input.style.width = '52px';
+
+    const save = document.createElement('button');
+    save.textContent = 'Save';
+    save.addEventListener('click', async () => {
+        const value = Math.min(Math.max(Math.round(Number(input.value) || DEFAULT_ROLLING_DAYS), 1), 60);
+        input.value = String(value);
+        await GM.setValue(ROLLING_DAYS_KEY, value);
+        save.textContent = 'Saved';
+        setTimeout(() => location.reload(), 300);
+    });
+
+    wrapper.append(label, input, save);
+    container.appendChild(wrapper);
 }
 
 async function toggleZones(){
@@ -147,6 +234,7 @@ async function toggleZones(){
         // Get all stored keys and clear them
         const keys = await GM.listValues();
         for (const key of keys) {
+            if (key === ROLLING_DAYS_KEY) continue;
             await GM.deleteValue(key);
         }
 
@@ -164,6 +252,10 @@ async function toggleZones(){
                 var server = match[1];
                 server = server.slice(1); //will get the three digit server ID
             }
+
+    const rollingDays = await getRollingDays();
+    const isLiveView = /\/(?:arms2|arms|guardian)(?:\/+index\.php)?\/?$/i.test(window.location.pathname);
+    const dashboardState = isLiveView ? await loadDashboardCalibrationState(server) : null;
 
 
 
@@ -195,10 +287,10 @@ async function toggleZones(){
 
             const parsed = Date.parse(lastCal.innerHTML) / 1000; //get a unix timestamp of the last calibration date (javascript works with milliseconds since epoch)
 
-            if(((Date.now() / 1000) - parsed) < 604800){ //determine if sensor has been calibrated in past week
+            if(((Date.now() / 1000) - parsed) < rollingDays * 86400){ //determine if sensor is inside the rolling calibration window
                 //alert("past week");
                 let storeName = server + "," + sensorId; //store the sensor as calibrated in the format of SERVER,SENSORID
-                GM.setValue(storeName, true);
+                GM.setValue(storeName, parsed * 1000);
                 console.log("Storing sensor as calibrated: " + storeName);
             }
         }
@@ -219,10 +311,10 @@ async function toggleZones(){
 
                 const parsed = Date.parse(dateSpan.innerHTML) / 1000; //get a unix timestamp of the last calibration date (javascript works with milliseconds since epoch)
 
-                if(((Date.now() / 1000) - parsed) < 604800){ //determine if sensor has been calibrated in past week
+                if(((Date.now() / 1000) - parsed) < rollingDays * 86400){ //determine if sensor is inside the rolling calibration window
                     let sensorId = tableRows[i].querySelector('td:nth-child(1)').textContent;
                     let storeName = server + "," + sensorId; //store the sensor as calibrated in the format of SERVER,SENSORID
-                    GM.setValue(storeName, true);
+                    GM.setValue(storeName, parsed * 1000);
                     console.log("Storing sensor as calibrated: " + storeName);
                 }
             }
@@ -252,7 +344,7 @@ async function toggleZones(){
                     let id = getSensorId(sensorList[i]);
                     if (!id) continue;
                     let storedName = server + "," + id;
-                    let check = await GM.getValue(storedName);
+                    let check = await isCalibratedSensor(id, storedName, dashboardState, rollingDays);
 
                     if(check){
                         let checkMark = document.createTextNode(' \u2713 Calibrated');
@@ -325,6 +417,7 @@ async function toggleZones(){
             deleteButt.innerHTML="Delete Stored Calibration Data from Leighton's Tools";
             deleteButt.addEventListener("click", () => deleteStoredData());
             document.querySelector("body > hr").appendChild(deleteButt);
+            await addCalibrationWindowControl(document.querySelector("body > hr")?.parentElement || document.body, rollingDays);
             //=============================================================================
         }
     }
@@ -347,11 +440,11 @@ async function toggleZones(){
 
                 const parsed = Date.parse(dateSpan.innerHTML) / 1000; //get a unix timestamp of the last calibration date (javascript works with milliseconds since epoch)
 
-                if(((Date.now() / 1000) - parsed) < 604800){ //determine if sensor has been calibrated in past week
+                if(((Date.now() / 1000) - parsed) < rollingDays * 86400){ //determine if sensor is inside the rolling calibration window
                 //alert("past week");
                     let sensorId = tableRows[i].querySelector('td:nth-child(1)').textContent;
                     let storeName = server + "," + sensorId; //store the sensor as calibrated in the format of SERVER,SENSORID
-                    GM.setValue(storeName, true);
+                    GM.setValue(storeName, parsed * 1000);
                     console.log("Storing sensor as calibrated: " + storeName);
                 }
             }
@@ -373,11 +466,11 @@ async function toggleZones(){
 
                 const parsed = Date.parse(dateSpan.innerHTML) / 1000; //get a unix timestamp of the last calibration date (javascript works with milliseconds since epoch)
 
-                if(((Date.now() / 1000) - parsed) < 604800){ //determine if sensor has been calibrated in past week
+                if(((Date.now() / 1000) - parsed) < rollingDays * 86400){ //determine if sensor is inside the rolling calibration window
                 //alert("past week");
                     let sensorId = tableRows[i].querySelector('tr td:nth-child(1)').textContent.trim();
                     let storeName = server + "," + sensorId; //store the sensor as calibrated in the format of SERVER,SENSORID
-                    GM.setValue(storeName, true);
+                    GM.setValue(storeName, parsed * 1000);
                     console.log("Storing sensor as calibrated: " + storeName);
                 }
             }
@@ -413,7 +506,7 @@ async function toggleZones(){
                 if (!id) continue;
 
                 let storedName = server + "," + id;
-                let check = await GM.getValue(storedName);
+                let check = await isCalibratedSensor(id, storedName, dashboardState, rollingDays);
 
                 if(check){
                     let checkMark = document.createTextNode(' \u2713 Calibrated');
@@ -497,6 +590,7 @@ async function toggleZones(){
             deleteButt.innerHTML="Delete Stored Calibration Data from Leighton's Tools";
             deleteButt.addEventListener("click", () => deleteStoredData());
             document.querySelector("#body").appendChild(deleteButt);
+            await addCalibrationWindowControl(document.querySelector("#body"), rollingDays);
             //=============================================================================
         }
     }
@@ -526,7 +620,7 @@ async function toggleZones(){
                 const parsed = Date.parse(dateSpan) / 1000; //get a unix timestamp of the last calibration date (javascript works with milliseconds since epoch)
                 //console.log(parsed);
 
-                if(((Date.now() / 1000) - parsed) < 604800){ //determine if sensor has been calibrated in past week
+                if(((Date.now() / 1000) - parsed) < rollingDays * 86400){ //determine if sensor is inside the rolling calibration window
                 //alert("past week");
                     let sensorId = tableRows[i].querySelector('tr td:nth-child(1)').textContent.trim();
                     if(threePoint0){
@@ -538,7 +632,7 @@ async function toggleZones(){
                         catch(err){}
                     }
                     let storeName = server + "," + sensorId; //store the sensor as calibrated in the format of SERVER,SENSORID
-                    GM.setValue(storeName, true);
+                    GM.setValue(storeName, parsed * 1000);
                     console.log("Storing sensor as calibrated: " + storeName);
                 }
             }
@@ -560,11 +654,11 @@ async function toggleZones(){
 
                 const parsed = Date.parse(dateSpan.innerHTML) / 1000; //get a unix timestamp of the last calibration date (javascript works with milliseconds since epoch)
 
-                if(((Date.now() / 1000) - parsed) < 604800){ //determine if sensor has been calibrated in past week
+                if(((Date.now() / 1000) - parsed) < rollingDays * 86400){ //determine if sensor is inside the rolling calibration window
                 //alert("past week");
                     let sensorId = tableRows[i].querySelector('tr td:nth-child(1)').textContent.trim();
                     let storeName = server + "," + sensorId; //store the sensor as calibrated in the format of SERVER,SENSORID
-                    GM.setValue(storeName, true);
+                    GM.setValue(storeName, parsed * 1000);
                     console.log("Storing sensor as calibrated: " + storeName);
                 }
             }
@@ -615,7 +709,7 @@ async function toggleZones(){
 
                 let storedName = server + "," + id;
                 //console.log(storedName);
-                let check = await GM.getValue(storedName);
+                let check = await isCalibratedSensor(id, storedName, dashboardState, rollingDays);
                 //console.log(check);
 
                 if(check){
@@ -639,6 +733,7 @@ async function toggleZones(){
             deleteButt.addEventListener("click", () => deleteStoredData());
             deleteButt.title = "This will make Leighton's Tools scripts forget which sensors have been calibrated across all servers. No data on the servers themselves will be affected.";
             document.querySelector("#body").appendChild(deleteButt);
+            await addCalibrationWindowControl(document.querySelector("#body"), rollingDays);
             //=============================================================================
 
 
