@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calibration Capture - Send to Visualizer Database
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.55
+// @version      3.6
 // @description  Capture Isensix calibration and Live View data for the dashboard database.
 // @author       Leighton Solomon
 // @match        https://*/guardian/calibration/calsensor.php*
@@ -47,9 +47,13 @@
     catch(err){}
 
   let twoPointZero = false;
-    try {//determine if the server is Guardian 3.0
-        if(document.getElementsByClassName("ICO_DISCONNECT")[0].innerHTML == "Sign me off"){
+    try {
+        const guardianVersion = document.querySelector("#guardian-bar-wp-logo > a")?.title?.trim();
+        const disconnectText = document.querySelector(".ICO_DISCONNECT")?.textContent?.trim();
 
+        // Older Guardian 2.0 pages use "Sign me off"; newer pages identify
+        // themselves explicitly in the Guardian bar and use "Sign off".
+        if (guardianVersion === "Guardian 2.0" || disconnectText === "Sign me off") {
             twoPointZero = true;
             console.log("2.0 Detected");
         }
