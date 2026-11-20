@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Copy Isensix Calibration Summary (G2.0, G2.1, G3.0)
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.41
+// @version      3.42
 // @description  Copies the data from the Isensix Calibration Summary on guardian servers when the button is pressed, and link to the calibration report generator
 // @author       Leighton Solomon
 // @match        https://*/arms2/iserep1.php
@@ -146,7 +146,7 @@ function openCalReport(twoPointZero = false) {
 
         if (twoPointZero) {
             // if parameter is true, just use the fixed link for G2.0
-            newUrl = "https://172.16.64.2/sshto/cal.php";
+            newUrl = "https://172.16.64.54/sshto/cal.php";
         } else {
             // otherwise use current URL logic
             let url = window.location.href;

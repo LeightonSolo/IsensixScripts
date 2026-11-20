@@ -5,7 +5,7 @@
 // ==UserScript==
 // @name         ARMS Debug Query
 // @namespace    https://github.com/LeightonSolo/IsensixScripts
-// @version      3.1
+// @version      3.15
 // @description  Creates a button on ARMS servers that will open, autofill query, and copy from debug_query.php along with server information. Also creates link to generate calibration report
 // @author       Leighton Solomon
 // @match        https://*/arms/admin/
@@ -212,7 +212,7 @@ function copyTable(copyBtn){
 })();
 
 function openCalReport() {
-        window.open("https://172.16.64.2/sshto/cal.php", "_blank");
+        window.open("https://172.16.64.54/sshto/cal.php", "_blank");
     }
 
 })();
